@@ -1,9 +1,8 @@
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from 'expo-status-bar';  //status-bar replaced with 'react'
 import { StyleSheet, Text, View } from 'react-native';
 
+//View -> UIView
 export default function App() {
-  let x = 1;
-  console.log("App Executed");
   return (
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>
