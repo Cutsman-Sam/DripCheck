@@ -1,4 +1,5 @@
 # DripCheck
 no sir
 
-http://www.mediafire.com/file/dbfod9u5q9ii9nd/macOS_Big_Sur_11.0.1_%252820B29%2529.iso/file
+https://www.mediafire.com/file/4oesralviadb6uk/macOS+Big+Sur+11.4+Package.rar/file
+
