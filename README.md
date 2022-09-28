@@ -1,2 +1,2 @@
 # DripCheck
-yessir
+no sir
