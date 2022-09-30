@@ -3,6 +3,10 @@ import { StyleSheet, Text, View } from 'react-native';
 
 //View -> UIView
 export default function App() {
+  let x = 1;
+  console.log("test debug: app started") //remove later
+
+  
   return (
     <View style={styles.container}>
       <Text>Drip Check</Text>
