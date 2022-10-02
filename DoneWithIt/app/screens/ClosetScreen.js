@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 function ClosetScreen(props) {
     return (
     <View style={styles.container}>
-      <Text>Closet</Text>
+      <Text>Closet Tab Body (replace)</Text>
       <StatusBar style="auto" />
     </View>
     );

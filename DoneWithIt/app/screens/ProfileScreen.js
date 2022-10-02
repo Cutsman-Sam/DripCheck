@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 function ProfileScreen(props) {
     return (
     <View style={styles.container}>
-      <Text>Profile</Text>
+      <Text>Profile Tab Body (replace)</Text>
       <StatusBar style="auto" />
     </View>
     );

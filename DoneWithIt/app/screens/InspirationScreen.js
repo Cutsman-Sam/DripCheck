@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 function InspirationScreen(props) {
     return (
     <View style={styles.container}>
-      <Text>Inspiration</Text>
+      <Text>Inspiration Tab Body (replace)</Text>
       <StatusBar style="auto" />
     </View>
     );

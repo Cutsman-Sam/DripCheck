@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 function CalendarScreen(props) {
     return (
     <View style={styles.container}>
-      <Text>Calendar</Text>
+      <Text>Calendar Tab Body (replace)</Text>
       <StatusBar style="auto" />
     </View>
     );

@@ -19,19 +19,19 @@ function BottomTabs() {
     <Tab.Navigator initialRouteName="Profile">
       <Tab.Screen name="Profile" component={ProfileScreen} 
         options={{tabBarIcon: () => (<Image source={require("./app/assets/icon-profile.jpg")} 
-        style={{width: 32, height: 32}} />)}}/>
+        style={{width: 32, height: 32}} />), headerShown: false}}/>
 
       <Tab.Screen name="Calendar" component={CalendarScreen} 
         options={{tabBarIcon: () => (<Image source={require("./app/assets/icon-calendar.jpg")} 
-        style={{width: 32, height: 32}} />)}}/>
+        style={{width: 32, height: 32}} />), headerShown: false}}/>
 
       <Tab.Screen name="Closet" component={ClosetScreen} 
         options={{tabBarIcon: () => (<Image source={require("./app/assets/icon-closet.jpg")} 
-        style={{width: 32, height: 32}} />)}}/>
+        style={{width: 32, height: 32}} />), headerShown: false}}/>
         
       <Tab.Screen name="Inspiration" component={InspirationScreen} 
         options={{tabBarIcon: () => (<Image source={require("./app/assets/icon-inspiration.jpg")} 
-        style={{width: 32, height: 32}} />)}}/>
+        style={{width: 32, height: 32}} />), headerShown: false}}/>
     </Tab.Navigator>
   );
 }
@@ -45,7 +45,8 @@ export default function App({navigation}) {
       initialRouteName={"Login"}
       screenOptions={{headerBackVisible: false}}>
         <Stack.Screen name="Login" component={LoginScreen}/>
-        <Stack.Screen name="BottomTabs" component={BottomTabs}/>
+        <Stack.Screen name="BottomTabs" component={BottomTabs} 
+          options={{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
