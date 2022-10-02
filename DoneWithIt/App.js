@@ -1,16 +1,18 @@
-import { StatusBar } from 'expo-status-bar';  //status-bar replaced with 'react'
+import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import LoginScreen from './app/screens/LoginScreen';
 import ProfileScreen from './app/screens/ProfileScreen';
 import CalendarScreen from './app/screens/CalendarScreen';
 import ClosetScreen from './app/screens/ClosetScreen';
 import InspirationScreen from './app/screens/InspirationScreen';
 
 const Tab = createBottomTabNavigator();
-Tab
+const Stack = createNativeStackNavigator();
 
 function BottomTabs() {
   return (
@@ -24,10 +26,16 @@ function BottomTabs() {
 }
 
 //View -> UIView
-export default function App() {
+export default function App({navigation}) {
   return (
     <NavigationContainer>
-      <BottomTabs/>
+
+      <Stack.Navigator 
+      initialRouteName={"Login"}
+      screenOptions={{headerBackVisible: false}}>
+        <Stack.Screen name="Login" component={LoginScreen}/>
+        <Stack.Screen name="BottomTabs" component={BottomTabs}/>
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
