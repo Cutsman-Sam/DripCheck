@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -17,10 +17,21 @@ const Stack = createNativeStackNavigator();
 function BottomTabs() {
   return (
     <Tab.Navigator initialRouteName="Profile">
-      <Tab.Screen name="Profile" component={ProfileScreen} />
-      <Tab.Screen name="Calendar" component={CalendarScreen} />
-      <Tab.Screen name="Closet" component={ClosetScreen} />
-      <Tab.Screen name="Inspiration" component={InspirationScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} 
+        options={{tabBarIcon: () => (<Image source={require("./app/assets/icon-profile.jpg")} 
+        style={{width: 32, height: 32}} />)}}/>
+
+      <Tab.Screen name="Calendar" component={CalendarScreen} 
+        options={{tabBarIcon: () => (<Image source={require("./app/assets/icon-calendar.jpg")} 
+        style={{width: 32, height: 32}} />)}}/>
+
+      <Tab.Screen name="Closet" component={ClosetScreen} 
+        options={{tabBarIcon: () => (<Image source={require("./app/assets/icon-closet.jpg")} 
+        style={{width: 32, height: 32}} />)}}/>
+        
+      <Tab.Screen name="Inspiration" component={InspirationScreen} 
+        options={{tabBarIcon: () => (<Image source={require("./app/assets/icon-inspiration.jpg")} 
+        style={{width: 32, height: 32}} />)}}/>
     </Tab.Navigator>
   );
 }
