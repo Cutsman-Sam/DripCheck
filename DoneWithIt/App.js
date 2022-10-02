@@ -10,10 +10,11 @@ import ClosetScreen from './app/screens/ClosetScreen';
 import InspirationScreen from './app/screens/InspirationScreen';
 
 const Tab = createBottomTabNavigator();
+Tab
 
 function BottomTabs() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator initialRouteName="Profile">
       <Tab.Screen name="Profile" component={ProfileScreen} />
       <Tab.Screen name="Calendar" component={CalendarScreen} />
       <Tab.Screen name="Closet" component={ClosetScreen} />
