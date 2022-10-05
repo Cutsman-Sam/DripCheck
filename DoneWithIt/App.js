@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
+import { Provider as PaperProvider } from 'react-native-paper';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -50,6 +51,7 @@ function BottomTabs() {
 //View -> UIView
 export default function App({navigation}) {
   return (
+    <PaperProvider>
     <NavigationContainer>
       <Stack.Navigator 
       initialRouteName={"Login"}
@@ -59,14 +61,6 @@ export default function App({navigation}) {
           options={{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
+    </PaperProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
