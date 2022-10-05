@@ -7,6 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import LoginScreen from './app/screens/LoginScreen';
 import ProfileScreen from './app/screens/ProfileScreen';
+import SettingsScreen from './app/screens/SettingsScreen';
 import CalendarScreen from './app/screens/CalendarScreen';
 import ClosetScreen from './app/screens/ClosetScreen';
 import InspirationScreen from './app/screens/InspirationScreen';
@@ -14,24 +15,34 @@ import InspirationScreen from './app/screens/InspirationScreen';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+function ProfileStack() {
+  return (
+    <Stack.Navigator 
+    initialRouteName={"Profile"}>
+      <Stack.Screen name="Profile" component={ProfileScreen} options={{}}/>
+      <Stack.Screen name="Settings" component={SettingsScreen} />
+    </Stack.Navigator>
+  )
+}
+
 function BottomTabs() {
   return (
-    <Tab.Navigator initialRouteName="Profile">
-      <Tab.Screen name="Profile" component={ProfileScreen} 
+    <Tab.Navigator initialRouteName="ProfileStack">
+      <Tab.Screen name="ProfileStack" component={ProfileStack} 
         options={{tabBarIcon: () => (<Image source={require("./app/assets/icon-profile.jpg")} 
-        style={{width: 32, height: 32}} />), headerShown: false}}/>
+        style={{width: 32, height: 32}} />), title: "Profile", headerShown: false}}/>
 
       <Tab.Screen name="Calendar" component={CalendarScreen} 
         options={{tabBarIcon: () => (<Image source={require("./app/assets/icon-calendar.jpg")} 
-        style={{width: 32, height: 32}} />), headerShown: false}}/>
+        style={{width: 32, height: 32}} />)}}/>
 
       <Tab.Screen name="Closet" component={ClosetScreen} 
         options={{tabBarIcon: () => (<Image source={require("./app/assets/icon-closet.jpg")} 
-        style={{width: 32, height: 32}} />), headerShown: false}}/>
+        style={{width: 32, height: 32}} />)}}/>
         
       <Tab.Screen name="Inspiration" component={InspirationScreen} 
         options={{tabBarIcon: () => (<Image source={require("./app/assets/icon-inspiration.jpg")} 
-        style={{width: 32, height: 32}} />), headerShown: false}}/>
+        style={{width: 32, height: 32}} />)}}/>
     </Tab.Navigator>
   );
 }
@@ -40,7 +51,6 @@ function BottomTabs() {
 export default function App({navigation}) {
   return (
     <NavigationContainer>
-
       <Stack.Navigator 
       initialRouteName={"Login"}
       screenOptions={{headerBackVisible: false}}>

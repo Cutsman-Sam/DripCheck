@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';  //status-bar replaced with 'react'
-import { StyleSheet, Text, View, Image, TouchableOpacity, LayoutAnimation } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, LayoutAnimation, Button } from 'react-native';
 //import {Avatar, Button} from 'react-native-paper'
 import UserPermissions from '../utilities/UserPermissions'
 import * as ImagePicker from 'expo-image-picker'
@@ -26,7 +26,7 @@ state = {
   },
 };
 
-function ProfileScreen(props) {
+function ProfileScreen({props, navigation}) {
     return (
     <View style={styles.container}> 
       {/* <TouchableOpacity>
@@ -47,6 +47,10 @@ function ProfileScreen(props) {
      </TouchableOpacity>
       <Text>Profile</Text>
       <StatusBar style="auto" />
+      <Button
+        title="Go to Settings (replace)"
+        onPress={() => navigation.navigate("Settings")}
+      />
     </View>
     );
 }
