@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';  //status-bar replaced with 'react'
 import { StyleSheet, Text, View, Button } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
@@ -13,6 +13,7 @@ function LoginScreen({navigation}) {
   React.useEffect(() => {
     if (response?.type === 'success') {
       const { authentication } = response;
+      navigation.navigate("BottomTabs");
     }
   }, [response]);
     return (
