@@ -1,30 +1,16 @@
 import qs from 'qs';
 import { Linking } from 'react-native';
-
-//https://blog.codemagic.io/how-to-make-your-react-native-app-send-emails/
+import email from 'react-native-email';
+//
 export async function sendEmail(to, subject, body, options = {}) {
     const { cc, bcc } = options;
 
-    let url = `mailto:${to}`;
-
-    // Create email link query
-    const query = qs.stringify({
+    email(to, {
+        // Optional additional arguments
+        cc: cc, // string or array of email addresses
+        bcc: bcc, // string or array of email addresses
         subject: subject,
         body: body,
-        cc: cc,
-        bcc: bcc
-    });
-
-    if (query.length) {
-        url += `?${query}`;
-    }
-
-    // check if we can use this link
-    const canOpen = await Linking.canOpenURL(url);
-
-    if (!canOpen) {
-        throw new Error('Provided URL can not be handled');
-    }
-    
-    return Linking.openURL(url);
+        checkCanOpen: false // Call Linking.canOpenURL prior to Linking.openURL
+    }).catch(console.error)
 }

@@ -5,10 +5,10 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, LayoutAnimation } from
 import UserPermissions from '../utilities/UserPermissions'
 import * as ImagePicker from 'expo-image-picker'
 import {Ionicons} from '@expo/vector-icons'
-import sendEmail from '../utilities/sendEmail'
+import {sendEmail} from '../utilities/sendEmail'
 import Button from 'react-native'
 
-function send (){
+function send(){
   sendEmail(
     'joegunner26@gmail.com',
        'We need your feedback',
@@ -58,7 +58,7 @@ function ProfileScreen(props) {
        />
      </TouchableOpacity>
       <Text>Profile</Text>
-      <Button onPress = {send()}> Send Email</Button>
+      <Button onPress ={send()} title = "Send Email"/>
       <StatusBar style="auto" />
     </View>
     );

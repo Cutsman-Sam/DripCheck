@@ -51,6 +51,12 @@ function LoginScreen({navigation}) {
         }}
         //onPress={() => navigation.navigate("BottomTabs")}
       />
+      <Button
+        title="Bypass Login (Temporary for Dev)"
+        onPress={() => {
+          navigation.navigate("BottomTabs")
+        }}
+      />
       <Modal visible={open}>
           <Text style={styles.center}>Dripcheck collects certain data about the user, such as uploaded photos, email addresses, and liked posts. Do you consent to this collection of data?</Text>
             <Button
