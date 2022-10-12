@@ -5,7 +5,19 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, LayoutAnimation } from
 import UserPermissions from '../utilities/UserPermissions'
 import * as ImagePicker from 'expo-image-picker'
 import {Ionicons} from '@expo/vector-icons'
+import sendEmail from '../utilities/sendEmail'
+import Button from 'react-native'
 
+function send (){
+  sendEmail(
+    'joegunner26@gmail.com',
+       'We need your feedback',
+    'UserName, we need 2 minutes of your time to fill this quick survey [link]',
+    {}
+).then(() => {
+    console.log('Your message was successfully sent!');
+});
+}
 handlePickAvatar = async () => {
   UserPermissions.getCameraPermission()
 
@@ -46,6 +58,7 @@ function ProfileScreen(props) {
        />
      </TouchableOpacity>
       <Text>Profile</Text>
+      <Button onPress = {send()}> Send Email</Button>
       <StatusBar style="auto" />
     </View>
     );
