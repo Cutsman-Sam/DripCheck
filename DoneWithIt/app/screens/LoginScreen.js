@@ -7,8 +7,6 @@ import { fetchUserInfoAsync } from 'expo-auth-session';
 
 function LoginScreen({navigation}) {
   const [open, setOpen] = useState(false)
-  //const [name, setName] = useState()
-  //const [age, setAge] = useState(0);
 
   const [request, resp, promptAsync] = Google.useAuthRequest({
     expoClientId: '680747377509-nhf0jt64eghn93bcmanicj7a2aqok75q.apps.googleusercontent.com',
