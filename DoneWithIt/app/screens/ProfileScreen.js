@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';  //status-bar replaced with 'react'
-import { StyleSheet, Text, View, Image, TouchableOpacity, LayoutAnimation, Button } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, LayoutAnimation } from 'react-native';
 //import {Avatar, Button} from 'react-native-paper'
 import UserPermissions from '../utilities/UserPermissions'
 import * as ImagePicker from 'expo-image-picker'
@@ -26,7 +26,7 @@ state = {
   },
 };
 
-function ProfileScreen({props, navigation}) {
+function ProfileScreen(props) {
     return (
     <View style={styles.container}> 
       {/* <TouchableOpacity>
@@ -36,8 +36,9 @@ function ProfileScreen({props, navigation}) {
         color="FFF" 
         style={{marginTop: 6, marginLeft: 2}}
       ></Ionicons>
+      this.handlePickAvatar
       </TouchableOpacity>   */}
-     <TouchableOpacity onPress={this.handlePickAvatar}>
+     <TouchableOpacity>
       <Image 
         source={require('../assets/blank-profile-pic.png')} 
         //source={{uri: this.state.user.avatar}} 
@@ -47,10 +48,6 @@ function ProfileScreen({props, navigation}) {
      </TouchableOpacity>
       <Text>Profile</Text>
       <StatusBar style="auto" />
-      <Button
-        title="Go to Settings (replace)"
-        onPress={() => navigation.navigate("Settings")}
-      />
     </View>
     );
 }
