@@ -10,5 +10,6 @@ npm-debug.*
 *.orig.*
 web-build/
 
-# macOS
+# General OS Files
 .DS_Store
+.Trash/
