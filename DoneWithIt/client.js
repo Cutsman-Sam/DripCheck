@@ -10,10 +10,10 @@ const client = new net.Socket();
 //connect to server on port
 client.connect(PORT,function(){
     //log connections
-    console.log(`Client 1: Connected to server on port ${PORT}`);
+    console.log(`Client: Connected to server on port ${PORT}`);
 
     //try to send data
-    client.write(/*data*/);
+    client.write('Hi Honey did you remember to buy milk?');
 });
 
 //Handle incoming data
