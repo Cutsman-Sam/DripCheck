@@ -11,9 +11,17 @@ const outfitSchema = new Schema({
         required: true
     },
     wornDates: [{
-        type: mongoose.Schema.Types.ObjectId
+        type: mongoose.Schema.Types.ObjectId,
         ref: "OutfitDate"
-    }]
+    }],
+    imagePath: {
+        type: String,
+        required: true
+    },
+    ownedBy: {
+        type: Schema.type.ObjectId,
+        required: true
+    }
 });
 
 module.exports = mongoose.model('User',userSchema); 
