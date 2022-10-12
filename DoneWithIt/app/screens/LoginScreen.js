@@ -22,6 +22,7 @@ function LoginScreen({navigation}) {
   });
   React.useEffect(() => {
     if (resp?.type === 'success') {
+      setOpen(true)
       const token = resp.authentication.accessToken;
       async function fetchData() {
         
@@ -35,14 +36,9 @@ function LoginScreen({navigation}) {
         })
         let data = await response.json();
         console.log(data.email);
+        //TODO: utilize this email address
       }
       fetchData()
-      
-      //2
-      
-      
-      
-      navigation.navigate("BottomTabs");
      
     }
   }, [resp]);
@@ -54,17 +50,11 @@ function LoginScreen({navigation}) {
         title="Login"
         onPress={() => {
           promptAsync();
-          setOpen(true)
         }}
         //onPress={() => navigation.navigate("BottomTabs")}
       />
       <Modal visible={open}>
-          <Text style={styles.center}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-             nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
-            in reprehenderit in voluptate velit esse cillum dolore eu fugiat 
-            nulla pariatur</Text>
+          <Text style={styles.center}>Dripcheck collects certain data about the user, such as uploaded photos, email addresses, and liked posts. Do you consent to this collection of data?</Text>
             <Button
               title="Agree"
               //onPress={() => setOpen(true)}
