@@ -29,30 +29,31 @@ mongoose.connection.once('open', () => {
 //function to handle client connection
 function onClientConnection(socket) {
     //log connection
-    console.log(`${sock.remoteAddress}:${sock.remotePort} Connected`);
+    console.log(`${socket.remoteAddress}:${socket.remotePort} Connected`);
 
     //Handle the client data.
-    sock.on('data',/*insert data handling function here*/function(data){
+    socket.on('data',/*insert data handling function here*/function(data){
         //Log data received from the client
         console.log(`>> data received : ${data} `);
 		
 		//prepare and send a response to the client 
 		let serverResp = "Hello from the server"
         //setup response
-		sock.write(serverResp);
+		socket.write(serverResp);
+        console.log(`Server responded: ${serverResp}`)
 		
 		//close the connection 
-		sock.end()    
+		socket.end()    
     });    
 
     //Handle when client connection is closed
-    sock.on('close',function(){
-        console.log(`${sock.remoteAddress}:${sock.remotePort} Connection closed`);
+    socket.on('close',function(){
+        console.log(`${socket.remoteAddress}:${socket.remotePort} Connection closed`);
     });
     
 	//Handle Client connection error.
-    sock.on('error',function(error){
-        console.error(`${sock.remoteAddress}:${sock.remotePort} Connection Error ${error}`);
+    socket.on('error',function(error){
+        console.error(`${socket.remoteAddress}:${socket.remotePort} Connection Error ${error}`);
     });
 	
 };

@@ -5,48 +5,14 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, LayoutAnimation } from
 import UserPermissions from '../utilities/UserPermissions'
 import * as ImagePicker from 'expo-image-picker'
 import {Ionicons} from '@expo/vector-icons'
+import UploadImage from '../utilities/UploadImage';
 
-handlePickAvatar = async () => {
-  UserPermissions.getCameraPermission()
 
-  let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    allowsEditing: true,
-    aspect: [4, 3]
-  })
-
-  if(result.cancelled) {
-    this.setState({ user: { ...this.state.user, avatar: result.uri}}) //figure this line out
-  }
-};
-
-state = {
-  user: {
-    avatar: null
-  },
-};
-
-function ProfileScreen(props) {
+function ProfileScreen() {
     return (
-    <View style={styles.container}> 
-      {/* <TouchableOpacity>
-        <Ionicons 
-        name="ios-add" 
-        size={40} 
-        color="FFF" 
-        style={{marginTop: 6, marginLeft: 2}}
-      ></Ionicons>
-      this.handlePickAvatar
-      </TouchableOpacity>   */}
-     <TouchableOpacity>
-      <Image 
-        source={require('../assets/blank-profile-pic.png')} 
-        //source={{uri: this.state.user.avatar}} 
-        style={styles.profileAvatar}
-        //style={{width: 150, height: 150, borderRadius: 150/2}}
-       />
-     </TouchableOpacity>
-      <Text>Profile</Text>
+    <View style={styles.container}>
+     <UploadImage/>
+     <Text style={{marginVertical:20,fontSize:16}}>Profile</Text>
       <StatusBar style="auto" />
     </View>
     );
