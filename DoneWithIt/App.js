@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 
-import { Provider as PaperProvider } from 'react-native-paper';
+import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -16,6 +16,19 @@ import InspirationScreen from './app/screens/InspirationScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+
+const theme = {
+  ...DefaultTheme,
+  roundness: 2,
+  version: 3,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#48ADE1',
+    secondary: '#f1c40f',
+    tertiary: '#a1b2c3'
+  }
+};
+
 
 function ProfileStack() {
   return (
@@ -54,7 +67,7 @@ function BottomTabs() {
 export default function App({navigation}) {
   
   return (
-    <PaperProvider>
+    <PaperProvider theme={theme}>
     <NavigationContainer>
       <Stack.Navigator 
       initialRouteName={"Login"}
