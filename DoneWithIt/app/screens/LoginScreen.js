@@ -3,7 +3,6 @@ import { StatusBar } from 'expo-status-bar';  //status-bar replaced with 'react'
 import { StyleSheet, Text, View, Button } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
-import * as Linking from 'expo-linking';
 import { fetchUserInfoAsync } from 'expo-auth-session';
 
 function LoginScreen({navigation}) {
