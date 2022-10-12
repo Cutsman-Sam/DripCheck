@@ -2,6 +2,7 @@
   "expo": {
     "name": "DoneWithIt",
     "slug": "DoneWithIt",
+    "scheme": "exp://10.186.149.229:19000",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
