@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
+
 import { Provider as PaperProvider } from 'react-native-paper';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -48,8 +49,10 @@ function BottomTabs() {
   );
 }
 
+
 //View -> UIView
 export default function App({navigation}) {
+  
   return (
     <PaperProvider>
     <NavigationContainer>

@@ -1,40 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';  //status-bar replaced with 'react'
-
-import { StyleSheet,
-  Text,
-  View,
-  Image,
-  TextInput,
-  Button,
-  TouchableOpacity, } from 'react-native';
-
+import { StyleSheet, Text, View, Button, Modal } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+import { fetchUserInfoAsync } from 'expo-auth-session';
 
 function LoginScreen({navigation}) {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    return (
-      <View style={styles.container}>
-        <Image style={styles.image} source={require("../assets/logo.png")} />
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Username"
-            placeholderTextColor="#003f5c"
-            onChangeText={(email) => setUsername(email)}
-          />
-        </View>
+  const [open, setOpen] = useState(false)
+  //const [name, setName] = useState()
+  //const [age, setAge] = useState(0);
 
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Password"
-            placeholderTextColor="#003f5c"
-            secureTextEntry={true}
-            onChangeText={(password) => setPassword(password)}
-          />
-        </View>
-      </View>
+  const [request, resp, promptAsync] = Google.useAuthRequest({
+    expoClientId: '680747377509-nhf0jt64eghn93bcmanicj7a2aqok75q.apps.googleusercontent.com',
+    scopes: [
+      'profile',
+      'email',
+      'openid',
+      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/userinfo.profile',
+    ]
+  });
+  React.useEffect(() => {
+    if (resp?.type === 'success') {
+      setOpen(true)
+      const token = resp.authentication.accessToken;
+      async function fetchData() {
+        
+        let response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          method: 'GET',
+          headers: {
+          Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+        })
+        let data = await response.json();
+        console.log(data.email);
+        //TODO: utilize this email address
+      }
+      fetchData()
+     
+    }
+  }, [resp]);
+    return (
+    <View style={styles.container}>
+      <Text>Login</Text>
+      <Button
+        disabled={!request}
+        title="Login"
+        onPress={() => {
+          promptAsync();
+        }}
+        //onPress={() => navigation.navigate("BottomTabs")}
+      />
+      <Modal visible={open}>
+          <Text style={styles.center}>Dripcheck collects certain data about the user, such as uploaded photos, email addresses, and liked posts. Do you consent to this collection of data?</Text>
+            <Button
+              title="Agree"
+              //onPress={() => setOpen(true)}
+              onPress={() => {setOpen(false); navigation.navigate("BottomTabs")}}
+             />
+             <Button
+              title="Disagree"
+              onPress={() => setOpen(false)}
+              //onPress={() => navigation.navigate("BottomTabs")}
+             />
+          </Modal>
+    </View>
     );
 }
 
@@ -45,21 +77,10 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
-    image: {
-      marginBottom: 60,
-    },
-    inputView: {
-      backgroundColor: "#48ADE1",
-      borderRadius: 30,
-      width: "65%",
-      height: 45,
-      marginBottom: 20,
-      alignItems: "center",
-    },
-    textInput: {
-      height: 50,
-      flex: 1,
-      padding: 10,
+    center: {
+    flex: 1,
+    //justifyContent: 'flex-end',
+    marginTop: 200
     }
 });
 
