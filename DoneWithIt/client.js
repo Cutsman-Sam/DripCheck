@@ -5,8 +5,9 @@ const net = require('net');
 const PORT = 3400;
 
 
-
-function messageServerNoRecv(msg) {
+//function to send a message to the server
+//returns server response
+function messageServer(msg) {
     //create socket
     const client = new net.Socket();
 
@@ -16,7 +17,8 @@ function messageServerNoRecv(msg) {
         console.log(`Client: Connected to server on port ${PORT}`);
 
         //try to send data
-        client.write('Hi Honey did you remember to buy milk?');
+        console.log(`Client: Sent message: \"${msg}\" to server on port ${PORT}`);
+        client.write(msg);
     });
 
     //Handle confirm
@@ -28,44 +30,13 @@ function messageServerNoRecv(msg) {
     client.on('close',function(){
         console.log('Cleint 1 :Connection Closed');
     });
-
+    
     //Handle error
     client.on('error',function(error){
         console.error(`Connection Error ${error}`); 
     });
 
-    return 
+    return data;
 }
 
-function messageServerRecv(msg) {
-
-    //create socket
-    const client = new net.Socket();
-
-    //connect to server on port
-    client.connect(PORT,function(){
-        //log connections
-        console.log(`Client: Connected to server on port ${PORT}`);
-
-        //try to send data
-        client.write(msg);
-    });
-
-    //Handle incoming data
-    client.on('data', function(recv){
-        console.log(`Client received from server: ${recv}`);
-    });
-
-    // Handle connection close 
-    client.on('close',function(){
-        console.log('Client: Connection Closed');
-    });
-
-    //Handle error
-    client.on('error',function(error){
-        console.error(`Connection Error ${error}`); 
-    });
-
-    return recv;
-}
- 
+export function messageServer();

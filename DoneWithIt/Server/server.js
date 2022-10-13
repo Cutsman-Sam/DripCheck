@@ -36,8 +36,11 @@ function onClientConnection(socket) {
         //Log data received from the client
         console.log(`>> data received : ${data} `);
 		
-		//prepare and send a response to the client 
-		let serverResp = "Hello from the server"
+		//verify valid message received
+
+        //pass message to message handler
+        let serverResp = messageHandler(data);
+
         //setup response
 		socket.write(serverResp);
         console.log(`Server responded: ${serverResp}`)
