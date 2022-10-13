@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const outfitDateShema = new Schema({
+const outfitDateSchema = new Schema({
     date: {
         type: Date,
         required: true

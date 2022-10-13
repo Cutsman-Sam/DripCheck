@@ -1,3 +1,5 @@
+//_id is default created for any object
+
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -9,7 +11,11 @@ const userSchema = new Schema({
     email: {
         type: String,
         required: true
-    } 
+    },
+    outfits: [{
+        type: Array,
+        ref: "Outfit"
+    }]
 });
 
 module.exports = mongoose.model('User',userSchema); 
