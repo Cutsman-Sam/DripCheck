@@ -5,29 +5,44 @@
 2. Add new User
     > email
     > displayName
-    < success/failure
+    < userID
+
 3. Get existing user data
-    > email/userID
+    > email
     < profile picture
     < outfit images and associated file paths
     < userID
+
 4. Update display name
     > user email, display name
     < succes/fail
+
 5. Update profile pic
     > user email/userID
     > new picture
     < success/failure
+
 6. Remove all user data 
     > user email/userID
     < success/fail
+
 7. Add outfit to database under user
+    > user Id/email
     > outfit image
     > outfit name
-    > user Id/email
     > outfit description
     < success/failure
     < outfitID
+
 8. Delete outfit from database
-    > 
+    > userID
+    > outfitID
+    < success/failure
+    
 9. Edit outfit information in database
+    > user Id
+    > outfitID
+    > outfit name
+    > outfit description
+    < success/failure
+    < outfitID
