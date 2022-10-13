@@ -1,30 +1,60 @@
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';  //status-bar replaced with 'react'
-import { StyleSheet, Text, View, Image, TouchableOpacity, LayoutAnimation } from 'react-native';
-//import {Avatar, Button} from 'react-native-paper'
-import UserPermissions from '../utilities/UserPermissions'
-import * as ImagePicker from 'expo-image-picker'
-import {Ionicons} from '@expo/vector-icons'
+import { StyleSheet, View} from 'react-native';
+import { Text, Button, Paragraph } from 'react-native-paper';
 import UploadImage from '../utilities/UploadImage';
 
-
-function ProfileScreen() {
+function ProfileScreen({navigation}) {
     return (
     <View style={styles.container}>
+      <View style={styles.containerSettings}>
+        <Button icon="cog" mode="outlined" onPress={() => {navigation.navigate("Settings")}} style={styles.settingsButton}>
+          Settings
+        </Button>
+      </View>
      <UploadImage/>
-     <Text style={{marginVertical:20,fontSize:16}}>Profile</Text>
-      <StatusBar style="auto" />
+      <Text variant="headlineLarge" style={styles.username}>JoeySpencer26</Text>
+      <Paragraph style={styles.bio}>This is a profile bio. I enjoy counting robotic sheep, and having a long enough bio to test text wrapping!</Paragraph>
+      <Button icon="account-wrench" mode="outlined" style={styles.editButton}>
+        Edit Profile
+      </Button>
+      <View style={styles.containerRow}>
+        <Text variant="headlineLarge" style={styles.numberField}>64</Text>
+        <Text variant="headlineLarge" style={styles.numberField}>53</Text>
+      </View>
+      <View style={styles.containerRow}>
+        <Text variant="headlineSmall" style={styles.numberLabel}>Followers</Text>
+        <Text variant="headlineSmall" style={styles.numberLabel}>Following</Text>
+      </View>
+      <Button mode="outlined" style={styles.editButton}>
+        Manage Posts
+      </Button>
     </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-      paddingTop: 50,
+      paddingTop: 10,
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: '#f5fafc',
       alignItems: 'center',
-      //justifyContent: 'center',
+    },
+    containerSettings: {
+      paddingTop: 0,
+      paddingRight: 10,
+      backgroundColor: '#f5fFFF',
+      flexDirection: "row",
+      alignSelf: 'flex-end',
+    },
+    containerRow: {
+      paddingTop: 0,
+      flexDirection: "row",
+      backgroundColor: '#f5fafc',
+      alignItems: 'center',
+    },
+
+    settingsButton: {
+      width: 120,
     },
     profileAvatar: {
       width: 150,
@@ -33,7 +63,30 @@ const styles = StyleSheet.create({
       backgroundColor: "E1E2E6",
       justifyContent: 'center',
       alignItems: 'center'      
-    }
+    },
+    username: {
+      paddingTop: 15,
+    },
+    bio: {
+      paddingTop: 5,
+      paddingHorizontal: 25,
+      paddingBottom: 20,
+    },
+    editButton: {
+      width: 180,
+    },
+    numberField: {
+      paddingTop: 25,
+      flex: 1,
+      textAlign: 'center'
+    },
+    numberLabel: {
+      paddingTop: 15,
+      flex: 1,
+      textAlign: 'center',
+      paddingBottom: 20,
+    },
+    
 });
 
 export default ProfileScreen;

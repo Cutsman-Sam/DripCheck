@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { StatusBar } from 'expo-status-bar';  //status-bar replaced with 'react'
-import { StyleSheet, Text, View, Modal, Image } from 'react-native';
-import { Button } from 'react-native-paper';
-import * as WebBrowser from 'expo-web-browser';
+import React from 'react';
+import { StyleSheet, View, Image } from 'react-native';
+import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import * as Google from 'expo-auth-session/providers/google';
-import { fetchUserInfoAsync } from 'expo-auth-session';
 
 function LoginScreen({navigation}) {
-  const [open, setOpen] = useState(false)
-  //const [name, setName] = useState()
-  //const [age, setAge] = useState(0);
+  const [visible, setVisible] = React.useState(false);
+  const hideDialog = () => setVisible(false);
 
   const [request, resp, promptAsync] = Google.useAuthRequest({
     expoClientId: '680747377509-nhf0jt64eghn93bcmanicj7a2aqok75q.apps.googleusercontent.com',
@@ -23,7 +19,7 @@ function LoginScreen({navigation}) {
   });
   React.useEffect(() => {
     if (resp?.type === 'success') {
-      setOpen(true)
+      setVisible(true);
       const token = resp.authentication.accessToken;
       async function fetchData() {
         
@@ -49,22 +45,22 @@ function LoginScreen({navigation}) {
       <Button icon="account-key" mode="contained" onPress={() => {promptAsync();}}>
         Sign in with Google
       </Button>
-      <Modal visible={open}>
-          <Text style={styles.center}>Dripcheck collects certain data about the user, such as uploaded photos, email addresses, and liked posts. Do you consent to this collection of data?</Text>
-            <Button
-              title="Agree"
-              //onPress={() => setOpen(true)}
-              onPress={() => {setOpen(false); navigation.navigate("BottomTabs")}}
-             />
-             <Button
-              title="Disagree"
-              onPress={() => setOpen(false)}
-              //onPress={() => navigation.navigate("BottomTabs")}
-             />
-          </Modal>
+        <Portal>
+          <Dialog visible={visible} onDismiss={hideDialog} dismissable={false}>
+            <Dialog.Title>Alert</Dialog.Title>
+            <Dialog.Content>
+              <Paragraph>Dripcheck collects certain data about the user, such as uploaded photos, email addresses, and liked posts. Do you consent to this collection of data?</Paragraph>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={() => {setVisible(false); navigation.navigate("BottomTabs")}}>Accept</Button>
+              <Button onPress={hideDialog}>Decline</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
     </View>
     );
 }
+//<Button onPress={showDialog}>Show Dialog</Button>
 
 const styles = StyleSheet.create({
     container: {

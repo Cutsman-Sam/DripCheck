@@ -19,13 +19,18 @@ const Stack = createNativeStackNavigator();
 
 const theme = {
   ...DefaultTheme,
-  roundness: 2,
+  roundness: 4,
   version: 3,
   colors: {
     ...DefaultTheme.colors,
     primary: '#48ADE1',
-    secondary: '#f1c40f',
-    tertiary: '#a1b2c3'
+    
+    secondary: '#48ADE1',
+    secondaryContainer: '#8fd4f7',
+    tertiary: '#48ADE1',
+
+    outline: '#48ADE1',
+    background: '#FFFFFF'
   }
 };
 
