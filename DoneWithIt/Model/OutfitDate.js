@@ -5,6 +5,10 @@ const outfitDateSchema = new Schema({
     date: {
         type: Date,
         required: true
+    },
+    OwnedBy: {
+        type: Schema.Types.ObjectID,
+        required: true
     }
 });
 

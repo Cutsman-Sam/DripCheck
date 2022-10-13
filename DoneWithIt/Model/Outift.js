@@ -10,10 +10,6 @@ const outfitSchema = new Schema({
         type: Date,
         required: true
     },
-    wornDates: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "OutfitDate"
-    }],
     imagePath: {
         type: String,
         required: true

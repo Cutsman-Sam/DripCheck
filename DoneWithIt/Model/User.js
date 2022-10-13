@@ -12,8 +12,16 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    notificationToken: {
+        type: String,
+        required: false
+    },
+    accountCreationDate: {
+        type: Date,
+        required: true
+    },
     outfits: [{
-        type: Array,
+        type: Schema.Types.ObjectID,
         ref: "Outfit"
     }]
 });

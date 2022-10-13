@@ -5,13 +5,15 @@ Message to Server format:
 {request_number}~|`{userID/email}~|`{case specific data}
 
 Server response format:
-{request_number}~|`{relevant data}
+{"success" || "fail"}~|`{relevant data}~|`{...}~|`{request_number if success}
+    - Note: every fail will be fail~|`{request_number}
 
 1. Check User Exists
     Format: 1~|`email
     > email
 
-    < true/false
+    Format: {"success" || "fail"}~|`1
+    < success/fail
 
 2. Add new User
     Format: 2~|`email~|`displayName~|`
@@ -19,12 +21,16 @@ Server response format:
     > displayName
     > currentDate
 
+    Format: {"success" || "fail"}~|`userID~|`2
     < userID
 
 3. Get existing user data
     Format: 3~|`email
     > email
 
+    Format:
+    {"success" || "fail"}~|`userID~|`{profilePic still dont know about pic stuff}~|`{outfit 1 info}~|`{outfit 2 info}Format: {"success" || "fail"}~|`3
+    
     < userID
     < profile picture
     < outfit images and associated file paths
@@ -35,6 +41,7 @@ Server response format:
     > userID
     > display name
 
+    Format: {"success" || "fail"}~|`4
     < succes/fail
 
 
@@ -43,6 +50,7 @@ Server response format:
     > userID
     > new picture
 
+    Format: {"success" || "fail"}~|`5
     < success/failure
 
 
@@ -50,6 +58,7 @@ Server response format:
     Format: 6~|`userID
     > userID
 
+    Format: {"success" || "fail"}~|`6
     < success/fail
 
 
@@ -61,6 +70,7 @@ Server response format:
     > outfit description
     > creationDate
 
+    Format: {"success" || "fail"}~|`outfitID~|`7
     < success/failure
     < outfitID
 
@@ -70,6 +80,7 @@ Server response format:
     > userID
     > outfitID
 
+    Format: {"success" || "fail"}~|`8
     < success/failure
     
 
@@ -81,6 +92,7 @@ Server response format:
     > outfit name
     > outfit description
 
+    Format: {"success" || "fail"}~|`outfitID~|`9
     < success/failure
     < outfitID
 
@@ -90,6 +102,7 @@ Server response format:
     > userID
     > token || NULL
 
+    Format: {"success" || "fail"}~|`token~|`10
     < success/failure || token
 
 

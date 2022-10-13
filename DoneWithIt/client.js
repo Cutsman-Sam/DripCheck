@@ -1,6 +1,6 @@
 //imports
 const net = require('net'); 
-
+var serverRespHandler = new serverResponseHandler();
 //config
 const PORT = 3400;
 
@@ -24,11 +24,12 @@ function messageServer(msg) {
     //Handle confirm
     client.on('data', function(data){
         console.log(`Client received from server: ${data}`);
+        serverRespHandler.handleResponse(data);
     });
 
     // Handle connection close 
     client.on('close',function(){
-        console.log('Cleint 1 :Connection Closed');
+        console.log('Cleint: Connection Closed');
     });
     
     //Handle error
