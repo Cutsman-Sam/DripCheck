@@ -15,6 +15,6 @@ const options = {
   body: '{"personalizations":[{"to":[{"email":' + '"' + to + '"' + '}],"subject":' + '"' + subject + '"' + '}],"from":{"email":"dripcheck307@gmail.com"},"content":[{"type":"text/plain","value":' + '"' + body + '"' + '}]}'
 };
 
-fetch(url, options)
-console.log("Sent an email.")
+const stat = await (await fetch(url, options)).ok
+console.log(stat)
 }

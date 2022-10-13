@@ -28,7 +28,7 @@ function messageServer(msg) {
 
     // Handle connection close 
     client.on('close',function(){
-        console.log('Cleint 1 :Connection Closed');
+        console.log('Client 1 :Connection Closed');
     });
     
     //Handle error

@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Button, Modal } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { fetchUserInfoAsync } from 'expo-auth-session';
+import {sendEmail} from '../utilities/sendEmail';
 
 function LoginScreen({navigation}) {
   const [open, setOpen] = useState(false)
