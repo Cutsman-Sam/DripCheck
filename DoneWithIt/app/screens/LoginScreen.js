@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Button, Modal } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { fetchUserInfoAsync } from 'expo-auth-session';
-
+import UserPermissions from '../utilities/UserPermissions/'
 function LoginScreen({navigation}) {
   const [open, setOpen] = useState(false)
 
@@ -42,6 +42,11 @@ function LoginScreen({navigation}) {
   }, [resp]);
     return (
     <View style={styles.container}>
+      <Button
+              title="Notifications"
+              //onPress={() => setOpen(true)}
+              onPress={() => {UserPermissions.registerForPushNotificationsAsync()}}
+             />
       <Text>Login</Text>
       <Button
         disabled={!request}
