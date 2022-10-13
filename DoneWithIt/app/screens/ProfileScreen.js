@@ -50,8 +50,8 @@ function ProfileScreen(props) {
       <Text>Profile</Text>
       <Button icon="account-key" mode="contained" onPress={() => {sendEmail(
     'joegunner26@gmail.com',
-       'We need your feedback',
-    'UserName, we need 2 minutes of your time to fill this quick survey [link]'
+       'We\'re sorry to see you go :(',
+    'This email confirms the deletion of your Dripcheck account. We hope you consider making a new account some day!'
 );}}>
         Send Email
       </Button>

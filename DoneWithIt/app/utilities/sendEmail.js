@@ -16,4 +16,5 @@ const options = {
 };
 
 fetch(url, options)
+console.log("Sent an email.")
 }
