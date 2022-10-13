@@ -1,23 +1,13 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';  //status-bar replaced with 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity, LayoutAnimation } from 'react-native';
-//import {Avatar, Button} from 'react-native-paper'
+import {Avatar, Button} from 'react-native-paper'
 import UserPermissions from '../utilities/UserPermissions'
 import * as ImagePicker from 'expo-image-picker'
 import {Ionicons} from '@expo/vector-icons'
 import {sendEmail} from '../utilities/sendEmail'
-import Button from 'react-native'
 
-function send(){
-  sendEmail(
-    'joegunner26@gmail.com',
-       'We need your feedback',
-    'UserName, we need 2 minutes of your time to fill this quick survey [link]',
-    {}
-).then(() => {
-    console.log('Your message was successfully sent!');
-});
-}
+
 handlePickAvatar = async () => {
   UserPermissions.getCameraPermission()
 
@@ -58,7 +48,13 @@ function ProfileScreen(props) {
        />
      </TouchableOpacity>
       <Text>Profile</Text>
-      <Button onPress ={send()} title = "Send Email"/>
+      <Button icon="account-key" mode="contained" onPress={() => {sendEmail(
+    'joegunner26@gmail.com',
+       'We need your feedback',
+    'UserName, we need 2 minutes of your time to fill this quick survey [link]'
+);}}>
+        Send Email
+      </Button>
       <StatusBar style="auto" />
     </View>
     );

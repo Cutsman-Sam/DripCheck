@@ -2,15 +2,21 @@ import qs from 'qs';
 import { Linking } from 'react-native';
 import email from 'react-native-email';
 //
-export async function sendEmail(to, subject, body, options = {}) {
-    const { cc, bcc } = options;
+export async function sendEmail(to, subject, body) {
+    const url = 'https://rapidprod-sendgrid-v1.p.rapidapi.com/mail/send';
 
-    email(to, {
-        // Optional additional arguments
-        cc: cc, // string or array of email addresses
-        bcc: bcc, // string or array of email addresses
-        subject: subject,
-        body: body,
-        checkCanOpen: false // Call Linking.canOpenURL prior to Linking.openURL
-    }).catch(console.error)
+const options = {
+  method: 'POST',
+  headers: {
+    'content-type': 'application/json',
+    'X-RapidAPI-Key': 'c1eb99b731mshca880d4da5c8547p1e1f70jsn1f6eb7211649',
+    'X-RapidAPI-Host': 'rapidprod-sendgrid-v1.p.rapidapi.com'
+  },
+  body: '{"personalizations":[{"to":[{"email":"joegunner26@gmail.com"}],"subject":"Hello, World!"}],"from":{"email":"dripcheck307@gmail.com"},"content":[{"type":"text/plain","value":"Hello, World!"}]}'
+};
+
+fetch(url, options)
+	.then(res => res.json())
+	.then(json => console.log(json))
+	.catch(err => console.error('error:' + err));
 }
