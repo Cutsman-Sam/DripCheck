@@ -1,9 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import { StyleSheet, View} from 'react-native';
 import { Text, Button, Paragraph } from 'react-native-paper';
 import UploadImage from '../utilities/UploadImage';
 
 function ProfileScreen({navigation}) {
+  const [followers, setFollowers] = React.useState(0);
+  const [following, setFollowing] = React.useState(0);
     return (
     <View style={styles.container}>
       <View style={styles.containerSettings}>
@@ -16,8 +18,8 @@ function ProfileScreen({navigation}) {
       <Paragraph style={styles.bio}>This is a profile bio. I enjoy counting robotic sheep, and having a long enough bio to test text wrapping!</Paragraph>
       
       <View style={styles.containerRow}>
-        <Text variant="headlineLarge" style={styles.numberField}>0</Text>
-        <Text variant="headlineLarge" style={styles.numberField}>0</Text>
+        <Text variant="headlineLarge" style={styles.numberField}>{followers}</Text>
+        <Text variant="headlineLarge" style={styles.numberField}>{following}</Text>
       </View>
       <View style={styles.containerRow}>
         <Text variant="headlineSmall" style={styles.numberLabel}>Followers</Text>
