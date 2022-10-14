@@ -1,18 +1,24 @@
 //imports
 const net = require('net'); 
 const { send } = require('process');
-
 //config
 const PORT = 3400;
 
-messageServer(0,"jdawgs009@gmail.com");
+sendMessage(1,"jdawgs009@gmail.com");
 
 
 //function to send a message to the server
 //returns server response
-function sendMessage(msg) {
-    var data;
-    
+function sendMessage() {
+
+    const args = Array.from(arguments);
+    var message = args[0] + "~|`";
+
+    //add all arguments to message
+    for (let i = 1; i < args.length; i++) {
+        message = message + args[i] + "~|`";
+    }
+   
     //create socket
     const client = new net.Socket();
 
@@ -22,13 +28,16 @@ function sendMessage(msg) {
         console.log(`Client: Connected to server on port ${PORT}`);
 
         //try to send data
-        console.log(`Client: Sent message: \"${msg}\" to server on port ${PORT}`);
-        client.write(msg);
+        console.log(`Client: Sent message: \"${message}\" to server on port ${PORT}`);
+        client.write(message);
     });
     
     //Handle confirm
     client.on('data', function(data){
         console.log(`Client received from server: ${data}`);
+        const buf = Buffer.from(data);
+        let response = handleResponse(buf.toString());
+        return response; 
     });
 
     // Handle connection close 
@@ -41,28 +50,11 @@ function sendMessage(msg) {
         console.error(`Connection ${error}`); 
     });
 
-    return data;
 }
 
-function messageServer(requestNum) {
-    const args = Array.from(arguments);
-    var message = args[0] + "~|`";
-
-    //add all arguments to message
-    for (let i = 1; i < args.length; i++) {
-        message = message + args[i] + "~|`";
-    }
-   
-    //send message to server
-    let data = sendMessage(message);
-    
-    //handle server response
-    let response = handleResponse(toString(data));
-    return response;
-}
-
-
-function handleResponse(data) { //null 
+function handleResponse(data) { 
+    console.log(data);
+    data = toString(data);
     //split using agreed upon regex
     const messageSplit = data.split("~|`");
     let requestNum = messageSplit[messageSplit.length - 1];
@@ -85,11 +77,10 @@ function handleResponse(data) { //null
          * Format: {"success" || "fail"}~|`userID~|`2
         */
         case 2: 
-
             break;
         /*
          * Get existing user data
-         * {"success" || "fail"}~|`userID~|`{profilePic still dont know about pic stuff}~|`{outfit 1 info}~|`{outfit 2 info}Format: {"success" || "fail"}~|`3
+         * {"success" || "fail"}~|`userID~|`{profilePic still dont know about pic stuff}~|`{outfit 1 info}~|`{outfit 2 info}
          */
         case 3: 
             
