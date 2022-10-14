@@ -1,4 +1,5 @@
 //imports
+const { triggerAsyncId } = require('async_hooks');
 const dgram = require('dgram');
 const mongoose = require('mongoose');
 
@@ -12,6 +13,7 @@ const User = require('../Model/User');
 //connect to DB
 connectDB();
 
+mongoose.connection.useDb("DripBase");
 //create server
 const socket = dgram.createSocket("udp4");
 
@@ -60,6 +62,7 @@ socket.on('error',function(error){
 function handleRequest(data) {
     const buf = Buffer.from(data);
     var dataStr = buf.toString();
+    console.log("Data as string: ", dataStr);
     var requestSplit = dataStr.split("~|`");
     let requestNum = parseInt(requestSplit[0]);
 
@@ -81,12 +84,15 @@ function handleRequest(data) {
          * Format: 2~|`email~|`displayName~|`currentDate
         */
         case 2: 
-            const newUser = new User({displayName: toString(requestSplit[2]), email: toString(requestSplit[1]), accountCreationDate: toString(requestSplit[1])});
-            var err = saveToMongo(newUser);
-            if(err == null) {
-                //success
+            var newUser = new User({displayName: requestSplit[2], email: requestSplit[1], accountCreationDate: requestSplit[3]});
+            if(!newUser.$isValid) {
+                console.log(`>>>> user is invalid.`)
+                return "fail~|`" + "~|`2";
+            }
+            if(saveToMongo(newUser)) {
                 return "success~|`" + newUser.id + "~|`2";
             } else {
+                console.log(`>>>> save to mongo failed.`)
                 //fail
                 return "fail~|`" + "~|`2";
             }
@@ -154,10 +160,15 @@ function handleRequest(data) {
 }
 
 async function saveToMongo(entry) {
-    await entry.save((err,savedUser) => {
-        if (err) {return err};
-        //saved\
+    await entry.save(function(err,result){
+        if (err) {
+            console.log(err);
+            return false;
+        } else  {
+            console.log(result);
+            return true;
+        }
       });
-      return null;
 }
+
 
