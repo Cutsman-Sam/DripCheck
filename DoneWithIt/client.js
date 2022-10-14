@@ -4,7 +4,7 @@ const { send } = require('process');
 //config
 const PORT = 34000;
 const serverIP = "100.65.75.254";
-sendMessage(2,"jdawgs009@gmail.com", );
+sendMessage(1,"jdawgs009@gmail.com");
 
 
 //function to send a message to the server
@@ -66,7 +66,7 @@ function handleResponse(data) {
          * Format: {"success" || "fail"}~|`1
         */
         case 1: 
-
+            
             break;
         /*
          * Add new User
