@@ -6,7 +6,7 @@ import { fetchUserInfoAsync } from 'expo-auth-session';
 import {sendEmail} from '../utilities/sendEmail';
 
 function LoginScreen({navigation}) {
-  const [open, setOpen] = useState(false)
+  //const [open, setOpen] = useState(false)
 
   const [visible, setVisible] = React.useState(false);
   const hideDialog = () => setVisible(false);
