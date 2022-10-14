@@ -4,10 +4,11 @@ import { StyleSheet, Text, View, Button, Modal } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { fetchUserInfoAsync } from 'expo-auth-session';
-import {sendEmail} from '../utilities/sendEmail';
 
 function LoginScreen({navigation}) {
   const [open, setOpen] = useState(false)
+  //const [name, setName] = useState()
+  //const [age, setAge] = useState(0);
 
   const [request, resp, promptAsync] = Google.useAuthRequest({
     expoClientId: '680747377509-nhf0jt64eghn93bcmanicj7a2aqok75q.apps.googleusercontent.com',
@@ -35,6 +36,7 @@ function LoginScreen({navigation}) {
         })
         let data = await response.json();
         console.log(data.email);
+        
         //TODO: utilize this email address
       }
       fetchData()
@@ -51,12 +53,6 @@ function LoginScreen({navigation}) {
           promptAsync();
         }}
         //onPress={() => navigation.navigate("BottomTabs")}
-      />
-      <Button
-        title="Bypass Login (Temporary for Dev)"
-        onPress={() => {
-          navigation.navigate("BottomTabs")
-        }}
       />
       <Modal visible={open}>
           <Text style={styles.center}>Dripcheck collects certain data about the user, such as uploaded photos, email addresses, and liked posts. Do you consent to this collection of data?</Text>

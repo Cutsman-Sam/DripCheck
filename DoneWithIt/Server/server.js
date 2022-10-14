@@ -4,6 +4,7 @@ const path = require('path');
 const net = require('net');
 const mongoose = require('mongoose');
 const logEvents = require('./logEvents');
+var reqHandler = new requestHandler();
 
 //global values
 const PORT = 3400;
@@ -39,7 +40,13 @@ function onClientConnection(socket) {
 		//verify valid message received
 
         //pass message to message handler
-        let serverResp = messageHandler(data);
+        let serverResp = reqHandler.handleRequest(data);
+        
+        if(serverResp == null) {
+            console.log(`Request: "${data}" failed in messageHandler`)
+            serverResp = "fail";
+        }
+
 
         //setup response
 		socket.write(serverResp);
