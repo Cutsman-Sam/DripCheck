@@ -12,7 +12,7 @@ function ProfileScreen({navigation}) {
         </Button>
       </View>
      <UploadImage/>
-      <Text variant="headlineLarge" style={styles.username}>JoeySpencer26</Text>
+      <Text variant="headlineLarge" style={styles.username} > {global.userEmail} </Text>
       <Paragraph style={styles.bio}>This is a profile bio. I enjoy counting robotic sheep, and having a long enough bio to test text wrapping!</Paragraph>
       <Button icon="account-wrench" mode="outlined" style={styles.editButton}>
         Edit Profile
