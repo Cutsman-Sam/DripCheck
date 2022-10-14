@@ -30,14 +30,12 @@ function ClosetScreen(props) {
     if (index < numOutfits - 1) {
       setIndex(index + 1);
     }
-    console.log(index)
   }
 
   function prevOutfit() {
     if (index > 0) {
       setIndex(index - 1);
     }
-    console.log(index)
   }
 
   function showModal() {
