@@ -18,8 +18,8 @@ function ProfileScreen({navigation}) {
         Edit Profile
       </Button>
       <View style={styles.containerRow}>
-        <Text variant="headlineLarge" style={styles.numberField}>64</Text>
-        <Text variant="headlineLarge" style={styles.numberField}>53</Text>
+        <Text variant="headlineLarge" style={styles.numberField}>0</Text>
+        <Text variant="headlineLarge" style={styles.numberField}>0</Text>
       </View>
       <View style={styles.containerRow}>
         <Text variant="headlineSmall" style={styles.numberLabel}>Followers</Text>
