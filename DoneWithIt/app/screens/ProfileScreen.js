@@ -14,9 +14,7 @@ function ProfileScreen({navigation}) {
      <UploadImage/>
       <Text variant="headlineSmall" style={styles.username} > {global.userEmail} </Text>
       <Paragraph style={styles.bio}>This is a profile bio. I enjoy counting robotic sheep, and having a long enough bio to test text wrapping!</Paragraph>
-      <Button icon="account-wrench" mode="outlined" style={styles.editButton}>
-        Edit Profile
-      </Button>
+      
       <View style={styles.containerRow}>
         <Text variant="headlineLarge" style={styles.numberField}>0</Text>
         <Text variant="headlineLarge" style={styles.numberField}>0</Text>
@@ -31,6 +29,10 @@ function ProfileScreen({navigation}) {
     </View>
     );
 }
+
+//<Button icon="account-wrench" mode="outlined" style={styles.editButton}>
+//Edit Profile
+//</Button>
 
 const styles = StyleSheet.create({
     container: {
