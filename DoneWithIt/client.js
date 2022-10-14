@@ -1,10 +1,10 @@
 //imports
-const net = require('net'); 
+const dgram = require('dgram');
 const { send } = require('process');
 //config
-const PORT = 3400;
-
-sendMessage(1,"jdawgs009@gmail.com");
+const PORT = 34000;
+const serverIP = "100.65.75.254";
+sendMessage(2,"jdawgs009@gmail.com", );
 
 
 //function to send a message to the server
@@ -18,42 +18,38 @@ function sendMessage() {
     for (let i = 1; i < args.length; i++) {
         message = message + args[i] + "~|`";
     }
-   
-    //create socket
-    const client = new net.Socket();
-
-    //connect to server on port
-    client.connect(PORT,function(){
-        //log connections
-        console.log(`Client: Connected to server on port ${PORT}`);
-
-        //try to send data
-        console.log(`Client: Sent message: \"${message}\" to server on port ${PORT}`);
-        client.write(message);
-    });
     
+    //create socket
+    const client = dgram.createSocket('udp4');
+    
+    //try to send data
+    console.log(`Client: Sent message: \"${message}\" to server on port ${PORT}`);
+
+    client.send(message,0,message.length,PORT,serverIP); //server IP of justins desktop
+
     //Handle confirm
-    client.on('data', function(data){
-        console.log(`Client received from server: ${data}`);
-        const buf = Buffer.from(data);
+    client.on('message', function(msg,rinfo) {
+        const buf = Buffer.from(msg);
+
+        console.log(`Client received from server: ${buf.toString()}`);
         let response = handleResponse(buf.toString());
+        client.close();
         return response; 
     });
 
     // Handle connection close 
-    client.on('close',function(){
+    client.on('close',function() {
         console.log('Client: Connection Closed');
     });
     
     //Handle error
-    client.on('error',function(error){
+    client.on('error',function(error) {
         console.error(`Connection ${error}`); 
     });
-
+    
 }
 
 function handleResponse(data) { 
-    console.log(data);
     data = toString(data);
     //split using agreed upon regex
     const messageSplit = data.split("~|`");
@@ -143,3 +139,5 @@ function handleResponse(data) {
             return null;
     } 
 }
+
+module.exports = sendMessage;

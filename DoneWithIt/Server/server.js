@@ -1,74 +1,68 @@
 //imports
-const net = require('net');
+const dgram = require('dgram');
 const mongoose = require('mongoose');
 
 //global values
-const PORT = 3400;
+const PORT = 34000;
+const HOST = '0.0.0.0';
 
 const connectDB = require('../config/dbConn');
-const { emitWarning } = require('process');
+const User = require('../Model/User');
 
 //connect to DB
 connectDB();
 
 //create server
-const server = net.createServer(onClientConnection);
+const socket = dgram.createSocket("udp4");
 
 //check that mongo connected before listen
 mongoose.connection.once('open', () => {
     console.log('Connected to MongoBongo Batadase');
     
     //start listening
-    server.listen(PORT,function() {
-        console.log(`Server started on port ${PORT}`);
-    });
+    socket.bind(PORT);
+    console.log(`Server started on port ${PORT}`);
 });
 
-//function to handle client connection
-function onClientConnection(socket) {
-    //log connection
-    console.log(`${socket.remoteAddress}:${socket.remotePort} Connected`);
+socket.once('listening', () => {
+    const address = socket.address();
+    console.log(`server listening ${address.address}:${address.port}`);
+});
 
-    //Handle the client data.
-    socket.on('data',/*insert data handling function here*/function(data){
-        //Log data received from the client
-        console.log(`>> data received : ${data} `);
+//Handle the client data.
+socket.on('message',function(msg,rinfo){
+
+    //Log data received from the client
+    console.log(`>> data received : ${msg} from ${rinfo.address}:${rinfo.port} `);
 		
-		//verify valid message received
+	//verify valid message received
 
-        //pass message to message handler
-        
-        let serverResp = handleRequest(toString(data));
+    //pass message to message handler
+    let serverResp = handleRequest(msg);
 
         //setup response
-		socket.write(serverResp);
-        console.log(`Server responded: ${serverResp}`)
+	socket.send(serverResp,0,serverResp.length,rinfo.port,rinfo.address);
+    console.log(`Server responded: ${serverResp}`)
 		
-		//close the connection 
-		socket.end()  
+    //serverResp = "fail~|`0";
+    if(serverResp == null) {
+        console.log(`Request: "${data}" failed in messageHandler`)
+    }
+});    
 
-        //serverResp = "fail~|`0";
-        if(serverResp == null) {
-            console.log(`Request: "${data}" failed in messageHandler`)
-        }  
-    });    
+//Handle Client connection error.
+socket.on('error',function(error){
+    console.error(`${socket.remoteAddress}:${socket.remotePort} Connection ${error}`);
+});	
 
-    //Handle when client connection is closed
-    socket.on('close',function(){
-        console.log(`${socket.remoteAddress}:${socket.remotePort} Connection closed`);
-    });
-    
-	//Handle Client connection error.
-    socket.on('error',function(error){
-        console.error(`${socket.remoteAddress}:${socket.remotePort} Connection ${error}`);
-    });
-	
-};
+
 
 function handleRequest(data) {
-    var requestSplit = data.split("~|`");
-    let requestNum = requestSplit[0];
-    
+    const buf = Buffer.from(data);
+    var dataStr = buf.toString();
+    var requestSplit = dataStr.split("~|`");
+    let requestNum = parseInt(requestSplit[0]);
+
     if(isNaN(requestNum) || requestNum == 0) {
         return "fail~|`0"
     }
@@ -81,15 +75,21 @@ function handleRequest(data) {
         */
         case 1: 
             //query database to see if user email exists
-            
-            break;
+            return "success~|`1";
         /*
          * Add new User
-         * Format: 2~|`email~|`displayName~|`
+         * Format: 2~|`email~|`displayName~|`currentDate
         */
         case 2: 
-
-            break;
+            const newUser = new User({displayName: toString(requestSplit[2]), email: toString(requestSplit[1]), accountCreationDate: toString(requestSplit[1])});
+            var err = saveToMongo(newUser);
+            if(err == null) {
+                //success
+                return "success~|`" + newUser.id + "~|`2";
+            } else {
+                //fail
+                return "fail~|`" + "~|`2";
+            }
         /*
          * Get existing user data
          * Format: 3~|`email
@@ -152,3 +152,12 @@ function handleRequest(data) {
             return "fail~|`" + requestNum;
     } 
 }
+
+async function saveToMongo(entry) {
+    await entry.save((err,savedUser) => {
+        if (err) {return err};
+        //saved\
+      });
+      return null;
+}
+
