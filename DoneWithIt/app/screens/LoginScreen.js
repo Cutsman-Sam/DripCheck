@@ -3,6 +3,7 @@ import { StyleSheet, View, Image } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import * as Google from 'expo-auth-session/providers/google';
 import { fetchUserInfoAsync } from 'expo-auth-session';
+global.userEmail;
 
 function LoginScreen({navigation}) {
   //const [open, setOpen] = useState(false)
@@ -35,7 +36,7 @@ function LoginScreen({navigation}) {
           },
         })
         let data = await response.json();
-        console.log(data.email);
+        global.userEmail = data.email;
         
         //TODO: utilize this email address
       }

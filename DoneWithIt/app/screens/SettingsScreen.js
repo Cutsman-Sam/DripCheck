@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View} from 'react-native';
 import { Text, Button, Paragraph, DefaultTheme, Portal, Dialog, Switch } from 'react-native-paper';
+import {sendEmail} from '../utilities/sendEmail'
 
 const redTheme = {
   ...DefaultTheme,
@@ -55,7 +56,7 @@ function SettingsScreen({navigation}) {
             <Paragraph>Are you sure you want to delete your Dripcheck account? This cannot be undone.</Paragraph>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => {setVisible(false); navigation.navigate("Login")}}>Delete</Button>
+            <Button onPress={() => {setVisible(false); navigation.navigate("Login"); sendEmail(global.userEmail, "Dripcheck-Account Deleted", "We're sorry to see you go! Your account has been successfully deleted.")}}>Delete</Button>
             <Button onPress={hideDialog}>Cancel</Button>
           </Dialog.Actions>
         </Dialog>
