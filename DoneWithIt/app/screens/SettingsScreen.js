@@ -16,7 +16,6 @@ const redTheme = {
 function SettingsScreen({navigation}) {
   const [visible, setVisible] = React.useState(false);
   const hideDialog = () => setVisible(false);
-  const showDialog = () => setVisible(true);
 
   const [likeNotifsEnabled, toggleLikeNotifs] = React.useState(false);
   const onToggleLikeNotifs = () => toggleLikeNotifs(!likeNotifsEnabled);
@@ -46,7 +45,7 @@ function SettingsScreen({navigation}) {
       Log Out
     </Button>
     <View style={styles.emptyView}></View>
-    <Button icon="alert-decagram" mode="outlined" style={styles.editButton} theme={redTheme} buttonColor="#e8231e" textColor="#4d0200" onPress={() => {showDialog}}>
+    <Button icon="alert-decagram" mode="outlined" style={styles.editButton} theme={redTheme} buttonColor="#e8231e" textColor="#4d0200" onPress={() => {setVisible(true);}}>
       Delete Account
     </Button>
     <Portal>
