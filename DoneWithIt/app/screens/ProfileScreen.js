@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     containerSettings: {
       paddingTop: 0,
       paddingRight: 10,
-      backgroundColor: '#f5fFFF',
+      backgroundColor: '#f5fafc',
       flexDirection: "row",
       alignSelf: 'flex-end',
     },
@@ -86,7 +86,6 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       paddingBottom: 20,
     },
-    
 });
 
 export default ProfileScreen;

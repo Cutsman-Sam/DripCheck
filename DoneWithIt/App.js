@@ -34,7 +34,6 @@ const theme = {
   }
 };
 
-
 function ProfileStack() {
   return (
     <Stack.Navigator 
