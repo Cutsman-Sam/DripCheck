@@ -7,8 +7,18 @@ Message to Server format:
 Server response format:
 {"success" || "fail"}~|`{relevant data}~|`{...}~|`{request_number if success}
     - Note: every fail will be fail~|`{request_number}
+    1. 2
+    2. 4
+    3. 2
+    4. 3
+    5. 3
+    6. 2
+    7. 6
+    8. 3
+    9. N
+    10. 3
 
-1. Check User Exists
+1. Check User Exists 
     Format: 1~|`email
     > email
 
@@ -16,7 +26,7 @@ Server response format:
     < success/fail
 
 2. Add new User
-    Format: 2~|`email~|`displayName~|`
+    Format: 2~|`email~|`displayName~|`currentDate
     > email
     > displayName
     > currentDate
@@ -63,7 +73,7 @@ Server response format:
 
 
 7. Add new outfit to database under user
-    Format: 7~|`userID~|`{outfit image idk what to do so far}~|`outfitName~|`outfitDescription
+    Format: 7~|`userID~|`{outfit image idk what to do so far}~|`outfitName~|`outfitDescription~|`creationDate
     > user Id
     > outfit image
     > outfit name

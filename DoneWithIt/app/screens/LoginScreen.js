@@ -37,6 +37,7 @@ function LoginScreen({navigation}) {
         let data = await response.json();
         console.log(data.email);
         //TODO: utilize this email address
+        
       }
       fetchData()
      

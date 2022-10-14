@@ -14,7 +14,8 @@ async function run() {
         const users = database.collection('user');
 
     } finally {
-        //
+        //after connection
+        
     }
 
 }
