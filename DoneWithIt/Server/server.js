@@ -8,12 +8,12 @@ const PORT = 34000;
 const HOST = '0.0.0.0';
 
 const connectDB = require('../config/dbConn');
+const Outift = require('../Model/Outift');
 const User = require('../Model/User');
+var conn;
 
 //connect to DB
 connectDB();
-
-mongoose.connection.useDb("DripBase");
 //create server
 const socket = dgram.createSocket("udp4");
 
@@ -21,6 +21,10 @@ const socket = dgram.createSocket("udp4");
 mongoose.connection.once('open', () => {
     console.log('Connected to MongoBongo Batadase');
     
+    //initialize database collections
+    //User.createCollection();
+    //Outift.createCollection();
+
     //start listening
     socket.bind(PORT);
     console.log(`Server started on port ${PORT}`);
@@ -86,13 +90,14 @@ function handleRequest(data) {
         case 2: 
             var newUser = new User({displayName: requestSplit[2], email: requestSplit[1], accountCreationDate: requestSplit[3]});
             if(!newUser.$isValid) {
-                console.log(`>>>> user is invalid.`)
+                console.log(`>>>> user is invalid.`);
                 return "fail~|`" + "~|`2";
             }
             if(saveToMongo(newUser)) {
+                console.log(`>>>> save to mongo succeeded.`);
                 return "success~|`" + newUser.id + "~|`2";
             } else {
-                console.log(`>>>> save to mongo failed.`)
+                console.log(`>>>> save to mongo failed.`);
                 //fail
                 return "fail~|`" + "~|`2";
             }

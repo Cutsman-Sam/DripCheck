@@ -1,0 +1,10 @@
+{
+    "displayName": "test2",
+    "email": "testemail2@gmail.com",
+    "accountCreationDate": "2022-10-14",
+    "outfits": [],
+    "_id": {
+      "$oid":"634985143274f217f9c275b8"
+    },    
+    "__v": 0
+  }

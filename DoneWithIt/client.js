@@ -4,7 +4,7 @@ const { send } = require('process');
 //config
 const PORT = 34000;
 const serverIP = "100.65.75.254";
-sendMessage(1,"jdawgs009@gmail.com");
+sendMessage(2,"testemail2@gmail.com","test2","10-14-2022");
 
 
 //function to send a message to the server
@@ -30,7 +30,6 @@ function sendMessage() {
     //Handle confirm
     client.on('message', function(msg,rinfo) {
         const buf = Buffer.from(msg);
-
         console.log(`Client received from server: ${buf.toString()}`);
         let response = handleResponse(buf.toString());
         client.close();
@@ -50,7 +49,6 @@ function sendMessage() {
 }
 
 function handleResponse(data) { 
-    data = toString(data);
     //split using agreed upon regex
     const messageSplit = data.split("~|`");
     let requestNum = messageSplit[messageSplit.length - 1];
@@ -73,6 +71,11 @@ function handleResponse(data) {
          * Format: {"success" || "fail"}~|`userID~|`2
         */
         case 2: 
+            if(messageSplit[0] == "fail") {
+                return false;
+            } else {
+                return messageSplit[1];
+            }
             break;
         /*
          * Get existing user data
