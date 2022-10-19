@@ -1,19 +1,19 @@
 //imports 
 const mongoose = require('mongoose');
 const connectDB = require('./config/dbConn');
-const { exists } = require('./Model/Outift');
 const Outift = require('./Model/Outift');
 const User = require('./Model/User');
 
-//connect to DB
-connectDB();
 
 //test entry
-var retVal = requestDatabase(2,"testemail@gmail.com",`test`,"10-16-2022");
+//var retVal = requestDatabase(2,"testemail@gmail.com",`test`,"10-16-2022");
 
 //function to send a message to the server
 //returns server response
 function requestDatabase() {
+
+    //connect to DB
+    connectDB();
 
     //check that mongo connected before listen
     try {
