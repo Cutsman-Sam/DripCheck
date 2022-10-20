@@ -118,6 +118,7 @@ function requestDatabase() {
             return "fail, " + requestNum;
     } 
 
+    mongoose.connection.close();
 }
 
 async function saveToMongo(entry) {
@@ -130,8 +131,8 @@ async function saveToMongo(entry) {
             return true;
         }
       });
+      
 }
 
-mongoose.connection.close();
 
 module.exports = requestDatabase;
