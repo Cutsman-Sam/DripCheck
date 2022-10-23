@@ -13,14 +13,17 @@ import { Text, Button, Portal, Modal, TextInput } from 'react-native-paper';
 function ClosetScreen(props) {
   const [addingOutfitMenu, setAddingOutfitMenu] = React.useState(false);
   const [editOutfitMenu, setEditOutfitMenu] = React.useState(false);
+  const [addTagMenu, setAddTagMenu] = React.useState(false);
 
   const [addingName, setAddingName] = React.useState("");
   const [addingDate, setAddingDate] = React.useState("");
   const [addingOutfit, setAddingOutfit] = React.useState("");
+  const [addingTag, setAddingTag] = React.useState("");
 
   const [nameArray, setNameArray] = React.useState([]);
   const [dateArray, setDateArray] = React.useState([]);
   const [outfitArray, setOutfitArray] = React.useState([]);
+  const [tagArray, setTagArray] = React.useState([]);
   const [numOutfits, setNumOutfits] = React.useState(0);
   const [index, setIndex] = React.useState(0);
 
@@ -60,15 +63,28 @@ function ClosetScreen(props) {
     setEditOutfitMenu(false);
   }
 
+  function hideModalTag() {
+    setAddTagMenu(false);
+  }
+
   function addOutfit(name, date, image) {
     if (name != "" && date != "" && image != "") {
       setNameArray(nameArray.concat(name));
       setDateArray(dateArray.concat(date));
       setOutfitArray(outfitArray.concat(image));
+      setTagArray(tagArray.concat([]));
       let newOutfits = numOutfits + 1;
       let newIndex = numOutfits;
       setNumOutfits(newOutfits);
       setIndex(newIndex);
+    }
+  }
+
+  function addTag(tag) {
+    if (tag != "") {
+      let tempArray1 = tagArray;
+      tempArray1.splice(index, 1, tag);
+      setNameArray(tempArray1);
     }
   }
 
@@ -135,6 +151,10 @@ function ClosetScreen(props) {
         <Button icon="pencil" mode="contained" style={styles.addOutfit} onPress={showModalEdit}>
           Edit Outfit
         </Button>
+        <View style={{padding: 5}}></View>
+        <Button icon="pencil" mode="contained" style={styles.addOutfit} onPress={showModalTag}>
+          Add Tag
+        </Button>
 
 
 
@@ -199,6 +219,28 @@ function ClosetScreen(props) {
             </Button>
             <View style={styles.buttonSpacing}></View>
             <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModal()}}>
+              Cancel
+            </Button>
+          </Modal>
+        </Portal>
+
+
+
+        <Portal>
+          <Modal visible={addTagMenu} style={styles.modalMenu} dismissable={false}>
+            <Text variant="headlineSmall" style={styles.outfitText}>Tag Details</Text>
+            <View style={styles.buttonSpacing}></View>
+            <TextInput
+              label="Tag Name"
+              value={addingTag}
+              onChangeText={addingTag => setAddingTag(addingTag)}
+            />
+            <View style={styles.buttonSpacing}></View>
+            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalTag(); addTag(addingTag)}}>
+              Confirm Tag Addition
+            </Button>
+            <View style={styles.buttonSpacing}></View>
+            <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalTag()}}>
               Cancel
             </Button>
           </Modal>
