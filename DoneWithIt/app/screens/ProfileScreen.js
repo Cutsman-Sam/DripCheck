@@ -1,59 +1,64 @@
-import React from 'react';
-import { StatusBar } from 'expo-status-bar';  //status-bar replaced with 'react'
-import { StyleSheet, Text, View, Image, TouchableOpacity, LayoutAnimation } from 'react-native';
-import {Avatar, Button} from 'react-native-paper'
-import UserPermissions from '../utilities/UserPermissions'
-import * as ImagePicker from 'expo-image-picker'
-import {Ionicons} from '@expo/vector-icons'
+import * as React from 'react';
+import { StyleSheet, View} from 'react-native';
+import { Text, Button, Paragraph } from 'react-native-paper';
 import UploadImage from '../utilities/UploadImage';
 
-
-// handlePickAvatar = async () => {
-//   UserPermissions.getCameraPermission()
-
-//   let result = await ImagePicker.launchImageLibraryAsync({
-//     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-//     allowsEditing: true,
-//     aspect: [4, 3],
-//     quality: 1,
-//   })
-
-//   if(result.cancelled) {
-//     this.setState({ user: { ...this.state.user, avatar: result.uri}}) //figure this line out
-//   }
-// };
-
-// state = {
-//   user: {
-//     avatar: null
-//   },
-// };
-//     {/* <TouchableOpacity onPress={this.handlePickAvatar}>
-//    <Image 
- //       source={require('../assets/blank-profile-pic.png')} 
-        //source={{uri: this.state.user.avatar}} 
- //       style={styles.profileAvatar}
- //       //style={{width: 150, height: 150, borderRadius: 150/2}}
- //      />
- //    </TouchableOpacity> */}
-
-export default function ProfileScreen() {
+function ProfileScreen({navigation}) {
+  const [followers, setFollowers] = React.useState(0);
+  const [following, setFollowing] = React.useState(0);
     return (
     <View style={styles.container}>
+      <View style={styles.containerSettings}>
+        <Button icon="cog" mode="outlined" onPress={() => {navigation.navigate("Settings")}} style={styles.settingsButton}>
+          Settings
+        </Button>
+      </View>
      <UploadImage/>
-     <Text style={{marginVertical:20,fontSize:16}}>Profile</Text>
-      <StatusBar style="auto" />
+      <Text variant="headlineSmall" style={styles.username} > {global.userEmail} </Text>
+      <Paragraph style={styles.bio}>This is a profile bio. I enjoy counting robotic sheep, and having a long enough bio to test text wrapping!</Paragraph>
+      
+      <View style={styles.containerRow}>
+        <Text variant="headlineLarge" style={styles.numberField}>{followers}</Text>
+        <Text variant="headlineLarge" style={styles.numberField}>{following}</Text>
+      </View>
+      <View style={styles.containerRow}>
+        <Text variant="headlineSmall" style={styles.numberLabel}>Followers</Text>
+        <Text variant="headlineSmall" style={styles.numberLabel}>Following</Text>
+      </View>
+      <Button mode="outlined" style={styles.editButton}>
+        Manage Posts
+      </Button>
     </View>
     );
 }
 
+//<Button icon="account-wrench" mode="outlined" style={styles.editButton}>
+//Edit Profile
+//</Button>
+
 const styles = StyleSheet.create({
     container: {
-      paddingTop: 50,
+      paddingTop: 10,
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: '#f5fafc',
       alignItems: 'center',
-      //justifyContent: 'center',
+    },
+    containerSettings: {
+      paddingTop: 0,
+      paddingRight: 10,
+      backgroundColor: '#f5fafc',
+      flexDirection: "row",
+      alignSelf: 'flex-end',
+    },
+    containerRow: {
+      paddingTop: 0,
+      flexDirection: "row",
+      backgroundColor: '#f5fafc',
+      alignItems: 'center',
+    },
+
+    settingsButton: {
+      width: 120,
     },
     profileAvatar: {
       width: 150,
@@ -62,8 +67,31 @@ const styles = StyleSheet.create({
       backgroundColor: "E1E2E6",
       justifyContent: 'center',
       alignItems: 'center'      
-    }
+    },
+    username: {
+      paddingTop: 15,
+      paddingBottom:5,
+    },
+    bio: {
+      paddingTop: 5,
+      paddingHorizontal: 25,
+      paddingBottom: 20,
+    },
+    editButton: {
+      width: 180,
+    },
+    numberField: {
+      paddingTop: 25,
+      flex: 1,
+      textAlign: 'center'
+    },
+    numberLabel: {
+      paddingTop: 15,
+      flex: 1,
+      textAlign: 'center',
+      paddingBottom: 20,
+    },
 });
 
-//export default ProfileScreen;
+export default ProfileScreen;
 
