@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import * as Google from 'expo-auth-session/providers/google';
-import {requestDatabase} from '../../requestDatabase';
 global.userEmail;
 
 function LoginScreen({navigation}) {
@@ -39,7 +38,7 @@ function LoginScreen({navigation}) {
         global.userEmail = data.email;
         
         //TODO: utilize this email address
-        requestDatabase(2,data.email,data.email,"10-19-2020");
+        
       }
       fetchData()
      

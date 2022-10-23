@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View} from 'react-native';
 import { Text, Button, Paragraph, DefaultTheme, Portal, Dialog, Switch } from 'react-native-paper';
+import { requestData } from '../utilities/requestData';
 import {sendEmail} from '../utilities/sendEmail'
 
 const redTheme = {
@@ -17,7 +18,8 @@ const redTheme = {
 function SettingsScreen({navigation}) {
   const [visible, setVisible] = React.useState(false);
   const hideDialog = () => setVisible(false);
-
+  const [visible2, setVisible2] = React.useState(false);
+  const hideDialog2 = () => setVisible2(false);
   const [likeNotifsEnabled, toggleLikeNotifs] = React.useState(false);
   const onToggleLikeNotifs = () => toggleLikeNotifs(!likeNotifsEnabled);
 
@@ -46,6 +48,21 @@ function SettingsScreen({navigation}) {
       Log Out
     </Button>
     <View style={styles.emptyView}></View>
+    <Button icon="account-arrow-left" mode="outlined" style={styles.editButton} onPress={() => {setVisible2(true);}}>
+      Request My Data
+    </Button>
+    <Portal>
+        <Dialog visible={visible2} onDismiss={hideDialog2} dismissable={true}>
+          <Dialog.Title>Confirmation</Dialog.Title>
+          <Dialog.Content>
+            <Paragraph>Are you sure you want to request your data? An email will be sent to you.</Paragraph>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => {setVisible2(false); requestData(global.userEmail)}}>Yes</Button>
+            <Button onPress={hideDialog2}>No</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     <Button icon="alert-decagram" mode="outlined" style={styles.editButton} theme={redTheme} buttonColor="#e8231e" textColor="#4d0200" onPress={() => {setVisible(true);}}>
       Delete Account
     </Button>
