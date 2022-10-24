@@ -207,21 +207,6 @@ function ClosetScreen(props) {
     );
   } else {
     return (
-<<<<<<< HEAD
-    <View style={styles.container}>
-      <View style={styles.shape_container}>
-        <View style={styles.rectangle} />
-      </View>
-      <Text>Closet Tab Body (replace)</Text>
-      <Button
-              title="View and Edit Outfits"
-              //onPress={() => setOpen(false)}
-              //onPress={() => navigation.navigate("BottomTabs")}
-             />
-      <StatusBar style="auto" />
-      
-    </View>
-=======
       <View style={styles.container}>
         <Text variant="headlineSmall" style={styles.noOutfitText}>No Outfits Yet...</Text>
         <Button icon="account-cowboy-hat" mode="contained" style={styles.addOutfit} onPress={showModal}>
@@ -257,31 +242,11 @@ function ClosetScreen(props) {
           </Modal>
         </Portal>
       </View>
->>>>>>> e14dc16c4a4e510928307b59a3d8311a3c1cf3e9
     );
   }
 }
 
 const styles = StyleSheet.create({
-<<<<<<< HEAD
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    shape_container: {
-      height: 150,
-      alignItems: "center",
-      justifyContent: "center",
-      margin: 10,
-    },
-    rectangle: {
-      width: 200,
-      height: 200 * 2,
-      backgroundColor: '#EBDCDC'
-    }
-=======
   container: {
     flex: 1,
     backgroundColor: '#f5fafc',
@@ -338,7 +303,6 @@ const styles = StyleSheet.create({
   inputField: {
     paddingTop: 20,
   },
->>>>>>> e14dc16c4a4e510928307b59a3d8311a3c1cf3e9
 });
 
 export default ClosetScreen;
