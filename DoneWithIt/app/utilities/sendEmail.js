@@ -1,6 +1,3 @@
-import qs from 'qs';
-import { Linking } from 'react-native';
-import email from 'react-native-email';
 //
 export async function sendEmail(to, subject, body) {
     const url = 'https://rapidprod-sendgrid-v1.p.rapidapi.com/mail/send';
@@ -14,7 +11,5 @@ const options = {
   },
   body: '{"personalizations":[{"to":[{"email":' + '"' + to + '"' + '}],"subject":' + '"' + subject + '"' + '}],"from":{"email":"dripcheck307@gmail.com"},"content":[{"type":"text/plain","value":' + '"' + body + '"' + '}]}'
 };
-
-const stat = await (await fetch(url, options)).ok
-console.log(stat)
+const stat = (await fetch(url, options)).status
 }

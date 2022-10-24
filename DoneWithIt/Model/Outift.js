@@ -19,9 +19,9 @@ const outfitSchema = new Schema({
         required: true
     },
     ownedBy: {
-        type: Schema.type.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     }
 });
 
-module.exports = mongoose.model('User',userSchema); 
+module.exports = mongoose.model('Outfit',outfitSchema); 
