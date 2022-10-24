@@ -1,15 +1,13 @@
-import React from 'react';
-import { StyleSheet, View, Image } from 'react-native';
-import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
+import React, { useState, useEffect } from 'react';
+import { StatusBar } from 'expo-status-bar';  //status-bar replaced with 'react'
+import { StyleSheet, Text, View, Button, Modal } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
-import {requestDatabase} from '../../requestDatabase';
-global.userEmail;
+import { fetchUserInfoAsync } from 'expo-auth-session';
+import {sendEmail} from '../utilities/sendEmail';
 
 function LoginScreen({navigation}) {
-  //const [open, setOpen] = useState(false)
-
-  const [visible, setVisible] = React.useState(false);
-  const hideDialog = () => setVisible(false);
+  const [open, setOpen] = useState(false)
 
   const [request, resp, promptAsync] = Google.useAuthRequest({
     expoClientId: '680747377509-nhf0jt64eghn93bcmanicj7a2aqok75q.apps.googleusercontent.com',
@@ -23,7 +21,7 @@ function LoginScreen({navigation}) {
   });
   React.useEffect(() => {
     if (resp?.type === 'success') {
-      setVisible(true);
+      setOpen(true)
       const token = resp.authentication.accessToken;
       async function fetchData() {
         
@@ -36,10 +34,8 @@ function LoginScreen({navigation}) {
           },
         })
         let data = await response.json();
-        global.userEmail = data.email;
-        
+        console.log(data.email);
         //TODO: utilize this email address
-        requestDatabase(2,data.email,data.email,"10-19-2020");
       }
       fetchData()
      
@@ -47,31 +43,42 @@ function LoginScreen({navigation}) {
   }, [resp]);
     return (
     <View style={styles.container}>
-      <Image style={styles.image} source={require("../assets/logo.png")} />
-      <Button icon="account-key" mode="contained" onPress={() => {promptAsync();}}>
-        Sign in with Google
-      </Button>
-        <Portal>
-          <Dialog visible={visible} onDismiss={hideDialog} dismissable={false}>
-            <Dialog.Title>Alert</Dialog.Title>
-            <Dialog.Content>
-              <Paragraph>Dripcheck collects certain data about the user, such as uploaded photos, email addresses, and liked posts. Do you consent to this collection of data?</Paragraph>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={() => {setVisible(false); navigation.navigate("BottomTabs")}}>Accept</Button>
-              <Button onPress={hideDialog}>Decline</Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
+      <Text>Login</Text>
+      <Button
+        disabled={!request}
+        title="Login"
+        onPress={() => {
+          promptAsync();
+        }}
+        //onPress={() => navigation.navigate("BottomTabs")}
+      />
+      <Button
+        title="Bypass Login (Temporary for Dev)"
+        onPress={() => {
+          navigation.navigate("BottomTabs")
+        }}
+      />
+      <Modal visible={open}>
+          <Text style={styles.center}>Dripcheck collects certain data about the user, such as uploaded photos, email addresses, and liked posts. Do you consent to this collection of data?</Text>
+            <Button
+              title="Agree"
+              //onPress={() => setOpen(true)}
+              onPress={() => {setOpen(false); navigation.navigate("BottomTabs")}}
+             />
+             <Button
+              title="Disagree"
+              onPress={() => setOpen(false)}
+              //onPress={() => navigation.navigate("BottomTabs")}
+             />
+          </Modal>
     </View>
     );
 }
-//<Button onPress={showDialog}>Show Dialog</Button>
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#daecf5',
+      backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -79,9 +86,6 @@ const styles = StyleSheet.create({
     flex: 1,
     //justifyContent: 'flex-end',
     marginTop: 200
-    },
-    image: {
-      marginBottom: 60,
     }
 });
 
