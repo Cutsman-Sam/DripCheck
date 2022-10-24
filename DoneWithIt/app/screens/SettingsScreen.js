@@ -31,7 +31,7 @@ function SettingsScreen({navigation}) {
       <View style={styles.containerRow}>
         <Text variant="titleMedium" style={styles.notifOption}>Notify when Post Liked</Text>
         <View style={styles.containerSwitch}>
-          <Switch value={likeNotifsEnabled} onValueChange={onToggleLikeNotifs} style={styles.switch}/>
+          <Switch value={likeNotifsEnabled} onValueChange={onToggleLikeNotifs} style={styles.switchTwo}/>
         </View>
       </View>
       <View style={styles.containerRow}>
@@ -105,6 +105,11 @@ const styles = StyleSheet.create({
   },
   switch: {
     alignSelf: 'flex-end',
+    left: 150,
+  },
+  switchTwo: {
+    alignSelf: 'flex-end',
+    left: 111,
   },
 });
 
