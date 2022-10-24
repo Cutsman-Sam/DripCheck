@@ -63,6 +63,11 @@ function ClosetScreen(props) {
     setEditOutfitMenu(false);
   }
 
+  function showModalTag() {
+    setAddTagMenu(true);
+    setAddingTag("");
+  }
+
   function hideModalTag() {
     setAddTagMenu(false);
   }
@@ -83,8 +88,8 @@ function ClosetScreen(props) {
   function addTag(tag) {
     if (tag != "") {
       let tempArray1 = tagArray;
-      tempArray1.splice(index, 1, tag);
-      setNameArray(tempArray1);
+      tempArray1.splice(index, 1, tagArray[index] + ", " + tag);
+      setTagArray(tempArray1);
     }
   }
 
@@ -129,6 +134,7 @@ function ClosetScreen(props) {
       <View style={styles.container}>
         <Text variant="headlineSmall" style={styles.outfitText}>{nameArray[index]}</Text>
         <Text variant="headerLarge" style={styles.dateText}>Last Worn: {dateArray[index]}</Text>
+        <Text variant="headerLarge" style={styles.dateText}>Tags: {tagArray[index]}</Text>
         <View style={styles.imageContainer}>
           <Image
             style={styles.closetPicture}
@@ -148,13 +154,16 @@ function ClosetScreen(props) {
           Add Outfit
         </Button>
         <View style={{padding: 5}}></View>
-        <Button icon="pencil" mode="contained" style={styles.addOutfit} onPress={showModalEdit}>
-          Edit Outfit
-        </Button>
-        <View style={{padding: 5}}></View>
-        <Button icon="pencil" mode="contained" style={styles.addOutfit} onPress={showModalTag}>
-          Add Tag
-        </Button>
+        <View style={styles.buttonRowContainer}>
+          <Button icon="pencil" mode="contained" style={styles.addOutfit} onPress={showModalEdit}>
+            Edit Outfit
+          </Button>
+          <View style={{padding: 5}}></View>
+          <Button icon="pencil" mode="contained" style={styles.addOutfit} onPress={showModalTag}>
+            Add Tag
+          </Button>
+        </View>
+        
 
 
 
@@ -325,7 +334,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   closetPicture: {
-    height: 380,
+    height: 340,
     width: 280,
     borderRadius: 20,
     borderWidth: 1,
