@@ -8,11 +8,11 @@ function CalendarScreen(navigation) {
       <View style={{ paddingTop: 50, flex: 1 }}>
         <Calendar
           // Initially visible month. Default = Date()
-          current={'2012-03-01'}
+          current={'2022-09-01'}
           // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-          minDate={'2012-05-10'}
+  
           // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-          maxDate={'2012-05-30'}
+        
           // Handler which gets executed on day press. Default = undefined
           onDayPress={day => {
             console.log('selected day', day);
@@ -24,14 +24,14 @@ function CalendarScreen(navigation) {
             console.log('month changed', month);
           }}
           // Hide month navigation arrows. Default = false
-          hideArrows={true}
+          hideArrows={false}
           // Do not show days of other months in month page. Default = false
-          hideExtraDays={true}
+          hideExtraDays={false}
           // If hideArrows=false and hideExtraDays=false do not swich month when tapping on greyed out
           // day from another month that is visible in calendar page. Default = false
-          disableMonthChange={true}
+          disableMonthChange={false}
           // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-          firstDay={1}
+          firstDay={0}
         />
       </View>
     );
