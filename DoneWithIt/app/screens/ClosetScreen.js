@@ -87,9 +87,53 @@ function ClosetScreen(props) {
 
   function addTag(tag) {
     if (tag != "") {
-      let tempArray1 = tagArray;
-      tempArray1.splice(index, 1, tagArray[index] + ", " + tag);
-      setTagArray(tempArray1);
+      let valid = true;
+      if (tagArray.length != 0) {
+        let str = tagArray[index].toString();
+        const strArray = str.split(", ");
+        var arrayLength = strArray.length;
+        
+        for (var i = 0; i < arrayLength; i++) {
+            if (strArray[i].toUpperCase() === tag.toUpperCase()) {
+              valid = false;
+            }
+        }
+        if (valid) {
+          let tempArray1 = tagArray;
+          tempArray1.splice(index, 1, tagArray[index] + ", " + tag);
+          setTagArray(tempArray1);
+        }
+      } else {
+        let tempArray1 = tagArray;
+        tempArray1.splice(index, 1, tag);
+        setTagArray(tempArray1);
+      }
+    }
+  }
+
+  function removeTag(tag) {
+    if (tag != "") {
+      let valid = true;
+      if (tagArray.length != 0) {
+        let str = tagArray[index].toString();
+        const strArray = str.split(", ");
+        var arrayLength = strArray.length;
+        
+        for (var i = 0; i < arrayLength; i++) {
+            if (strArray[i].toUpperCase() === tag.toUpperCase()) {
+              valid = false;
+            }
+        }
+        if (valid) {
+          let tempArray1 = tagArray;
+          tempArray1.splice(index, 1, tagArray[index] + ", " + tag);
+          setTagArray(tempArray1);
+        }
+      } else {
+        let tempArray1 = tagArray;
+        tempArray1.splice(index, 1, tag);
+        setTagArray(tempArray1);
+      }
     }
   }
 
@@ -238,6 +282,7 @@ function ClosetScreen(props) {
         <Portal>
           <Modal visible={addTagMenu} style={styles.modalMenu} dismissable={false}>
             <Text variant="headlineSmall" style={styles.outfitText}>Tag Details</Text>
+            <Text variant="headerLarge" style={styles.dateText}>Tags: {tagArray[index]}</Text>
             <View style={styles.buttonSpacing}></View>
             <TextInput
               label="Tag Name"
@@ -247,6 +292,9 @@ function ClosetScreen(props) {
             <View style={styles.buttonSpacing}></View>
             <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalTag(); addTag(addingTag)}}>
               Confirm Tag Addition
+            </Button>
+            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalTag(); removeTag(addingTag)}}>
+              Confirm Tag Removal
             </Button>
             <View style={styles.buttonSpacing}></View>
             <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalTag()}}>
@@ -350,7 +398,6 @@ const styles = StyleSheet.create({
     borderColor: "black",
     alignSelf: "center"
   },
-
   inputField: {
     paddingTop: 20,
   },
