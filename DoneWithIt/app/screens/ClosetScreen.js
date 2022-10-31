@@ -210,10 +210,10 @@ function ClosetScreen(props) {
     return (
       <View style={styles.container}>
         <Text variant="headlineSmall" style={styles.noOutfitText}>No Outfits Yet...</Text>
+        <UploadOutfit/>
         <Button icon="account-cowboy-hat" mode="contained" style={styles.addOutfit} onPress={showModal}>
           Add Outfit
         </Button>
-        //<UploadOutfit/>
         <Portal>
           <Modal visible={addingOutfitMenu} style={styles.modalMenu} dismissable={false}>
             <Text variant="headlineSmall" style={styles.outfitText}>Outfit Details</Text>
@@ -293,6 +293,7 @@ const styles = StyleSheet.create({
   },
   addOutfit: {
     borderWidth: 1,
+    marginTop: 15,
     borderColor: "black"
   },
   modalButton: {

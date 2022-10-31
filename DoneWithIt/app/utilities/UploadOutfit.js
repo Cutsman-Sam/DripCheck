@@ -34,11 +34,11 @@ export default function UploadOutfit() {
   return (
             <View style={imageUploaderStyles.container}>
                 {
-                    image  && <Image source={{ uri: image }} style={{ width: 300, height: 700 }} />
+                    image  && <Image source={{ uri: image }} style={{ width: 300, height: 550 }} />
                 }
                     <View style={imageUploaderStyles.uploadBtnContainer}>
                         <TouchableOpacity onPress={addImage} style={imageUploaderStyles.uploadBtn} >
-                            <Text>{image ? 'Edit' : 'Upload'} Icon</Text>
+                            <Text>{image ? 'Edit' : 'Upload'} Outfit</Text>
                             <AntDesign name="camera" size={20} color="black" />
                         </TouchableOpacity>
                     </View>
@@ -51,11 +51,12 @@ export default function UploadOutfit() {
 const imageUploaderStyles=StyleSheet.create({
     container:{
         elevation:2,
-        height:700,
+        //marginTop: 15,
+        height:550,
         width:300,
         backgroundColor:'#efefef',
         position:'relative',
-        borderRadius:999,
+        borderRadius:20,
         overflow:'hidden',
     },
     uploadBtnContainer:{
@@ -65,7 +66,7 @@ const imageUploaderStyles=StyleSheet.create({
         bottom:0,
         backgroundColor:'lightgrey',
         width:'100%',
-        height:'25%',
+        height:'10%',
     },
     uploadBtn:{
         display:'flex',
