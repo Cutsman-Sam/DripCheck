@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Text, Button, Portal, Modal, TextInput } from 'react-native-paper';
+import UploadOutfit from '../utilities/UploadOutfit';
 
 
 //addOutfit('Casual Blue Coat', '10/8/22', 'https://www.stitchfix.com/men/blog/wp-content/uploads/2017/09/20-10-20_Set_2_M_OLD_v2_1x1-scaled.jpeg');
@@ -212,6 +213,7 @@ function ClosetScreen(props) {
         <Button icon="account-cowboy-hat" mode="contained" style={styles.addOutfit} onPress={showModal}>
           Add Outfit
         </Button>
+        //<UploadOutfit/>
         <Portal>
           <Modal visible={addingOutfitMenu} style={styles.modalMenu} dismissable={false}>
             <Text variant="headlineSmall" style={styles.outfitText}>Outfit Details</Text>
