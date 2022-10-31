@@ -11,11 +11,11 @@ export async function requestData(emailAddress) {
             'content-type': 'application/json',
             'api-key': KEY,
         },
-        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "users", "filter": { "email": "jdawgs009@gmail.com" }}'
+        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "users", "filter": { "email": "' + emailAddress + '" }}'
     };
     let response = await fetch(url, options)
     let data = await response.json();
-    console.log(data);
+    return data;
 }
 
 export async function insertNewUser(email, displayName) {
@@ -38,5 +38,5 @@ export async function insertNewUser(email, displayName) {
      };
      let response = await fetch(url, options)
      let data = await response.json();
-     console.log(data);
+     return data;
 }

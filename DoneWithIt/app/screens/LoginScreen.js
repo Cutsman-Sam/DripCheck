@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import * as Google from 'expo-auth-session/providers/google';
-import {insertNewUser} from '../utilities/requestData'
+import {insertNewUser, requestData} from '../utilities/requestData'
 global.userEmail;
 
 function LoginScreen({navigation}) {
@@ -38,7 +38,14 @@ function LoginScreen({navigation}) {
         let data = await response.json();
         global.userEmail = data.email;
         const displayName = (String) (global.userEmail).substring(0, (String) (global.userEmail).indexOf("@"));
-        insertNewUser(global.userEmail, displayName)
+        let previousData = await requestData(global.userEmail)
+        
+        if(previousData.document == null){
+          insertNewUser(global.userEmail, displayName)
+        } else {
+          //Utilize previousData to load user's stuff
+        }
+        //insertNewUser(global.userEmail, displayName)
         //TODO: utilize this email address
         
       }
