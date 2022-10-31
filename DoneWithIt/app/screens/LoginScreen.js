@@ -4,6 +4,7 @@ import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import * as Google from 'expo-auth-session/providers/google';
 import {insertNewUser, requestData} from '../utilities/requestData'
 global.userEmail;
+global.displayName;
 
 function LoginScreen({navigation}) {
   //const [open, setOpen] = useState(false)
@@ -37,16 +38,15 @@ function LoginScreen({navigation}) {
         })
         let data = await response.json();
         global.userEmail = data.email;
-        const displayName = (String) (global.userEmail).substring(0, (String) (global.userEmail).indexOf("@"));
+        global.displayName = (String) (global.userEmail).substring(0, (String) (global.userEmail).indexOf("@"));
         let previousData = await requestData(global.userEmail)
         
         if(previousData.document == null){
-          insertNewUser(global.userEmail, displayName)
+          insertNewUser(global.userEmail, global.displayName)
         } else {
           //Utilize previousData to load user's stuff
         }
-        //insertNewUser(global.userEmail, displayName)
-        //TODO: utilize this email address
+        
         
       }
       fetchData()

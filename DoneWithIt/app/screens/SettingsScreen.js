@@ -58,7 +58,16 @@ function SettingsScreen({navigation}) {
             <Paragraph>Are you sure you want to request your data? An email will be sent to you.</Paragraph>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => {setVisible2(false); requestData(global.userEmail)}}>Yes</Button>
+            <Button onPress={() => {
+              setVisible2(false); 
+              async function getData(){
+                let data = await requestData(global.userEmail); 
+                let formattedString = "Username: " + data.document.displayName + ", Creation Date: " + data.document.dateCreated + ", Email: " + data.document.email;
+                sendEmail(global.userEmail, global.displayName + " Data Requested - Dripcheck", formattedString);
+              }
+              getData();
+            }
+              }>Yes</Button>
             <Button onPress={hideDialog2}>No</Button>
           </Dialog.Actions>
         </Dialog>
