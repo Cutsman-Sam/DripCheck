@@ -113,27 +113,18 @@ function ClosetScreen(props) {
 
   function removeTag(tag) {
     if (tag != "") {
-      let valid = true;
-      if (tagArray.length != 0) {
-        let str = tagArray[index].toString();
-        const strArray = str.split(", ");
-        var arrayLength = strArray.length;
-        
-        for (var i = 0; i < arrayLength; i++) {
-            if (strArray[i].toUpperCase() === tag.toUpperCase()) {
-              valid = false;
-            }
-        }
-        if (valid) {
-          let tempArray1 = tagArray;
-          tempArray1.splice(index, 1, tagArray[index] + ", " + tag);
-          setTagArray(tempArray1);
-        }
-      } else {
-        let tempArray1 = tagArray;
-        tempArray1.splice(index, 1, tag);
-        setTagArray(tempArray1);
+      let str = tagArray[index].toString();
+      const strArray = str.split(", ");
+      var arrayLength = strArray.length;
+      const dupeArray = strArray;
+      for (var i = 0; i < arrayLength; i++) {
+          if (strArray[i].toUpperCase() === tag.toUpperCase()) {
+            dupeArray.splice(i, 1);
+          }
       }
+      let tempArray1 = tagArray;
+      tempArray1.splice(index, 1, dupeArray.toString());
+      setTagArray(tempArray1);
     }
   }
 
