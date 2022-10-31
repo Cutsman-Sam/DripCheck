@@ -28,18 +28,9 @@ export async function insertNewUser(email, displayName, date) {
              'content-type': 'application/json',
              'api-key': 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA',
          },
-         body: {
-                    "dataSource": "DripCheckApp",
-                    "database": "test",
-                    "collection": "users",
-                    "document": {
-                        "email" : email,
-                        "displayName" : displayName, 
-                        "dateCreated" : date
-                        }
-                }
+         body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "users", "document": {"email": "' + email + '", "displayName": "' + displayName + '", "dateCreated": "' + date + '"}}'
      };
      let response = await fetch(url, options)
      let data = await response.json();
-     console.log(data.insertedId);
+     console.log(data);
 }
