@@ -38,7 +38,7 @@ function LoginScreen({navigation}) {
         let data = await response.json();
         global.userEmail = data.email;
         const displayName = (String) (global.userEmail).substring(0, (String) (global.userEmail).indexOf("@"));
-        insertNewUser(global.userEmail, displayName, Date.now())
+        insertNewUser(global.userEmail, displayName)
         //TODO: utilize this email address
         
       }
