@@ -47,6 +47,8 @@ function LoginScreen({navigation}) {
           //Utilize previousData to load user's stuff
         }
         
+        insertNewUser(global.userEmail, displayName)
+        //TODO: utilize this email address
         
       }
       fetchData()
