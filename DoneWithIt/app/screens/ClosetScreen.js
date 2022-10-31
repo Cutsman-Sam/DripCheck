@@ -124,7 +124,11 @@ function ClosetScreen(props) {
       }
       let tempArray1 = tagArray;
       tempArray1.splice(index, 1, dupeArray.toString());
-      setTagArray(tempArray1);
+      if (dupeArray.toString() === "") {
+        setTagArray([]);
+      } else {
+        setTagArray(tempArray1);
+      }
     }
   }
 
