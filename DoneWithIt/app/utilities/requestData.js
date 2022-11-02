@@ -9,34 +9,24 @@ export async function userExists(emailAddress) {
     //endpoint url
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/findOne';
 
-    const opt = {
+    const options = {
         method: 'POST',
         headers: {
             'content-type': 'application/json',
             'api-key': KEY,
         },
-        body: {
-            "dataSource": "DripCheckApp",
-            "database": "test",
-            "collection": "users",
-            "filter" : {
-                "email": emailAddress
-            }
-        }
+        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "users", "filter": { "email": "' + emailAddress + '" }}'
     };
 
-    //request database
-    var options = JSON.stringify(opt);
-    let response = await fetch(url, options)
-    let data = await response.json();
-    var user = JSON.parse(data);
+    let response = await fetch(url,options);
+    let data = await response.json();    
 
     //checks if JSON document is null, meaning user doesn't exist
-    if(user.document == null) {
+    if(data.document == null) {
         return false;
     } else {
         //returns user document if true
-        return user;
+        return data;
     }
 }
 
@@ -48,30 +38,30 @@ export async function insertNewUser(email, displayName) {
     //endpoint url
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/insertOne';
 
-    const opt = {
+    const options = {
         method: 'POST',
         headers: {
             'content-type': 'application/json',
             'api-key': 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA',
         },
-        body: {
-           "dataSource": "DripCheckApp",
-           "database": "test",
-           "collection": "users", 
-           "document": {
-                "email": email,
-                "displayName": displayName,
-                "dateCreated": date
-           }
-        }
-     };
-     var options = JSON.stringify(opt);
-     let response = await fetch(url, options)
-     let data = await response.json();
-     return data;
+       
+        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "users",' + 
+                ' "document": {' + 
+                '"email" : "' + email +
+                '", "displayName" : "' + displayName +
+                '", "dateCreated" : "' + date + '"  }}'
+    };
+
+    let response = await fetch(url, options);
+    let data = await response.json();
+    if(data.document == null) {
+        return -1;
+    }
+    //else return userID
+    return data.document._id;
 }
 
-export async function addNewOutfit(email, displayName, description, imageString) {
+export async function addNewOutfit(email, outfitName, description, imageString) {
 
     var date = getCurrentDate();
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/insertOne';
@@ -82,23 +72,25 @@ export async function addNewOutfit(email, displayName, description, imageString)
             'content-type': 'application/json',
             'api-key': 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA',
         },
-        body: {
-            "dataSource": "DripCheckApp",
-            "database": "test",
-            "collection": "outfits", 
-            "document": {
-                "userEmail" : email,
-                "outfitName" : displayName,
-                "description" : description,
-                "dateCreated" : date,
-                "imageString" : imageString
-            }
-        }
+        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits",' + 
+        ' "document": {' + 
+        '"userEmail" : "' + email + '",' + 
+        '"outfitName" : "' + outfitName + '",' + 
+        '"dateCreated" : "' + date + '",' + 
+        '"imageString" : "' + imageString + '",' + 
+        '"description" : "' + description + '"  }}'
      };
-     var options = JSON.stringify(opt);
+
      let response = await fetch(url, options)
      let data = await response.json();
-     return data;
+
+     //handle return 
+     if(data.document == null) {
+        return -1;
+     }
+
+     //else return outfitID
+     return data.document._id;
 }
 
 export async function getAllOutfits(emailAddress) {
@@ -112,19 +104,19 @@ export async function getAllOutfits(emailAddress) {
             'content-type': 'application/json',
             'api-key': KEY,
         },
-        body: {
-            "dataSource": "DripCheckApp",
-            "database": "test",
-            "collection": "outfits",
-            "filter" : {
-                "email": emailAddress
-            }
-        }
+        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits", "filter": { "email": "' + emailAddress + '" }}'
     };
-    var options = JSON.stringify(opt);
+
     let response = await fetch(url, options)
     let data = await response.json();
-    return data;
+
+    //handle return 
+    if(data.document == null) {
+        return -1;
+    }
+
+    //return document passed
+    return data.document;
 }
 
 function getCurrentDate() {
