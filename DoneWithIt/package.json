@@ -23,6 +23,7 @@
     "expo-random": "^12.3.0",
     "expo-status-bar": "~1.4.0",
     "googleapis": "^39.2.0",
+    "moment": "^2.29.4",
     "mongodb": "4.10",
     "mongoose": "^6.6.5",
     "qs": "^6.11.0",

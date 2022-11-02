@@ -2,23 +2,23 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';  //status-bar replaced with 'react'
 import { StyleSheet, Text, View } from 'react-native';
 import { Calendar } from 'react-native-calendars';
+import { CurrentRenderContext } from '@react-navigation/native';
 
 function CalendarScreen(navigation) {
     return (
       <View style={{ paddingTop: 50, flex: 1 }}>
         <Calendar
           // Initially visible month. Default = Date()
-          current={'2022-09-01'}
           // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
   
           // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-        
+          maxDate = {Date()}
           // Handler which gets executed on day press. Default = undefined
           onDayPress={day => {
             console.log('selected day', day);
           }}
           // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-          monthFormat={'yyyy MM'}
+          monthFormat={'MMM d, yyyy'}
           // Handler which gets executed when visible month changes in calendar. Default = undefined
           onMonthChange={month => {
             console.log('month changed', month);
