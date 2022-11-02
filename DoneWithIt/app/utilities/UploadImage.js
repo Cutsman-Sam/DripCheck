@@ -29,6 +29,7 @@ export default function UploadImage() {
     console.log(JSON.stringify(_image));
     if (!_image.cancelled) {
       setImage(_image.uri);
+      global.currentImage = _image.uri;
     }
   };
   return (

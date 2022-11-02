@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Text, Button, Portal, Modal, TextInput } from 'react-native-paper';
 import UploadOutfit from '../utilities/UploadOutfit';
+global.currentImage;
 
 function ClosetScreen(props) {
   const [addingOutfitMenu, setAddingOutfitMenu] = React.useState(false);
