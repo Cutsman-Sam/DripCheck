@@ -19,10 +19,10 @@ function SettingsScreen({navigation}) {
   const hideDialog = () => setVisible(false);
 
   const [likeNotifsEnabled, toggleLikeNotifs] = React.useState(false);
-  const onToggleLikeNotifs = () => toggleLikeNotifs(!likeNotifsEnabled);
+  const onToggleLikeNotifs = () => toggleLikeNotifs(!likeNotifsEnabled); global.likesEnabled = likeNotifsEnabled;
 
   const [reminderNotifsEnabled, toggleReminderNotifs] = React.useState(false);
-  const onToggleReminderNotifs = () => toggleReminderNotifs(!reminderNotifsEnabled);
+  const onToggleReminderNotifs = () => toggleReminderNotifs(!reminderNotifsEnabled); global.remindersEnabled = reminderNotifsEnabled;
 
   return (
   <View style={styles.container}>
