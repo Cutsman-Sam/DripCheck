@@ -2,14 +2,6 @@ import * as React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Text, Button, Portal, Modal, TextInput } from 'react-native-paper';
 
-
-//addOutfit('Casual Blue Coat', '10/8/22', 'https://www.stitchfix.com/men/blog/wp-content/uploads/2017/09/20-10-20_Set_2_M_OLD_v2_1x1-scaled.jpeg');
-//addOutfit('Shark Onesie', '10/9/22', 'https://cdn.shopify.com/s/files/1/0768/3211/products/Shark_X-Tall_Animal_Kigurumi_Adult_Onesie_Costume_Pajamas_Blue_Navy_Side\
-//_SZC-KG-2842_SZC-KG-2842XL_600x.jpg?v=1573783083');
-//addOutfit('Purdue Shirt', '10/10/22', 'https://m.media-amazon.com/images/I/5115LtQCd7L._AC_UX679_.jpg');
-//addOutfit('Akira Hoodie', '10/11/22', 'https://m.media-amazon.com/images/I/61fD7zP8XeS._AC_UX679_.jpg');
-//addOutfit('Saul Drip', '10/12/22', 'https://i.etsystatic.com/31485601/r/il/b36363/4123809102/il_794xN.4123809102_prep.jpg');
-
 function ClosetScreen(props) {
   const [addingOutfitMenu, setAddingOutfitMenu] = React.useState(false);
   const [editOutfitMenu, setEditOutfitMenu] = React.useState(false);
@@ -25,6 +17,7 @@ function ClosetScreen(props) {
   const [outfitArray, setOutfitArray] = React.useState([]);
   const [tagArray, setTagArray] = React.useState([]);
   const [numOutfits, setNumOutfits] = React.useState(0);
+
   const [index, setIndex] = React.useState(0);
 
   let outfitname = outfitArray[index];
