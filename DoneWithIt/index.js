@@ -1,4 +1,4 @@
-
+import './utilities/global.js'
 
 //GMAIL STUFF---------------------------
 const fs = require('fs').promises;

@@ -22,7 +22,7 @@ function ClosetScreen(props) {
 
   const [index, setIndex] = React.useState(0);
 
-  let outfitname = outfitArray[index];
+  var outfitname = outfitArray[index];
 
   function nextOutfit() {
     if (index < numOutfits - 1) {
@@ -172,7 +172,7 @@ function ClosetScreen(props) {
         <View style={styles.imageContainer}>
           <Image
             style={styles.closetPicture}
-            source={{ isStatic: true, uri: outfitname }}
+            source={{ uri: "data:image/png;base64,"+outfitname }}
           />
         </View>
         <View style={styles.buttonRowContainer}>
@@ -215,13 +215,9 @@ function ClosetScreen(props) {
               value={addingDate}
               onChangeText={addingDate => setAddingDate(addingDate)}
             />
-            <TextInput
-              label="Image Path"
-              value={addingOutfit}
-              onChangeText={addingOutfit => setAddingOutfit(addingOutfit)}
-            />
+            <UploadOutfit/>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalEdit(); changeOutfit(addingName, addingDate, addingOutfit)}}>
+            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalEdit(); changeOutfit(addingName, addingDate, global.outfitBase64)}}>
               Confirm Changes
             </Button>
             <View style={styles.buttonSpacing}></View>
@@ -251,13 +247,9 @@ function ClosetScreen(props) {
               value={addingDate}
               onChangeText={addingDate => setAddingDate(addingDate)}
             />
-            <TextInput
-              label="Image Path"
-              value={addingOutfit}
-              onChangeText={addingOutfit => setAddingOutfit(addingOutfit)}
-            />
+            <UploadOutfit style={{alignSelf: "center"}}/>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModal(); addOutfit(addingName, addingDate, addingOutfit)}}>
+            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModal(); addOutfit(addingName, addingDate, global.outfitBase64)}}>
               Confirm Outfit
             </Button>
             <View style={styles.buttonSpacing}></View>
@@ -298,7 +290,6 @@ function ClosetScreen(props) {
     return (
       <View style={styles.container}>
         <Text variant="headlineSmall" style={styles.noOutfitText}>No Outfits Yet...</Text>
-        <UploadOutfit/>
         <Button icon="account-cowboy-hat" mode="contained" style={styles.addOutfit} onPress={showModal}>
           Add Outfit
         </Button>
@@ -316,13 +307,9 @@ function ClosetScreen(props) {
               value={addingDate}
               onChangeText={addingDate => setAddingDate(addingDate)}
             />
-            <TextInput
-              label="Image Path"
-              value={addingOutfit}
-              onChangeText={addingOutfit => setAddingOutfit(addingOutfit)}
-            />
+            <UploadOutfit/>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModal(); addOutfit(addingName, addingDate, addingOutfit)}}>
+            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModal(); addOutfit(addingName, addingDate, global.outfitBase64)}}>
               Confirm Outfit
             </Button>
             <View style={styles.buttonSpacing}></View>

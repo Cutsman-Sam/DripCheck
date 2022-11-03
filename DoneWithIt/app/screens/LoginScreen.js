@@ -3,11 +3,7 @@ import { StyleSheet, View, Image } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import * as Google from 'expo-auth-session/providers/google';
 import {insertNewUser, userExists, getCurrentDate} from '../utilities/requestData'
-global.userEmail;
-global.remindersEnabled;
-global.likesEnabled;
-global.displayName;
-global.accountDate;
+
 
 function LoginScreen({navigation}) {
   //const [open, setOpen] = useState(false)

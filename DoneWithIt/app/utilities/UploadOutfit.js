@@ -3,7 +3,6 @@ import { Image, View, Platform, TouchableOpacity, Text, StyleSheet } from 'react
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 
-
 //https://www.waldo.com/blog/add-an-image-picker-react-native-app
 
 export default function UploadOutfit() {
@@ -23,23 +22,26 @@ export default function UploadOutfit() {
     let _image = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      //aspect: [4,3],
-      quality: 1,
+      aspect: [4,4],
+      quality: .2,
+      base64: true,
     });
-    console.log(JSON.stringify(_image));
+    //console.log(JSON.stringify(_image));
     if (!_image.cancelled) {
       setImage(_image.uri);
+      global.outfitBase64 = _image.base64;
+      console.log(global.outfitBase64);
     }
   };
   return (
             <View style={imageUploaderStyles.container}>
                 {
-                    image  && <Image source={{ uri: image }} style={{ width: 300, height: 550 }} />
+                    image  && <Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
                 }
                     <View style={imageUploaderStyles.uploadBtnContainer}>
                         <TouchableOpacity onPress={addImage} style={imageUploaderStyles.uploadBtn} >
                             <Text>{image ? 'Edit' : 'Upload'} Outfit</Text>
-                            <AntDesign name="camera" size={20} color="black" />
+                            <AntDesign style={{paddingLeft: 8}} name="camera" size={20} color="black" />
                         </TouchableOpacity>
                     </View>
             </View>
@@ -52,8 +54,8 @@ const imageUploaderStyles=StyleSheet.create({
     container:{
         elevation:2,
         //marginTop: 15,
-        height:550,
-        width:300,
+        height:250,
+        width:250,
         backgroundColor:'#efefef',
         position:'relative',
         borderRadius:20,
@@ -70,6 +72,7 @@ const imageUploaderStyles=StyleSheet.create({
     },
     uploadBtn:{
         display:'flex',
+        flexDirection:'row',
         alignItems:"center",
         justifyContent:'center'
     }
