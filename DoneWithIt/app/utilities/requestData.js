@@ -146,7 +146,7 @@ export async function removeAllOutfits(emailAddress) {
     //TODO: Make db function to gather all outfits belonging to a specific user
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteAllUserOutfits';
 
-    const opt = {
+    const options = {
         method: 'POST',
         headers: {
             'content-type': 'application/json',
@@ -157,7 +157,7 @@ export async function removeAllOutfits(emailAddress) {
 
     let response = await fetch(url, options);
     let data = await response.json();
-
+    console.log(data);
     //handle return 
     if(data.deleteResult == null) {
         return -1;
@@ -175,15 +175,15 @@ export async function removeAllOutfits(emailAddress) {
 export async function getAllOutfits(emailAddress) {
 
     //TODO: Make db function to gather all outfits belonging to a specific user
-    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/getOutfits';
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/deleteAllUserOutfits';
 
-    const opt = {
+    const options = {
         method: 'POST',
         headers: {
             'content-type': 'application/json',
             'api-key': KEY,
         },
-        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits", "document": { "email": "' + emailAddress + '" }}'
+        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits", "document": { "userEmail": "' + emailAddress + '" }}'
     };
 
     let response = await fetch(url, options)
