@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Text, Button, Portal, Modal, TextInput } from 'react-native-paper';
 import UploadOutfit from '../utilities/UploadOutfit';
+import {addNewOutfit} from '../utilities/requestData';
 global.currentImage;
 
 function ClosetScreen(props) {
@@ -84,6 +85,7 @@ function ClosetScreen(props) {
       let newIndex = numOutfits;
       setNumOutfits(newOutfits);
       setIndex(newIndex);
+      addNewOutfit(global.userEmail, o_name, "N/A", o_image);
     }
   }
 

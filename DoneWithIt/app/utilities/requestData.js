@@ -101,7 +101,7 @@ export async function addNewOutfit(email, outfitName, description, imageString) 
         '"description" : "' + description + '"  }}'
      };
 
-     let response = await fetch(url, options)
+     let response = await fetch(url, opt)
      let data = await response.json();
 
      //handle return 
@@ -110,7 +110,7 @@ export async function addNewOutfit(email, outfitName, description, imageString) 
      }
 
      //else return outfitID
-     return data.document._id;
+     return data;
 }
 
 export async function getAllOutfits(emailAddress) {

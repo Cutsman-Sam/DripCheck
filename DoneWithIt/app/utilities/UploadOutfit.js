@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Image, View, Platform, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-
+import { addNewOutfit } from './requestData';
 //https://www.waldo.com/blog/add-an-image-picker-react-native-app
 
 export default function UploadOutfit() {
@@ -30,7 +30,7 @@ export default function UploadOutfit() {
     if (!_image.cancelled) {
       setImage(_image.uri);
       global.outfitBase64 = _image.base64;
-      console.log(global.outfitBase64);
+      //console.log(global.outfitBase64);
     }
   };
   return (
