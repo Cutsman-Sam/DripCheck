@@ -78,7 +78,7 @@ export async function insertNewUser(email, displayName) {
 /**
  * deletes a user from the database
  * @param {*} email email of user to delete
- * @returns boolean true if operation succeeded, false otherwise
+ * @returns return 1 if success, -1 on failure
  */
 export async function deleteUser(email) {
 
@@ -96,7 +96,7 @@ export async function deleteUser(email) {
             '"database": "test",' + 
             '"collection": "users",' +
             '"filter": {' +
-                '"email": "' + emailAddress +
+                '"email": "' + email +
             '" }' +
         '}'
     };
@@ -105,9 +105,46 @@ export async function deleteUser(email) {
     let data = await response.json();
 
     if(data.deletedCount == 1) {
-        return true;
+        return 1;
     }
-    return false;
+    return -1;
+}
+
+/**
+ * deletes an outfit from the database
+ * @param {*} id id of outfit to delete
+ * @returns return 1 if success, -1 on failure
+ */
+ export async function deleteOutfit(outfitID) {
+
+    //endpoint url
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteOne';
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'api-key': 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA',
+        },
+        body: '{' + 
+            '"dataSource": "DripCheckApp",' + 
+            '"database": "test",' + 
+            '"collection": "outfits",' +
+            '"filter": {' +
+                '"_id" : {' + 
+                    '"$oid": "' + outfitID + '"' +
+                '}' +
+            '}' +
+        '}'
+    };
+
+    let response = await fetch(url, options);
+    let data = await response.json();
+
+    if(data.deletedCount == 1) {
+        return 1;
+    }
+    return -1;
 }
 
 /**
@@ -174,6 +211,7 @@ export async function removeAllOutfits(emailAddress) {
     let response = await fetch(url, options);
     let data = await response.json();
     console.log(data);
+
     //handle return 
     if(data.deleteResult == null) {
         return -1;
@@ -205,8 +243,11 @@ export async function getAllOutfits(emailAddress) {
     let response = await fetch(url, options)
     let data = await response.json();
 
+    var outfitArray = data.findResult;
+
     //return array of outfits
-    return data.findResult;
+    return outfitArray;
+
 }
 
 
@@ -217,7 +258,7 @@ export async function getAllOutfits(emailAddress) {
  * @param {*} description 
  * @param {*} imageString 
  */
-export async function updateOutfit(outfitID,email, outfitName, description, imageString) {
+export async function updateOutfit(outfitID, email, outfitName, description, imageString) {
     
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/updateOne';
 
@@ -234,6 +275,7 @@ export async function updateOutfit(outfitID,email, outfitName, description, imag
                 '"filter": {' +
                     '"_id" : {' + 
                         '"$oid": "' + outfitID + '"' +
+                    '}' +
                 '},' +
                 '"update": {' + 
                     '"email" : "' + email + '",' + 
