@@ -176,7 +176,7 @@ export async function addNewOutfit(email, outfitName, description, imageString) 
         '"description" : "' + description + '"  }}'
      };
 
-     let response = await fetch(url, opt)
+     let response = await fetch(url, options)
      let data = await response.json();
 
      //handle return 
