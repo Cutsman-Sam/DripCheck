@@ -1,7 +1,7 @@
 const KEY = 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA';
 
 /**
- * 
+ * Function to check if a user exists in the database or not
  * @param {*} emailAddress email address of registering user
  * @returns false if user doesnt exist. User JSON object if user exists
  */
@@ -30,6 +30,13 @@ export async function userExists(emailAddress) {
     }
 }
 
+
+/**
+ * Function to insert a new user into the database
+ * @param {*} email email address of user from goggole
+ * @param {*} displayName displayName of user
+ * @returns _id of user in database
+ */
 export async function insertNewUser(email, displayName) {
 
     //get current date
@@ -60,6 +67,12 @@ export async function insertNewUser(email, displayName) {
     //else return userID
     return data.document._id;
 }
+
+/**
+ * deletes a user from the database
+ * @param {*} email email of user to delete
+ * @returns number of users deleted
+ */
 export async function deleteUser(email) {
 
     //endpoint url
@@ -80,6 +93,15 @@ export async function deleteUser(email) {
     let data = await response.json();
     return data.deletedCount;
 }
+
+/**
+ * Adds an new outfit to the database
+ * @param {*} email email of user adding outfit
+ * @param {*} outfitName name of outfit
+ * @param {*} description outfit description
+ * @param {*} imageString Base64 URI image string
+ * @returns _id of inserted outfit or -1 on failure
+ */
 export async function addNewOutfit(email, outfitName, description, imageString) {
 
     var date = getCurrentDate();
@@ -94,7 +116,7 @@ export async function addNewOutfit(email, outfitName, description, imageString) 
         },
         body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits",' + 
         ' "document": {' + 
-        '"userEmail" : "' + email + '",' + 
+        '"email" : "' + email + '",' + 
         '"outfitName" : "' + outfitName + '",' + 
         '"dateCreated" : "' + date + '",' + 
         '"imageString" : "' + imageString + '",' + 
@@ -113,6 +135,43 @@ export async function addNewOutfit(email, outfitName, description, imageString) 
      return data.document._id;
 }
 
+/**
+ * method to delete ALL outfits of a user from database given user's email.
+ * DO NOT REMOVE USER BEFORE REMOVING OUTFITS
+ * @param {*} emailAddress email of user
+ * @returns number of outfits removed from database
+ */
+export async function removeAllOutfits(emailAddress) {
+
+    //TODO: Make db function to gather all outfits belonging to a specific user
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteAllUserOutfits';
+
+    const opt = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'api-key': KEY,
+        },
+        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits", "document": { "email": "' + emailAddress + '" }}'
+    };
+
+    let response = await fetch(url, options);
+    let data = await response.json();
+
+    //handle return 
+    if(data.deleteResult == null) {
+        return -1;
+    }
+
+    //return document passed
+    return data.deleteResult.deletedCount;
+}
+
+/**
+ * Method to get all outfits in database from a specific user given the user's email
+ * @param {*} emailAddress email address of user 
+ * @returns array of outfit objects in database from that user
+ */
 export async function getAllOutfits(emailAddress) {
 
     //TODO: Make db function to gather all outfits belonging to a specific user
@@ -124,26 +183,26 @@ export async function getAllOutfits(emailAddress) {
             'content-type': 'application/json',
             'api-key': KEY,
         },
-        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits", "filter": { "email": "' + emailAddress + '" }}'
+        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits", "document": { "email": "' + emailAddress + '" }}'
     };
 
     let response = await fetch(url, options)
     let data = await response.json();
 
-    //handle return 
-    if(data.document == null) {
-        return -1;
-    }
-
-    //return document passed
-    return data.document;
+    //return array of outfits
+    return data.findResult;
 }
 
+
+/**
+ * Helper method to get current date
+ * @returns current date in MM-DD-YYYY format
+ */
 export function getCurrentDate() {
     var date = new Date();
     var dd = String(date.getDate()).padStart(2, '0');
     var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = date.getFullYear();
-    date = mm + '/' + dd + '/' + yyyy;
+    date = mm + '-' + dd + '-' + yyyy;
     return date;
 }
