@@ -5,6 +5,7 @@ import * as Google from 'expo-auth-session/providers/google';
 import {insertNewUser, userExists} from '../utilities/requestData'
 global.userEmail;
 global.displayName;
+global.accountDate;
 
 function LoginScreen({navigation}) {
   //const [open, setOpen] = useState(false)
@@ -49,7 +50,8 @@ function LoginScreen({navigation}) {
           insertNewUser(global.userEmail, global.displayName);
         } else {
           //Utilize previousData to load user's stuff
-        
+          global.accountDate = JSON.parse(JSON.stringify(previousData)).document.dateCreated
+          
         }
         //TODO: utilize this email address
         

@@ -64,6 +64,7 @@ export async function insertNewUser(email, displayName) {
 export async function addNewOutfit(email, outfitName, description, imageString) {
 
     var date = getCurrentDate();
+    globalThis.accountDate = date;
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/insertOne';
 
     const opt = {
