@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import * as Google from 'expo-auth-session/providers/google';
-import {insertNewUser, userExists} from '../utilities/requestData'
+import {insertNewUser, userExists, getCurrentDate} from '../utilities/requestData'
 global.userEmail;
 global.displayName;
 global.accountDate;
@@ -41,17 +41,18 @@ function LoginScreen({navigation}) {
         global.userEmail = data.email;
         global.displayName = (String) (global.userEmail).substring(0, (String) (global.userEmail).indexOf("@"));
 
-        console.log("LoginScreen: called userExists");
+        //console.log("LoginScreen: called userExists");
         let previousData = await userExists(global.userEmail)
         
         //if user exists do nothing, else add them to database.
         if(previousData == false) {
-          console.log("LoginScreen: called insertNewUser");
+          //console.log("LoginScreen: called insertNewUser");
+          global.accountDate = getCurrentDate();
           insertNewUser(global.userEmail, global.displayName);
         } else {
           //Utilize previousData to load user's stuff
           global.accountDate = JSON.parse(JSON.stringify(previousData)).document.dateCreated
-          
+
         }
         //TODO: utilize this email address
         

@@ -60,7 +60,26 @@ export async function insertNewUser(email, displayName) {
     //else return userID
     return data.document._id;
 }
+export async function deleteUser(email) {
 
+    //endpoint url
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteOne';
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'api-key': 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA',
+        },
+       
+        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "users",' + 
+                ' "filter": {"email": "' + email + '" }}' 
+    };
+
+    let response = await fetch(url, options);
+    let data = await response.json();
+    return data.deletedCount;
+}
 export async function addNewOutfit(email, outfitName, description, imageString) {
 
     var date = getCurrentDate();
@@ -120,7 +139,7 @@ export async function getAllOutfits(emailAddress) {
     return data.document;
 }
 
-function getCurrentDate() {
+export function getCurrentDate() {
     var date = new Date();
     var dd = String(date.getDate()).padStart(2, '0');
     var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
