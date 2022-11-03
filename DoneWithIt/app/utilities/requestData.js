@@ -324,7 +324,7 @@ export async function updateUser(userID, displayName, dateCreated) {
                 '},' +
                 '"update": {' + 
                     '"email" : "' + email + '",' + 
-                    '"displayName" : "' + outfitName + '",' + 
+                    '"displayName" : "' + displayName + '",' + 
                     '"dateCreated" : "' + dateCreated + '"' +
                 '}' +
             '}'
@@ -353,8 +353,4 @@ export function getCurrentDate() {
     var yyyy = date.getFullYear();
     date = mm + '-' + dd + '-' + yyyy;
     return date;
-}
-
-function tagsToString(tags) {
-    for(i = 0; i < tags.)
 }
