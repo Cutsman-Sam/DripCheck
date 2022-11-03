@@ -5,57 +5,54 @@ import UploadOutfit from '../utilities/UploadOutfit';
 global.currentImage;
 
 function ClosetScreen(props) {
+  // Menu properties (what menus are open, fields being changed in text prompts, etc.)
   const [addingOutfitMenu, setAddingOutfitMenu] = React.useState(false);
   const [editOutfitMenu, setEditOutfitMenu] = React.useState(false);
   const [addTagMenu, setAddTagMenu] = React.useState(false);
-
   const [addingName, setAddingName] = React.useState("");
-  const [addingDate, setAddingDate] = React.useState("");
-  const [addingOutfit, setAddingOutfit] = React.useState("");
   const [addingTag, setAddingTag] = React.useState("");
 
-  const [nameArray, setNameArray] = React.useState([]);
-  const [dateArray, setDateArray] = React.useState([]);
+  // Closet properties, the number of outfits and outfit array respectively.
+  // I can probably nix the number of outfits hook state variable with the array length, 
+  // might look at later?
   const [outfitArray, setOutfitArray] = React.useState([]);
-  const [tagArray, setTagArray] = React.useState([]);
   const [numOutfits, setNumOutfits] = React.useState(0);
 
+  // Current outfit being viewed in the closet
   const [index, setIndex] = React.useState(0);
 
-  var outfitname = outfitArray[index];
+  var outfitname = "";
+  if (numOutfits > 0) {
+    outfitname = outfitArray[index].image;
+  }
 
+
+  //---------------
+  // Menu Functions
+  //---------------
+  // Shifts the outfit index over by one to the right, bounded
   function nextOutfit() {
     if (index < numOutfits - 1) {
       setIndex(index + 1);
     }
   }
 
+  // Shifts the outfit index over by one to the left, bounded
   function prevOutfit() {
     if (index > 0) {
       setIndex(index - 1);
     }
   }
-
+  
+  // Shows the modal for adding an outfit.
   function showModal() {
     setAddingOutfitMenu(true);
     setAddingName("");
-    setAddingDate("");
-    setAddingOutfit("");
-  }
-
-  function hideModal() {
-    setAddingOutfitMenu(false);
   }
 
   function showModalEdit() {
     setEditOutfitMenu(true);
-    setAddingName(nameArray[index]);
-    setAddingDate(dateArray[index]);
-    setAddingOutfit(outfitArray[index]);
-  }
-
-  function hideModalEdit() {
-    setEditOutfitMenu(false);
+    setAddingName(outfitArray[index].name);
   }
 
   function showModalTag() {
@@ -63,16 +60,26 @@ function ClosetScreen(props) {
     setAddingTag("");
   }
 
-  function hideModalTag() {
+  // Hides all modal menus.
+  function hideModalAll() {
+    setAddingOutfitMenu(false);
+    setEditOutfitMenu(false);
     setAddTagMenu(false);
   }
 
-  function addOutfit(name, date, image) {
-    if (name != "" && date != "" && image != "") {
-      setNameArray(nameArray.concat(name));
-      setDateArray(dateArray.concat(date));
-      setOutfitArray(outfitArray.concat(image));
-      setTagArray(tagArray.concat([]));
+  //----------------------------
+  // Outfit Management Functions
+  //----------------------------
+  // Adds an outfit into the closet.
+  function addOutfit(o_name, o_image) {
+    if (o_name != "" && o_image != "") {
+      let outfit = {
+        name: o_name,
+        date: "N/A",
+        image: o_image,
+        tags: ""
+      };
+      setOutfitArray(outfitArray.concat(outfit));
       let newOutfits = numOutfits + 1;
       let newIndex = numOutfits;
       setNumOutfits(newOutfits);
@@ -80,11 +87,40 @@ function ClosetScreen(props) {
     }
   }
 
+  // Deletes an outfit from the closet.
+  function deleteOutfit() {
+    let tempArray = outfitArray;
+    tempArray.splice(index, 1);
+    setOutfitArray(tempArray);
+
+    let newOutfits = numOutfits - 1;
+    let newIndex = index - 1;
+    if (newIndex < 0) { newIndex = 0; }
+    setNumOutfits(newOutfits);
+    setIndex(newIndex);
+  }
+
+  // Changes the outfit at the current index to the new values provided.
+  function changeOutfit(o_name, o_image) {
+    if (o_name != "" && o_image != "") {
+      let outfit = {
+        name: o_name,
+        date: "N/A",
+        image: o_image,
+        tags: ""
+      };
+      let tempArray = outfitArray;
+      tempArray.splice(index, 1, outfit);
+      setOutfitArray(tempArray);
+    }
+  }
+
+  // Adds a tag to an outfit's tag list if it is not present.
   function addTag(tag) {
     if (tag != "") {
       let valid = true;
-      if (tagArray.length != 0) {
-        let str = tagArray[index].toString();
+      if (outfitArray[index].tags != "") {
+        let str = outfitArray[index].tags.toString();
         const strArray = str.split(", ");
         var arrayLength = strArray.length;
         
@@ -94,81 +130,53 @@ function ClosetScreen(props) {
             }
         }
         if (valid) {
-          let tempArray1 = tagArray;
-          tempArray1.splice(index, 1, tagArray[index] + ", " + tag);
-          setTagArray(tempArray1);
+          let tempArray = outfitArray;
+          let replaceOutfit = outfitArray[index];
+          replaceOutfit.tags += ", " + tag;
+          tempArray.splice(index, 1, replaceOutfit);
+          setOutfitArray(tempArray);
         }
       } else {
-        let tempArray1 = tagArray;
-        tempArray1.splice(index, 1, tag);
-        setTagArray(tempArray1);
+        let tempArray = outfitArray;
+        let replaceOutfit = outfitArray[index];
+        replaceOutfit.tags = tag;
+        tempArray.splice(index, 1, replaceOutfit);
+        setOutfitArray(tempArray);
       }
     }
   }
 
+  // Removes a tag from an outfit's tag list if it is present.
   function removeTag(tag) {
     if (tag != "") {
-      let str = tagArray[index].toString();
+      let str = outfitArray[index].tags;
       const strArray = str.split(", ");
-      var arrayLength = strArray.length;
-      const dupeArray = strArray;
-      for (var i = 0; i < arrayLength; i++) {
-          if (strArray[i].toUpperCase() === tag.toUpperCase()) {
-            dupeArray.splice(i, 1);
-          }
-      }
-      let tempArray1 = tagArray;
-      tempArray1.splice(index, 1, dupeArray.toString());
-      if (dupeArray.toString() === "") {
-        setTagArray([]);
-      } else {
-        setTagArray(tempArray1);
-      }
-    }
-  }
-
-  function changeOutfit(name, date, image) {
-    if (name != "" && date != "" && image != "") {
-      let tempArray1 = nameArray;
-      tempArray1.splice(index, 1, name);
-      setNameArray(tempArray1);
-
-      let tempArray2 = dateArray;
-      tempArray2.splice(index, 1, date);
-      setDateArray(tempArray2);
       
-      let tempArray3 = outfitArray;
-      tempArray3.splice(index, 1, image);
-      setOutfitArray(tempArray3);
+      var arrayLength = strArray.length;
+      let dupeArray = strArray;
+      for (var i = 0; i < arrayLength; i++) {
+        let upperTag = strArray[i].toUpperCase();
+        console.log(i);
+        console.log(upperTag);
+        if (upperTag === tag.toUpperCase()) {
+          dupeArray.splice(i, 1);
+        }
+      }
+      let tempArray = outfitArray;
+      let replaceOutfit = outfitArray[index];
+      replaceOutfit.tags = dupeArray.toString();
+      tempArray.splice(index, 1, replaceOutfit);
     }
   }
 
-  function deleteOutfit() {
-    let tempArray1 = nameArray;
-    tempArray1.splice(index, 1);
-    setNameArray(tempArray1);
-
-    let tempArray2 = dateArray;
-    tempArray2.splice(index, 1);
-    setDateArray(tempArray2);
-    
-    let tempArray3 = outfitArray;
-    tempArray3.splice(index, 1);
-    setOutfitArray(tempArray3);
-
-    let newOutfits = numOutfits - 1;
-    let newIndex = index - 1;
-    if (newIndex < 0) { newIndex = 0; }
-    setNumOutfits(newOutfits);
-    setIndex(newIndex);
-  }
+  
 
   if (numOutfits > 0) {
     return (
       <View style={styles.container}>
-        <Text variant="headlineSmall" style={styles.outfitText}>{nameArray[index]}</Text>
-        <Text variant="headerLarge" style={styles.dateText}>Last Worn: {dateArray[index]}</Text>
-        <Text variant="headerLarge" style={styles.dateText}>Tags: {tagArray[index]}</Text>
+        <Text variant="headlineSmall" style={styles.outfitText}>{outfitArray[index].name}</Text>
+        <Text variant="headerLarge" style={styles.dateText}>Last Worn: {outfitArray[index].date}</Text>
+        <Text variant="headerLarge" style={styles.dateText}>Tags: {outfitArray[index].tags}</Text>
         <View style={styles.imageContainer}>
           <Image
             style={styles.closetPicture}
@@ -205,27 +213,19 @@ function ClosetScreen(props) {
           <Modal visible={editOutfitMenu} style={styles.modalMenu} dismissable={false}>
             <Text variant="headlineSmall" style={styles.outfitText}>Edit Outfit</Text>
             <View style={styles.buttonSpacing}></View>
-            <TextInput
-              label="Outfit Name"
-              value={addingName}
-              onChangeText={addingName => setAddingName(addingName)}
-            />
-            <TextInput
-              label="Date Worn"
-              value={addingDate}
-              onChangeText={addingDate => setAddingDate(addingDate)}
-            />
+            <TextInput label="Outfit Name" value={addingName} onChangeText={addingName => setAddingName(addingName)}/>
             <UploadOutfit/>
+
             <View style={styles.buttonSpacing}></View>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalEdit(); changeOutfit(addingName, addingDate, global.outfitBase64)}}>
+            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); changeOutfit(addingName, global.outfitBase64)}}>
               Confirm Changes
             </Button>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalEdit()}}>
+            <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
               Cancel Changes
             </Button>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="trash-can" mode="contained" style={styles.modalButton} onPress={() => {hideModalEdit(); deleteOutfit()}}>
+            <Button icon="trash-can" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); deleteOutfit()}}>
               Delete Outfit
             </Button>
           </Modal>
@@ -237,23 +237,15 @@ function ClosetScreen(props) {
           <Modal visible={addingOutfitMenu} style={styles.modalMenu} dismissable={false}>
             <Text variant="headlineSmall" style={styles.outfitText}>Outfit Details</Text>
             <View style={styles.buttonSpacing}></View>
-            <TextInput
-              label="Outfit Name"
-              value={addingName}
-              onChangeText={addingName => setAddingName(addingName)}
-            />
-            <TextInput
-              label="Date Worn"
-              value={addingDate}
-              onChangeText={addingDate => setAddingDate(addingDate)}
-            />
+            <TextInput label="Outfit Name" value={addingName} onChangeText={addingName => setAddingName(addingName)}/>
             <UploadOutfit style={{alignSelf: "center"}}/>
+
             <View style={styles.buttonSpacing}></View>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModal(); addOutfit(addingName, addingDate, global.outfitBase64)}}>
+            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); addOutfit(addingName, global.outfitBase64)}}>
               Confirm Outfit
             </Button>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModal()}}>
+            <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
               Cancel
             </Button>
           </Modal>
@@ -264,7 +256,7 @@ function ClosetScreen(props) {
         <Portal>
           <Modal visible={addTagMenu} style={styles.modalMenu} dismissable={false}>
             <Text variant="headlineSmall" style={styles.outfitText}>Tag Details</Text>
-            <Text variant="headerLarge" style={styles.dateText}>Tags: {tagArray[index]}</Text>
+            <Text variant="headerLarge" style={styles.dateText}>Tags: {outfitArray[index].tags}</Text>
             <View style={styles.buttonSpacing}></View>
             <TextInput
               label="Tag Name"
@@ -272,14 +264,14 @@ function ClosetScreen(props) {
               onChangeText={addingTag => setAddingTag(addingTag)}
             />
             <View style={styles.buttonSpacing}></View>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalTag(); addTag(addingTag)}}>
+            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); addTag(addingTag)}}>
               Confirm Tag Addition
             </Button>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalTag(); removeTag(addingTag)}}>
+            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); removeTag(addingTag)}}>
               Confirm Tag Removal
             </Button>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalTag()}}>
+            <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
               Cancel
             </Button>
           </Modal>
@@ -297,23 +289,14 @@ function ClosetScreen(props) {
           <Modal visible={addingOutfitMenu} style={styles.modalMenu} dismissable={false}>
             <Text variant="headlineSmall" style={styles.outfitText}>Outfit Details</Text>
             <View style={styles.buttonSpacing}></View>
-            <TextInput
-              label="Outfit Name"
-              value={addingName}
-              onChangeText={addingName => setAddingName(addingName)}
-            />
-            <TextInput
-              label="Date Worn"
-              value={addingDate}
-              onChangeText={addingDate => setAddingDate(addingDate)}
-            />
+            <TextInput label="Outfit Name" value={addingName} onChangeText={addingName => setAddingName(addingName)}/>
             <UploadOutfit/>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModal(); addOutfit(addingName, addingDate, global.outfitBase64)}}>
+            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); addOutfit(addingName, global.outfitBase64)}}>
               Confirm Outfit
             </Button>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModal()}}>
+            <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
               Cancel
             </Button>
           </Modal>
@@ -368,7 +351,7 @@ const styles = StyleSheet.create({
   },
   addOutfit: {
     borderWidth: 1,
-    marginTop: 15,
+    marginTop: 0,
     borderColor: "black"
   },
   modalButton: {
