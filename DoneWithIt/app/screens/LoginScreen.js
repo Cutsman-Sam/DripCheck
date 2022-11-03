@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import * as Google from 'expo-auth-session/providers/google';
-import {insertNewUser, userExists, getCurrentDate} from '../utilities/requestData'
+import {insertNewUser, userExists, getCurrentDate, getAllOutfits} from '../utilities/requestData'
 
 
 function LoginScreen({navigation}) {
@@ -38,22 +38,6 @@ function LoginScreen({navigation}) {
         let data = await response.json();
         global.userEmail = data.email;
         global.displayName = (String) (global.userEmail).substring(0, (String) (global.userEmail).indexOf("@"));
-
-        //console.log("LoginScreen: called userExists");
-        let previousData = await userExists(global.userEmail)
-        
-        //if user exists do nothing, else add them to database.
-        if(previousData == false) {
-          //console.log("LoginScreen: called insertNewUser");
-          global.accountDate = getCurrentDate();
-          insertNewUser(global.userEmail, global.displayName);
-        } else {
-          //Utilize previousData to load user's stuff
-          global.accountDate = JSON.parse(JSON.stringify(previousData)).document.dateCreated
-
-        }
-        //TODO: utilize this email address
-        //requestDatabase(2,data.email,data.email,"10-19-2020");
       }
       fetchData()
      
@@ -72,7 +56,7 @@ function LoginScreen({navigation}) {
               <Paragraph>Dripcheck collects certain data about the user, such as uploaded photos, email addresses, and liked posts. Do you consent to this collection of data?</Paragraph>
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={() => {setVisible(false); navigation.navigate("BottomTabs")}}>Accept</Button>
+              <Button onPress={() => {setVisible(false); navigation.navigate("BottomTabs"); handleLogin()}}>Accept</Button>
               <Button onPress={hideDialog}>Decline</Button>
             </Dialog.Actions>
           </Dialog>
@@ -82,6 +66,20 @@ function LoginScreen({navigation}) {
 }
 //<Button onPress={showDialog}>Show Dialog</Button>
 
+async function handleLogin(){
+    //console.log("LoginScreen: called userExists");
+    let previousData = await userExists(global.userEmail)
+        
+    //if user exists do nothing, else add them to database.
+    if(previousData == false) {
+      //console.log("LoginScreen: called insertNewUser");
+      global.accountDate = getCurrentDate();
+      insertNewUser(global.userEmail, global.displayName);
+    } else {
+      //Utilize previousData to load user's stuff
+      global.accountDate = JSON.parse(JSON.stringify(previousData)).document.dateCreated
+    }
+}
 const styles = StyleSheet.create({
     container: {
       flex: 1,
