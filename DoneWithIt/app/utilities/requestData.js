@@ -15,7 +15,14 @@ export async function userExists(emailAddress) {
             'content-type': 'application/json',
             'api-key': KEY,
         },
-        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "users", "filter": { "email": "' + emailAddress + '" }}'
+        body: '{' + 
+            '"dataSource": "DripCheckApp",' + 
+            '"database": "test",' + 
+            '"collection": "users",' +
+            '"filter": {' +
+                '"email": "' + emailAddress +
+            '" }' +
+        '}'
     };
 
     let response = await fetch(url,options);
@@ -71,7 +78,7 @@ export async function insertNewUser(email, displayName) {
 /**
  * deletes a user from the database
  * @param {*} email email of user to delete
- * @returns number of users deleted
+ * @returns boolean true if operation succeeded, false otherwise
  */
 export async function deleteUser(email) {
 
@@ -84,14 +91,23 @@ export async function deleteUser(email) {
             'content-type': 'application/json',
             'api-key': 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA',
         },
-       
-        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "users",' + 
-                ' "filter": {"email": "' + email + '" }}' 
+        body: '{' + 
+            '"dataSource": "DripCheckApp",' + 
+            '"database": "test",' + 
+            '"collection": "users",' +
+            '"filter": {' +
+                '"email": "' + emailAddress +
+            '" }' +
+        '}'
     };
 
     let response = await fetch(url, options);
     let data = await response.json();
-    return data.deletedCount;
+
+    if(data.deletedCount == 1) {
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -183,7 +199,7 @@ export async function getAllOutfits(emailAddress) {
             'content-type': 'application/json',
             'api-key': KEY,
         },
-        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits", "document": { "userEmail": "' + emailAddress + '" }}'
+        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits", "document": { "email": "' + emailAddress + '" }}'
     };
 
     let response = await fetch(url, options)
@@ -191,6 +207,16 @@ export async function getAllOutfits(emailAddress) {
 
     //return array of outfits
     return data.findResult;
+}
+
+
+
+export async function updateOutfit(emailAddress, outfitName, description, imageString) {
+
+}
+
+export async function updateUser() {
+
 }
 
 
