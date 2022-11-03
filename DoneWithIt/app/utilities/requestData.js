@@ -197,7 +197,7 @@ export async function addNewOutfit(email, outfitName, description, imageString) 
 export async function removeAllOutfits(emailAddress) {
 
     //TODO: Make db function to gather all outfits belonging to a specific user
-    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteAllUserOutfits';
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/deleteAllUserOutfits';
 
     const options = {
         method: 'POST',
@@ -229,7 +229,7 @@ export async function removeAllOutfits(emailAddress) {
 export async function getAllOutfits(emailAddress) {
 
     //TODO: Make db function to gather all outfits belonging to a specific user
-    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/deleteAllUserOutfits';
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/getOutfits';
 
     const options = {
         method: 'POST',
@@ -353,4 +353,8 @@ export function getCurrentDate() {
     var yyyy = date.getFullYear();
     date = mm + '-' + dd + '-' + yyyy;
     return date;
+}
+
+function tagsToString(tags) {
+    for(i = 0; i < tags.)
 }
