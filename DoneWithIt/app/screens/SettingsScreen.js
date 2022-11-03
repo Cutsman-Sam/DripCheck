@@ -21,10 +21,10 @@ function SettingsScreen({navigation}) {
   const [visible2, setVisible2] = React.useState(false);
   const hideDialog2 = () => setVisible2(false);
   const [likeNotifsEnabled, toggleLikeNotifs] = React.useState(false);
-  const onToggleLikeNotifs = () => toggleLikeNotifs(!likeNotifsEnabled);
+  const onToggleLikeNotifs = () => toggleLikeNotifs(!likeNotifsEnabled); global.likesEnabled = likeNotifsEnabled;
 
   const [reminderNotifsEnabled, toggleReminderNotifs] = React.useState(false);
-  const onToggleReminderNotifs = () => toggleReminderNotifs(!reminderNotifsEnabled);
+  const onToggleReminderNotifs = () => toggleReminderNotifs(!reminderNotifsEnabled); global.remindersEnabled = reminderNotifsEnabled;
 
   return (
   <View style={styles.container}>
@@ -33,7 +33,7 @@ function SettingsScreen({navigation}) {
       <View style={styles.containerRow}>
         <Text variant="titleMedium" style={styles.notifOption}>Notify when Post Liked</Text>
         <View style={styles.containerSwitch}>
-          <Switch value={likeNotifsEnabled} onValueChange={onToggleLikeNotifs} style={styles.switch}/>
+          <Switch value={likeNotifsEnabled} onValueChange={onToggleLikeNotifs} style={styles.switchTwo}/>
         </View>
       </View>
       <View style={styles.containerRow}>
@@ -131,6 +131,11 @@ const styles = StyleSheet.create({
   },
   switch: {
     alignSelf: 'flex-end',
+    left: 150,
+  },
+  switchTwo: {
+    alignSelf: 'flex-end',
+    left: 111,
   },
 });
 
