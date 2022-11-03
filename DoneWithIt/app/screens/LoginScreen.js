@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import * as Google from 'expo-auth-session/providers/google';
-import {insertNewUser, userExists, getCurrentDate} from '../utilities/requestData'
+import {insertNewUser, userExists, getCurrentDate, getAllOutfits} from '../utilities/requestData'
 global.userEmail;
 global.remindersEnabled;
 global.likesEnabled;
@@ -54,9 +54,7 @@ function LoginScreen({navigation}) {
         } else {
           //Utilize previousData to load user's stuff
           global.accountDate = JSON.parse(JSON.stringify(previousData)).document.dateCreated
-
         }
-        //TODO: utilize this email address
         //requestDatabase(2,data.email,data.email,"10-19-2020");
       }
       fetchData()

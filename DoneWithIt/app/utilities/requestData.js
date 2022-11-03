@@ -116,27 +116,27 @@ export async function addNewOutfit(email, outfitName, description, imageString) 
 export async function getAllOutfits(emailAddress) {
 
     //TODO: Make db function to gather all outfits belonging to a specific user
-    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/getOutfits';
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/getOutfits';
 
-    const opt = {
+    const options = {
         method: 'POST',
         headers: {
             'content-type': 'application/json',
             'api-key': KEY,
         },
-        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits", "filter": { "email": "' + emailAddress + '" }}'
+        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits", "document": { "userEmail": "' + emailAddress + '" }}'
     };
 
     let response = await fetch(url, options)
     let data = await response.json();
-
+    console.log(data);
     //handle return 
-    if(data.document == null) {
+    if(data.findResult == null) {
         return -1;
     }
 
     //return document passed
-    return data.document;
+    return data;
 }
 
 export function getCurrentDate() {
