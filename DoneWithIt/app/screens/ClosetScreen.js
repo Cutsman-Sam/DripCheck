@@ -339,6 +339,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   outfitText: {
+    alignSelf: "center",
     paddingTop: 10,
   },
   dateText: {

@@ -53,11 +53,12 @@ export default function UploadOutfit() {
 const imageUploaderStyles=StyleSheet.create({
     container:{
         elevation:2,
-        //marginTop: 15,
+        marginTop: 25,
         height:250,
         width:250,
         backgroundColor:'#efefef',
         position:'relative',
+        alignSelf: "center",
         borderRadius:20,
         overflow:'hidden',
     },
