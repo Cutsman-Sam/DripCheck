@@ -74,10 +74,10 @@ async function handleLogin(){
     if(previousData == false) {
       //console.log("LoginScreen: called insertNewUser");
       global.accountDate = getCurrentDate();
-      insertNewUser(global.userEmail, global.displayName);
+      insertNewUser(global.userEmail, global.displayName,0,0);
     } else {
       //Utilize previousData to load user's stuff
-      global.accountDate = JSON.parse(JSON.stringify(previousData)).document.dateCreated
+      global.accountDate = JSON.parse(JSON.stringify(previousData)).dateCreated
       let outfits = await getAllOutfits(global.userEmail)
       var obj = JSON.parse(JSON.stringify(outfits));
       var res = [];
