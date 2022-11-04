@@ -46,7 +46,7 @@ function ProfileStack() {
 
 function BottomTabs() {
   return (
-    <Tab.Navigator initialRouteName="Calendar">
+    <Tab.Navigator initialRouteName="ProfileStack">
       <Tab.Screen name="ProfileStack" component={ProfileStack} 
         options={{tabBarIcon: () => (<Image source={require("./app/assets/icon-profile.jpg")} 
         style={{width: 32, height: 32}} />), title: "Profile", headerShown: false}}/>
