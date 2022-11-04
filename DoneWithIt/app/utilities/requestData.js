@@ -1,6 +1,12 @@
 const KEY = 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA';
 
 /**
+ * USER USER USER USER USER USER USER USER USER USER USER USER USER USER USER USER USER USER 
+ * USER USER USER USER USER USER USER USER USER USER USER USER USER USER USER USER USER USER 
+ * USER USER USER USER USER USER USER USER USER USER USER USER USER USER USER USER USER USER 
+ */
+
+/**
  * Function to check if a user exists in the database or not
  * @param {*} emailAddress email address of registering user
  * @returns false if user doesnt exist. User JSON object if user exists
@@ -164,6 +170,13 @@ export async function deleteUser(email) {
 }
 
 /**
+ * OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT 
+ * OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT 
+ * OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT
+ */
+
+
+/**
  * Method to get all outfits in database from a specific user given the user's email
  * @param {*} emailAddress email address of user 
  * @returns array of outfit objects in database from that user
@@ -214,14 +227,19 @@ export async function deleteUser(email) {
             'content-type': 'application/json',
             'api-key': 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA',
         },
-        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits",' + 
-        ' "document": {' + 
-        '"email" : "' + email + '",' + 
-        '"outfitName" : "' + outfitName + '",' + 
-        '"dateCreated" : "' + date + '",' + 
-        '"imageString" : "' + imageString + '",' + 
-        '"tags" : "' + tagString + '",' + 
-        '"description" : "' + description + '"  }}'
+        body: 
+            '{"dataSource": "DripCheckApp",'+
+            ' "database": "test", '+
+            ' "collection": "outfits",' + 
+            ' "document": {' + 
+                '"email" : "' + email + '",' + 
+                '"outfitName" : "' + outfitName + '",' + 
+                '"dateCreated" : "' + date + '",' + 
+                '"imageString" : "' + imageString + '",' + 
+                '"tags" : "' + tagString + '",' + 
+                '"description" : "' + description + '"' +
+            '}' +
+        '}'
      };
 
      let response = await fetch(url, options)
@@ -234,43 +252,6 @@ export async function deleteUser(email) {
 
      //else return outfitID
      return data;
-}
-
-/**
- * deletes an outfit from the database
- * @param {*} id id of outfit to delete
- * @returns return 1 if success, -1 on failure
- */
- export async function deleteOutfit(outfitID) {
-
-    //endpoint url
-    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteOne';
-
-    const options = {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json',
-            'api-key': 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA',
-        },
-        body: '{' + 
-            '"dataSource": "DripCheckApp",' + 
-            '"database": "test",' + 
-            '"collection": "outfits",' +
-            '"filter": {' +
-                '"_id" : {' + 
-                    '"$oid": "' + outfitID + '"' +
-                '}' +
-            '}' +
-        '}'
-    };
-
-    let response = await fetch(url, options);
-    let data = await response.json();
-
-    if(data.deletedCount == 1) {
-        return 1;
-    }
-    return -1;
 }
 
 /**
@@ -379,6 +360,203 @@ export async function updateOutfit(outfitID, email, outfitName, description, ima
                     '"imageString" : "' + imageString + '",' + 
                     '"tags" : "' + tagString + '",' + 
                     '"description" : "' + description + '"' +
+                '}' +
+            '}'
+     };
+
+    let response = await fetch(url, options)
+    let data = await response.json();
+
+    //return 1 on success, -1 on failure
+    if(data.matchedCount == 1 && data.modifiedCount == 1) {
+        return 1;
+    } else {
+        return -1;
+    }
+}
+
+/**
+ * DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY 
+ * DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY 
+ * DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY DAY 
+ */
+
+
+/**
+ * function to add a day to the database
+ * @param {*} email 
+ * @param {*} outfitID 
+ * @param {*} text 
+ * @param {*} date 
+ * @returns -1 on fail, new day ID on success
+ */
+export async function addNewDay(email,outfitID,text,date) {
+    //endpoint url
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/insertOne';
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'api-key': KEY,
+        },
+        body: '{'+
+                '"dataSource": "DripCheckApp",'+ 
+                '"database": "test",'+
+                '"collection": "days",' + 
+                '"document": {' + 
+                    '"email" : "' + email + '",' + 
+                    '"outfitID" : "' + outfitID + '",' +
+                    '"text" : "' + text + '",' +
+                    '"date" : "' + date + '"' +
+                '}' +
+            '}'
+    };
+
+    let response = await fetch(url,options);
+    let data = await response.json();    
+
+    //checks if JSON document is null, meaning user doesn't exist
+    if(data.document == null) {
+        return -1;
+    } else {
+        //returns user document if true
+        return data.document._id;
+    }
+}
+
+/**
+ * function to get all days pertaining to a user from database
+ * @param {*} email email of the user
+ * @returns array of days from that user
+ */
+export async function getDaysUser(email) {
+    //endpoint url
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/find';
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'api-key': KEY,
+        },
+        body: '{'+
+                '"dataSource": "DripCheckApp",'+ 
+                '"database": "test",'+
+                '"collection": "days",' + 
+                '"filter": {' + 
+                    '"email" : "' + email + '"' +
+                '}' +
+            '}'
+    };
+
+    let response = await fetch(url,options);
+    let data = await response.json();    
+
+    //checks if JSON document is null, meaning user doesn't exist
+    return data.documents;
+}
+
+
+/**
+ * function to delete a specific day from the database
+ * @param {*} dayID ID of day to delete
+ * @returns 1 on success, -1 on failure
+ */
+export async function deleteDay(dayID) {
+    //endpoint url
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteOne';
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'api-key': KEY,
+        },
+        body: '{'+
+                '"dataSource": "DripCheckApp",'+ 
+                '"database": "test",'+
+                '"collection": "days",' + 
+                '"filter":  {' +
+                   '"_id" : {' + 
+                       '"$oid": "' + dayID + '"' +
+                   '}' +
+                '}' +
+            '}'
+    };
+ 
+    let response = await fetch(url,options);
+    let data = await response.json();    
+    
+    //handle return 
+    if(data.deleteResult.deletedCount == 1) {
+        return 1;
+    }
+    return -1;
+}
+
+/**
+ * function to delete all days of a specific user
+ * @param {*} email email of user to delete days from
+ * @returns number of days deleted
+ */
+export async function deleteAllDays(email) {
+    //endpoint url
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteMany';
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'api-key': KEY,
+        },
+        body: '{'+
+                '"dataSource": "DripCheckApp",'+ 
+                '"database": "test",'+
+                '"collection": "days",' + 
+                '"filter":  {' +
+                   '"email" : "' + email + '"' +
+                '}' +
+            '}'
+    };
+ 
+    let response = await fetch(url,options);
+    let data = await response.json();    
+    
+    //handle return 
+    if(data.deleteResult == null) {
+        return -1;
+    }
+
+    return data.deleteResult.deletedCount;
+}
+
+
+export async function updateDay(email,dayID,text,date,outfitID) {
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/updateOne';
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'api-key': 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA',
+        },
+        body: '{'+
+                '"dataSource": "DripCheckApp",'+ 
+                '"database": "test",'+
+                '"collection": "days",' + 
+                '"filter": {' +
+                    '"_id" : {' + 
+                        '"$oid": "' + dayID + '"' +
+                    '}' +
+                '},' +
+                '"update": {' + 
+                    '"email" : "' + email + '",' + 
+                    '"date" : "' + date + '",' + 
+                    '"outfitID" : {' + 
+                        '"$oid": "' + outfitID + '"' +
+                    '},' + 
+                    '"text" : "' + text + '"' + 
                 '}' +
             '}'
      };
