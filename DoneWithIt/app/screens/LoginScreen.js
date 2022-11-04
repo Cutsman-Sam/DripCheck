@@ -69,15 +69,14 @@ function LoginScreen({navigation}) {
 async function handleLogin(){
     //console.log("LoginScreen: called userExists");
     let previousData = await userExists(global.userEmail)
-        
     //if user exists do nothing, else add them to database.
     if(previousData == false) {
       //console.log("LoginScreen: called insertNewUser");
       global.accountDate = getCurrentDate();
-      insertNewUser(global.userEmail, global.displayName);
+      insertNewUser(global.userEmail, global.displayName, 0, 0);
     } else {
       //Utilize previousData to load user's stuff
-      global.accountDate = JSON.parse(JSON.stringify(previousData)).document.dateCreated
+      global.accountDate = JSON.parse(JSON.stringify(previousData)).dateCreated
       let outfits = await getAllOutfits(global.userEmail)
       var obj = JSON.parse(JSON.stringify(outfits));
       var res = [];

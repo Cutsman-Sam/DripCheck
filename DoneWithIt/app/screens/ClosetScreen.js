@@ -111,21 +111,6 @@ function ClosetScreen(props) {
       addNewOutfit(global.userEmail, o_name, "", o_image);
     }
   }
-  function addOldOutfit(o_name, o_image, o_date, o_tags) {
-    if (o_name != "" && o_image != "") {
-      let outfit = {
-        name: o_name,
-        date: o_date,
-        image: o_image,
-        tags: o_tags
-      };
-      setOutfitArray(outfitArray.concat(outfit));
-      let newOutfits = numOutfits + 1;
-      let newIndex = numOutfits;
-      setNumOutfits(newOutfits);
-      setIndex(newIndex);
-    }
-  }
   // Deletes an outfit from the closet.
   function deleteOutfit() {
     let tempArray = outfitArray;
