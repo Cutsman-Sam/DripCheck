@@ -84,6 +84,7 @@ function ClosetScreen(props) {
   function showModal() {
     setAddingOutfitMenu(true);
     setAddingName("");
+    setAddingTag("");
   }
 
   function showModalEdit() {
@@ -107,14 +108,15 @@ function ClosetScreen(props) {
   // Outfit Management Functions
   //----------------------------
   // Adds an outfit into the closet.
-  function addOutfit(o_name, o_image) {
+  function addOutfit(o_name, o_image, o_tag) {
     if (o_name != "" && o_image != "") {
       let outfit = {
         name: o_name,
         date: "N/A",
         image: o_image,
-        tags: ""
+        tags: o_tag
       };
+      if (!allAddedTags.includes(o_tag)) {allAddedTags.push(o_tag)};
       setOutfitArray(outfitArray.concat(outfit));
       let newOutfits = numOutfits + 1;
       let newIndex = numOutfits;
@@ -153,6 +155,7 @@ function ClosetScreen(props) {
 
   // Adds a tag to an outfit's tag list if it is not present.
   function addTag(tag) {
+    console.log("Tag: " + tag);
     if (tag != "") {
       let valid = true;
       if (outfitArray[index].tags != "") {
@@ -178,6 +181,7 @@ function ClosetScreen(props) {
         let replaceOutfit = outfitArray[index];
         replaceOutfit.tags = tag;
         tempArray.splice(index, 1, replaceOutfit);
+        if (!allAddedTags.includes(tag)) {allAddedTags.push(tag)};
         setOutfitArray(tempArray);
       }
     }
@@ -284,9 +288,23 @@ function ClosetScreen(props) {
             <View style={styles.buttonSpacing}></View>
             <TextInput label="Outfit Name" value={addingName} onChangeText={addingName => setAddingName(addingName)}/>
             <UploadOutfit style={{alignSelf: "center"}}/>
-
+            <TextInput
+              label="Tag Name"
+              value={addingTag}
+              onChangeText={addingTag => setAddingTag(addingTag)}
+            />
+            <DropDown
+              label={"Select Existing Tag"}
+              mode={"outlined"}
+              visible={showDropDown}
+              showDropDown={() => setShowDropDown(true)}
+              onDismiss={() => setShowDropDown(false)}
+              value={addingTag}
+              setValue={setAddingTag}
+              list={tagList}
+            />
             <View style={styles.buttonSpacing}></View>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); addOutfit(addingName, global.outfitBase64)}}>
+            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); addOutfit(addingName, global.outfitBase64, addingTag)}}>
               Confirm Outfit
             </Button>
             <View style={styles.buttonSpacing}></View>
@@ -351,8 +369,24 @@ function ClosetScreen(props) {
             <View style={styles.buttonSpacing}></View>
             <TextInput label="Outfit Name" value={addingName} onChangeText={addingName => setAddingName(addingName)}/>
             <UploadOutfit/>
+            <TextInput
+              label="Tag Name"
+              value={addingTag}
+              onChangeText={addingTag => setAddingTag(addingTag)}
+            />
+            <DropDown
+              label={"Select Existing Tag"}
+              mode={"outlined"}
+              visible={showDropDown}
+              showDropDown={() => setShowDropDown(true)}
+              onDismiss={() => setShowDropDown(false)}
+              value={addingTag}
+              setValue={setAddingTag}
+              list={tagList}
+            />
+            
             <View style={styles.buttonSpacing}></View>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); addOutfit(addingName, global.outfitBase64)}}>
+            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); addOutfit(addingName, global.outfitBase64, addingTag)}}>
               Confirm Outfit
             </Button>
             <View style={styles.buttonSpacing}></View>
