@@ -155,7 +155,7 @@ export async function deleteUser(email) {
  * @param {*} imageString Base64 URI image string
  * @returns _id of inserted outfit or -1 on failure
  */
-export async function addNewOutfit(email, outfitName, description, imageString) {
+export async function addNewOutfit(email, outfitName, tags, imageString) {
 
     var date = getCurrentDate();
     globalThis.accountDate = date;
@@ -173,7 +173,8 @@ export async function addNewOutfit(email, outfitName, description, imageString) 
         '"outfitName" : "' + outfitName + '",' + 
         '"dateCreated" : "' + date + '",' + 
         '"imageString" : "' + imageString + '",' + 
-        '"description" : "' + description + '"  }}'
+        '"description" : "' + "" + '",' + 
+        '"tags" : "' + tags + '"  }}'
      };
 
      let response = await fetch(url, options)

@@ -4,5 +4,5 @@ global.likesEnabled;
 global.displayName;
 global.accountDate;
 global.outfitBase64;
-
+global.closetLoaded;
 global.outfitArray;
