@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Text, Button, Portal, Modal, TextInput } from 'react-native-paper';
 import UploadOutfit from '../utilities/UploadOutfit';
-import {addNewOutfit} from '../utilities/requestData';
+import {addNewOutfit, updateOutfit} from '../utilities/requestData';
 import DropDown from "react-native-paper-dropdown";
 global.currentImage;
 
@@ -134,6 +134,7 @@ function ClosetScreen(props) {
     if (newIndex < 0) { newIndex = 0; }
     setNumOutfits(newOutfits);
     setIndex(newIndex);
+    
   }
 
   // Changes the outfit at the current index to the new values provided.

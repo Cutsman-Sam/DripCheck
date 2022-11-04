@@ -82,7 +82,9 @@ async function handleLogin(){
       var obj = JSON.parse(JSON.stringify(outfits));
       var res = [];
       for(var i in obj) {
-          res.push(obj[i]);
+          if(obj[i] != null){
+            res.push(obj[i]);
+          }
       }
       if(res.length != 0){
         
@@ -92,7 +94,11 @@ async function handleLogin(){
           let tags = res[i].tags;
           let imageString = res[i].imageString;
           let outfitName = res[i].outfitName; 
+          let description = res[i].description
+          let id = res[i]._id
           let outfit = {
+            id: id,
+            description: description,
             name: outfitName,
             date: created,
             image: imageString,
@@ -105,7 +111,7 @@ async function handleLogin(){
       } else {
         global.outfitArray = -1
       }
-      
+      console.log("ready")
     }
 }
 const styles = StyleSheet.create({
