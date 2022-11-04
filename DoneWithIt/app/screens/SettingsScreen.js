@@ -62,7 +62,7 @@ function SettingsScreen({navigation}) {
               setVisible2(false); 
               async function getData(){
                 let data = await userExists(global.userEmail); 
-                let formattedString = "Username: " + data.document.displayName + ", Creation Date: " + data.document.dateCreated + ", Email: " + data.document.email;
+                let formattedString = "Username: " + data.displayName + ", Creation Date: " + data.dateCreated + ", Email: " + data.email;
                 if(global.outfitArray != -1){
                   let str = ""
                   for(var i = 0; i < global.outfitArray.length; i++){

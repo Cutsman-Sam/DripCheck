@@ -74,15 +74,18 @@ async function handleLogin(){
     if(previousData == false) {
       //console.log("LoginScreen: called insertNewUser");
       global.accountDate = getCurrentDate();
+      global.outfitArray = -1;
       insertNewUser(global.userEmail, global.displayName, 0, 0);
     } else {
       //Utilize previousData to load user's stuff
       global.accountDate = JSON.parse(JSON.stringify(previousData)).dateCreated
-      let outfits = await getAllOutfits(global.userEmail)
+      let outfits = await getAllOutfits(global.userEmail);
       var obj = JSON.parse(JSON.stringify(outfits));
       var res = [];
       for(var i in obj) {
-          res.push(obj[i]);
+          if(obj[i] != null){
+            res.push(obj[i]);
+          }
       }
       if(res.length != 0){
         
@@ -92,7 +95,11 @@ async function handleLogin(){
           let tags = res[i].tags;
           let imageString = res[i].imageString;
           let outfitName = res[i].outfitName; 
+          let description = res[i].description
+          let id = res[i]._id
           let outfit = {
+            id: id,
+            description: description,
             name: outfitName,
             date: created,
             image: imageString,
@@ -105,7 +112,7 @@ async function handleLogin(){
       } else {
         global.outfitArray = -1
       }
-      
+      console.log("ready")
     }
 }
 const styles = StyleSheet.create({
