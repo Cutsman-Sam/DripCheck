@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Image, View, Platform, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-
-
+import { addNewOutfit } from './requestData';
 //https://www.waldo.com/blog/add-an-image-picker-react-native-app
 
-export default function UploadImage() {
+export default function UploadOutfit() {
 //   const  checkForCameraRollPermission=async()=>{
 //         const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
 //         if (status !== 'granted') {
@@ -23,24 +22,26 @@ export default function UploadImage() {
     let _image = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4,3],
-      quality: 1,
+      aspect: [4,4],
+      quality: .2,
+      base64: true,
     });
-    console.log(JSON.stringify(_image));
+    //console.log(JSON.stringify(_image));
     if (!_image.cancelled) {
       setImage(_image.uri);
-      global.currentImage = _image.uri;
+      global.outfitBase64 = _image.base64;
+      //console.log(global.outfitBase64);
     }
   };
   return (
             <View style={imageUploaderStyles.container}>
                 {
-                    image  && <Image source={{ uri: image }} style={{ width: 150, height: 150 }} />
+                    image  && <Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
                 }
                     <View style={imageUploaderStyles.uploadBtnContainer}>
                         <TouchableOpacity onPress={addImage} style={imageUploaderStyles.uploadBtn} >
-                            <Text>{image ? 'Edit' : 'Upload'} Icon</Text>
-                            <AntDesign name="camera" size={20} color="black" />
+                            <Text>{image ? 'Edit' : 'Upload'} Outfit</Text>
+                            <AntDesign style={{paddingLeft: 8}} name="camera" size={20} color="black" />
                         </TouchableOpacity>
                     </View>
             </View>
@@ -52,11 +53,13 @@ export default function UploadImage() {
 const imageUploaderStyles=StyleSheet.create({
     container:{
         elevation:2,
-        height:150,
-        width:150,
+        marginTop: 25,
+        height:250,
+        width:250,
         backgroundColor:'#efefef',
         position:'relative',
-        borderRadius:999,
+        alignSelf: "center",
+        borderRadius:20,
         overflow:'hidden',
     },
     uploadBtnContainer:{
@@ -66,10 +69,11 @@ const imageUploaderStyles=StyleSheet.create({
         bottom:0,
         backgroundColor:'lightgrey',
         width:'100%',
-        height:'25%',
+        height:'10%',
     },
     uploadBtn:{
         display:'flex',
+        flexDirection:'row',
         alignItems:"center",
         justifyContent:'center'
     }

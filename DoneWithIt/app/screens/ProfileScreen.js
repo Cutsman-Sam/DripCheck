@@ -25,9 +25,7 @@ function ProfileScreen({navigation}) {
         <Text variant="headlineSmall" style={styles.numberLabel}>Followers</Text>
         <Text variant="headlineSmall" style={styles.numberLabel}>Following</Text>
       </View>
-      <Button mode="outlined" style={styles.editButton}>
-        Manage Posts
-      </Button>
+      <Text>Account Created: {global.accountDate}</Text> 
     </View>
     );
 }

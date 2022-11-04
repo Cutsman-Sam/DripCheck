@@ -1,0 +1,77 @@
+Calling requestDatabase(); => requestDatabase(requestNum, args);
+- all args are ">"
+
+1. Check User Exists 
+    > email
+
+    < success/fail
+
+2. Add new User
+    > email
+    > displayName
+    > currentDate
+
+    < userID
+
+3. Get existing user data
+    > email
+    
+    < userID
+    < profile picture
+    < outfit images and associated file paths
+
+
+4. Update display name
+    > userID
+    > display name
+
+    < succes/fail
+
+
+5. Update profile pic
+    > userID
+    > new picture
+
+    < success/failure
+
+
+6. Remove all user data 
+    > userID
+
+    < success/fail
+
+
+7. Add new outfit to database under user
+    > user Id
+    > outfit image
+    > outfit name
+    > outfit description
+    > creationDate
+
+    < success/failure
+    < outfitID
+
+
+8. Delete outfit from database
+    > userID
+    > outfitID
+
+    < success/failure
+    
+
+9. Edit outfit information in database
+    > userID
+    > outfitID
+    > outfit image
+    > outfit name
+    > outfit description
+
+    < success/failure
+    < outfitID
+
+
+10. Give/receive notification token
+    > userID
+    > token || NULL
+
+    < success/failure || token
