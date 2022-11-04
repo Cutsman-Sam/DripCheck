@@ -42,9 +42,11 @@ export async function userExists(emailAddress) {
  * Function to insert a new user into the database
  * @param {*} email email address of user from goggole
  * @param {*} displayName displayName of user
+ * @param {*} streak streak data for user in format 
+ * @param {*} outfitCount displayName of user
  * @returns _id of user in database
  */
-export async function insertNewUser(email, displayName) {
+export async function insertNewUser(email, displayName, streak, outfitCount) {
 
     //get current date
     var date = getCurrentDate();
@@ -61,9 +63,12 @@ export async function insertNewUser(email, displayName) {
        
         body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "users",' + 
                 ' "document": {' + 
-                '"email" : "' + email +
-                '", "displayName" : "' + displayName +
-                '", "dateCreated" : "' + date + '"  }}'
+                '"email" : "' + email + '",' +
+                '"streak" : "' + streak + '",' +
+                '"lastStreakDate" : "00-00-0000",' +
+                '"outfitCount" : "' + outfitCount + '",' +
+                '"displayName" : "' + displayName + '",' +
+                '"dateCreated" : "' + date + '"  }}'
     };
 
     let response = await fetch(url, options);
@@ -98,6 +103,164 @@ export async function deleteUser(email) {
             '"filter": {' +
                 '"email": "' + email +
             '" }' +
+        '}'
+    };
+
+    let response = await fetch(url, options);
+    let data = await response.json();
+
+    if(data.deletedCount == 1) {
+        return 1;
+    }
+    return -1;
+}
+
+
+/**
+ * updates a user in the database, MUST PASS ALL USER DATA, NOT JUST UPDATED VALUES
+ * @param {*} email email address of user
+ * @param {*} displayName user's display name
+ * @param {*} streak integer number of current streak
+ * @param {*} outfitCount total number of outfits the user has.
+ * @param {*} lastStreakDay last date user's streak went up
+ * @param {*} dateCreated account creation date, this should never change
+ */
+ export async function updateUser(email, displayName, dateCreated, streak, lastStreakDay, outfitCount) {
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/updateOne';
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'api-key': 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA',
+        },
+        body: '{'+
+                '"dataSource": "DripCheckApp",'+ 
+                '"database": "test",'+
+                '"collection": "users",' + 
+                '"filter": {' +
+                    '"email" : "' + email + '"' +
+                '},' +
+                '"update": {' + 
+                    '"email" : "' + email + '",' + 
+                    '"streak" : "' + streak + '",' +
+                    '"lastStreakDate" : "' + lastStreakDay + '",' +
+                    '"outfitCount" : "' + outfitCount + '",' +
+                    '"displayName" : "' + displayName + '",' + 
+                    '"dateCreated" : "' + dateCreated + '"' +
+                '}' +
+            '}'
+     };
+
+    let response = await fetch(url, options)
+    let data = await response.json();
+
+    //return 1 on success, -1 on failure
+    if(data.matchedCount == 1 && data.modifiedCount == 1) {
+        return 1;
+    } else {
+        return -1;
+    }
+}
+
+/**
+ * Method to get all outfits in database from a specific user given the user's email
+ * @param {*} emailAddress email address of user 
+ * @returns array of outfit objects in database from that user
+ */
+ export async function getAllOutfits(emailAddress) {
+
+    //TODO: Make db function to gather all outfits belonging to a specific user
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/getOutfits';
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'api-key': KEY,
+        },
+        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits", "document": { "email": "' + emailAddress + '" }}'
+    };
+
+    let response = await fetch(url, options)
+    let data = await response.json();
+
+    var outfitArray = data.findResult;
+
+    //return array of outfits
+    return outfitArray;
+
+}
+
+/**
+ * Adds an new outfit to the database
+ * @param {*} email email of user adding outfit
+ * @param {*} outfitName name of outfit
+ * @param {*} description outfit description
+ * @param {*} imageString Base64 URI image string
+ * @param {*} tagString tag string passed from UI
+ * @returns _id of inserted outfit or -1 on failure
+ */
+ export async function addNewOutfit(email, outfitName, description, imageString, tagString) {
+
+    var date = getCurrentDate();
+
+    globalThis.accountDate = date;
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/insertOne';
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'api-key': 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA',
+        },
+        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits",' + 
+        ' "document": {' + 
+        '"email" : "' + email + '",' + 
+        '"outfitName" : "' + outfitName + '",' + 
+        '"dateCreated" : "' + date + '",' + 
+        '"imageString" : "' + imageString + '",' + 
+        '"tags" : "' + tagString + '",' + 
+        '"description" : "' + description + '"  }}'
+     };
+
+     let response = await fetch(url, options)
+     let data = await response.json();
+
+     //handle return 
+     if(data.document == null) {
+        return -1;
+     }
+
+     //else return outfitID
+     return data;
+}
+
+/**
+ * deletes an outfit from the database
+ * @param {*} id id of outfit to delete
+ * @returns return 1 if success, -1 on failure
+ */
+ export async function deleteOutfit(outfitID) {
+
+    //endpoint url
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteOne';
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'api-key': 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA',
+        },
+        body: '{' + 
+            '"dataSource": "DripCheckApp",' + 
+            '"database": "test",' + 
+            '"collection": "outfits",' +
+            '"filter": {' +
+                '"_id" : {' + 
+                    '"$oid": "' + outfitID + '"' +
+                '}' +
+            '}' +
         '}'
     };
 
@@ -148,48 +311,6 @@ export async function deleteUser(email) {
 }
 
 /**
- * Adds an new outfit to the database
- * @param {*} email email of user adding outfit
- * @param {*} outfitName name of outfit
- * @param {*} description outfit description
- * @param {*} imageString Base64 URI image string
- * @returns _id of inserted outfit or -1 on failure
- */
-export async function addNewOutfit(email, outfitName, tags, imageString) {
-
-    var date = getCurrentDate();
-    globalThis.accountDate = date;
-    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/insertOne';
-
-    const options = {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json',
-            'api-key': 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA',
-        },
-        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits",' + 
-        ' "document": {' + 
-        '"email" : "' + email + '",' + 
-        '"outfitName" : "' + outfitName + '",' + 
-        '"dateCreated" : "' + date + '",' + 
-        '"imageString" : "' + imageString + '",' + 
-        '"description" : "' + "" + '",' + 
-        '"tags" : "' + tags + '"  }}'
-     };
-
-     let response = await fetch(url, options)
-     let data = await response.json();
-
-     //handle return 
-     if(data.document == null) {
-        return -1;
-     }
-
-     //else return outfitID
-     return data;
-}
-
-/**
  * method to delete ALL outfits of a user from database given user's email.
  * DO NOT REMOVE USER BEFORE REMOVING OUTFITS
  * @param {*} emailAddress email of user
@@ -223,43 +344,16 @@ export async function removeAllOutfits(emailAddress) {
 }
 
 /**
- * Method to get all outfits in database from a specific user given the user's email
- * @param {*} emailAddress email address of user 
- * @returns array of outfit objects in database from that user
+ * updates an outfits information in the database,
+ * MUST PASS ALL VALUES, EVEN ONES THAT ARENT CHANGING
+ * @param {*} outfitID _id field of the outfit
+ * @param {*} emailAddress email of the user 
+ * @param {*} outfitName name of outfit
+ * @param {*} description just pass "" or null for now
+ * @param {*} imageString the base64 URI of the image
+ * @param {*} tagString the string containing tag info
  */
-export async function getAllOutfits(emailAddress) {
-
-    //TODO: Make db function to gather all outfits belonging to a specific user
-    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/getOutfits';
-
-    const options = {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json',
-            'api-key': KEY,
-        },
-        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits", "document": { "email": "' + emailAddress + '" }}'
-    };
-
-    let response = await fetch(url, options)
-    let data = await response.json();
-
-    var outfitArray = data.findResult;
-
-    //return array of outfits
-    return outfitArray;
-
-}
-
-
-/**
- * 
- * @param {*} emailAddress 
- * @param {*} outfitName 
- * @param {*} description 
- * @param {*} imageString 
- */
-export async function updateOutfit(outfitID, email, outfitName, description, imageString) {
+export async function updateOutfit(outfitID, email, outfitName, description, imageString, tagString) {
     
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/updateOne';
 
@@ -283,50 +377,8 @@ export async function updateOutfit(outfitID, email, outfitName, description, ima
                     '"outfitName" : "' + outfitName + '",' + 
                     '"dateCreated" : "' + date + '",' + 
                     '"imageString" : "' + imageString + '",' + 
+                    '"tags" : "' + tagString + '",' + 
                     '"description" : "' + description + '"' +
-                '}' +
-            '}'
-     };
-
-    let response = await fetch(url, options)
-    let data = await response.json();
-
-    //return 1 on success, -1 on failure
-    if(data.matchedCount == 1 && data.modifiedCount == 1) {
-        return 1;
-    } else {
-        return -1;
-    }
-}
-
-
-/**
- * 
- * @param {*} emailAddress 
- * @param {*} displayName 
- * @param {*} dateCreated 
- */
-export async function updateUser(userID, displayName, dateCreated) {
-    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/updateOne';
-
-    const options = {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json',
-            'api-key': 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA',
-        },
-        body: '{'+
-                '"dataSource": "DripCheckApp",'+ 
-                '"database": "test",'+
-                '"collection": "users",' + 
-                '"filter": {' +
-                    '"_id" : {' + 
-                        '"$oid": "' + userID + '"' +
-                '},' +
-                '"update": {' + 
-                    '"email" : "' + email + '",' + 
-                    '"displayName" : "' + displayName + '",' + 
-                    '"dateCreated" : "' + dateCreated + '"' +
                 '}' +
             '}'
      };
