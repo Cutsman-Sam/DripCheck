@@ -495,7 +495,15 @@ export async function deleteAllDays(email) {
     return data.deleteResult.deletedCount;
 }
 
-
+/**
+ * 
+ * @param {*} email email of user day belongs to
+ * @param {*} dayID ID of the day
+ * @param {*} text notes attached to day
+ * @param {*} date date of day
+ * @param {*} outfitID outfit ID attached to day
+ * @returns 
+ */
 export async function updateDay(email,dayID,text,date,outfitID) {
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/updateOne';
 
