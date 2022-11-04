@@ -236,42 +236,6 @@ export async function deleteUser(email) {
      return data;
 }
 
-/**
- * deletes an outfit from the database
- * @param {*} id id of outfit to delete
- * @returns return 1 if success, -1 on failure
- */
- export async function deleteOutfit(outfitID) {
-
-    //endpoint url
-    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteOne';
-
-    const options = {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json',
-            'api-key': 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA',
-        },
-        body: '{' + 
-            '"dataSource": "DripCheckApp",' + 
-            '"database": "test",' + 
-            '"collection": "outfits",' +
-            '"filter": {' +
-                '"_id" : {' + 
-                    '"$oid": "' + outfitID + '"' +
-                '}' +
-            '}' +
-        '}'
-    };
-
-    let response = await fetch(url, options);
-    let data = await response.json();
-
-    if(data.deletedCount == 1) {
-        return 1;
-    }
-    return -1;
-}
 
 /**
  * deletes an outfit from the database
