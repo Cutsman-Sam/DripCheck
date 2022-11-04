@@ -39,7 +39,7 @@ export async function userExists(emailAddress) {
         return false;
     } else {
         //returns user document if true
-        return data;
+        return data.document;
     }
 }
 
@@ -79,11 +79,10 @@ export async function insertNewUser(email, displayName, streak, outfitCount) {
 
     let response = await fetch(url, options);
     let data = await response.json();
-    if(data.document == null) {
-        return -1;
+    if(data.insertedId != null) {
+        return data.insertedId;
     }
-    //else return userID
-    return data.document._id;
+    return -1;
 }
 
 /**
@@ -130,6 +129,7 @@ export async function deleteUser(email) {
  * @param {*} outfitCount total number of outfits the user has.
  * @param {*} lastStreakDay last date user's streak went up
  * @param {*} dateCreated account creation date, this should never change
+ * @returns 1 if user updated correctly, -1 on fail
  */
  export async function updateUser(email, displayName, dateCreated, streak, lastStreakDay, outfitCount) {
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/updateOne';
@@ -160,7 +160,6 @@ export async function deleteUser(email) {
 
     let response = await fetch(url, options)
     let data = await response.json();
-
     //return 1 on success, -1 on failure
     if(data.matchedCount == 1 && data.modifiedCount == 1) {
         return 1;
