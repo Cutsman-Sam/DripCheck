@@ -420,7 +420,42 @@ export async function getDaysUser(email) {
     return data.documents;
 }
 
+/**
+ * function to delete a specific outfit from the database
+ * @param {*} outfitID ID of day to delete
+ * @returns 1 on success, -1 on failure
+ */
+ export async function deleteOutfitDB(outfitID) {
+    //endpoint url
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteOne';
 
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'api-key': KEY,
+        },
+        body: '{'+
+                '"dataSource": "DripCheckApp",'+ 
+                '"database": "test",'+
+                '"collection": "outfits",' + 
+                '"filter":  {' +
+                   '"_id" : {' + 
+                       '"$oid": "' + outfitID + '"' +
+                   '}' +
+                '}' +
+            '}'
+    };
+ 
+    let response = await fetch(url,options);
+    let data = await response.json();    
+    
+    //handle return 
+    if(data.deletedCount == 1) {
+        return 1;
+    }
+    return -1;
+}
 /**
  * function to delete a specific day from the database
  * @param {*} dayID ID of day to delete
