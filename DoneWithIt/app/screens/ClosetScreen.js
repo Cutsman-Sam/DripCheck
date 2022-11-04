@@ -6,6 +6,8 @@ import {addNewOutfit} from '../utilities/requestData';
 global.currentImage;
 
 function ClosetScreen(props) {
+
+  
   // Menu properties (what menus are open, fields being changed in text prompts, etc.)
   const [addingOutfitMenu, setAddingOutfitMenu] = React.useState(false);
   const [editOutfitMenu, setEditOutfitMenu] = React.useState(false);
@@ -26,7 +28,28 @@ function ClosetScreen(props) {
   if (numOutfits > 0) {
     outfitname = outfitArray[index].image;
   }
-
+  if(global.outfitArray != -1 && global.closetLoaded == null){
+    var arr = new Array();
+    for(var i = 0; i < global.outfitArray.length; i++){
+      if(global.outfitArray[i] != null){
+        let outfit = {
+          name: global.outfitArray[i].name,
+          date: global.outfitArray[i].date,
+          image: global.outfitArray[i].image,
+          tags: global.outfitArray[i].tags
+        };
+        arr.push(outfit);
+        setOutfitArray(arr);
+        let newOutfits = numOutfits + arr.length;
+        let newIndex = numOutfits;
+        setNumOutfits(newOutfits);
+        setIndex(0);
+        //addOldOutfit(global.outfitArray[i].name, global.outfitArray[i].image,global.outfitArray[i].date,global.outfitArray[i].tags);
+      }
+    }
+  }
+  global.closetLoaded = 1;
+  
 
   //---------------
   // Menu Functions
@@ -85,10 +108,24 @@ function ClosetScreen(props) {
       let newIndex = numOutfits;
       setNumOutfits(newOutfits);
       setIndex(newIndex);
-      addNewOutfit(global.userEmail, o_name, "N/A", o_image);
+      addNewOutfit(global.userEmail, o_name, "", o_image);
     }
   }
-
+  function addOldOutfit(o_name, o_image, o_date, o_tags) {
+    if (o_name != "" && o_image != "") {
+      let outfit = {
+        name: o_name,
+        date: o_date,
+        image: o_image,
+        tags: o_tags
+      };
+      setOutfitArray(outfitArray.concat(outfit));
+      let newOutfits = numOutfits + 1;
+      let newIndex = numOutfits;
+      setNumOutfits(newOutfits);
+      setIndex(newIndex);
+    }
+  }
   // Deletes an outfit from the closet.
   function deleteOutfit() {
     let tempArray = outfitArray;

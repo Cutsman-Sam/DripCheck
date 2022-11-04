@@ -78,6 +78,34 @@ async function handleLogin(){
     } else {
       //Utilize previousData to load user's stuff
       global.accountDate = JSON.parse(JSON.stringify(previousData)).document.dateCreated
+      let outfits = await getAllOutfits(global.userEmail)
+      var obj = JSON.parse(JSON.stringify(outfits));
+      var res = [];
+      for(var i in obj) {
+          res.push(obj[i]);
+      }
+      if(res.length != 0){
+        
+        let arr = new Array(res.length);
+        for(var i = 0; i < res.length; i++){
+          let created = res[i].dateCreated;
+          let tags = res[i].tags;
+          let imageString = res[i].imageString;
+          let outfitName = res[i].outfitName; 
+          let outfit = {
+            name: outfitName,
+            date: created,
+            image: imageString,
+            tags: tags
+          };
+          arr.push(outfit);
+        }
+      global.outfitArray = arr;
+      console.log("Added old outfits");
+      } else {
+        global.outfitArray = -1
+      }
+      
     }
 }
 const styles = StyleSheet.create({
