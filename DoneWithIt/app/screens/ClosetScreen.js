@@ -3,6 +3,7 @@ import { StyleSheet, View, Image } from 'react-native';
 import { Text, Button, Portal, Modal, TextInput } from 'react-native-paper';
 import UploadOutfit from '../utilities/UploadOutfit';
 import {addNewOutfit} from '../utilities/requestData';
+import DropDown from "react-native-paper-dropdown";
 global.currentImage;
 
 function ClosetScreen(props) {
@@ -23,6 +24,17 @@ function ClosetScreen(props) {
 
   // Current outfit being viewed in the closet
   const [index, setIndex] = React.useState(0);
+
+  const [showDropDown, setShowDropDown] = React.useState(false);
+  
+  let tagList = [];
+  console.log(global.allAddedTags);
+  for (let i = 0; i < global.allAddedTags.length; i++) {
+    let obj = {label: global.allAddedTags[i], value: global.allAddedTags[i] }
+    tagList.push(obj);
+  }
+  
+
 
   var outfitname = "";
   if (numOutfits > 0) {
@@ -158,6 +170,7 @@ function ClosetScreen(props) {
           let replaceOutfit = outfitArray[index];
           replaceOutfit.tags += ", " + tag;
           tempArray.splice(index, 1, replaceOutfit);
+          if (!allAddedTags.includes(tag)) {allAddedTags.push(tag)};
           setOutfitArray(tempArray);
         }
       } else {
@@ -179,11 +192,13 @@ function ClosetScreen(props) {
       var arrayLength = strArray.length;
       let dupeArray = strArray;
       for (var i = 0; i < arrayLength; i++) {
-        let upperTag = strArray[i].toUpperCase();
-        console.log(i);
-        console.log(upperTag);
-        if (upperTag === tag.toUpperCase()) {
-          dupeArray.splice(i, 1);
+        if (strArray[i] !== undefined) {
+          let upperTag = strArray[i].toUpperCase();
+          console.log(i);
+          console.log(upperTag);
+          if (upperTag === tag.toUpperCase()) {
+            dupeArray.splice(i, 1);
+          }
         }
       }
       let tempArray = outfitArray;
@@ -193,7 +208,13 @@ function ClosetScreen(props) {
     }
   }
 
-  
+  function clearTags() {
+    let tempArray = outfitArray;
+    let replaceOutfit = outfitArray[index];
+    replaceOutfit.tags = "";
+    tempArray.splice(index, 1, replaceOutfit);
+    setOutfitArray(tempArray);
+  }
 
   if (numOutfits > 0) {
     return (
@@ -226,7 +247,7 @@ function ClosetScreen(props) {
           </Button>
           <View style={{padding: 5}}></View>
           <Button icon="pencil" mode="contained" style={styles.addOutfit} onPress={showModalTag}>
-            Add Tag
+            Tags
           </Button>
         </View>
         
@@ -287,12 +308,27 @@ function ClosetScreen(props) {
               value={addingTag}
               onChangeText={addingTag => setAddingTag(addingTag)}
             />
+            <DropDown
+              label={"Select Existing Tag"}
+              mode={"outlined"}
+              visible={showDropDown}
+              showDropDown={() => setShowDropDown(true)}
+              onDismiss={() => setShowDropDown(false)}
+              value={addingTag}
+              setValue={setAddingTag}
+              list={tagList}
+            />
             <View style={styles.buttonSpacing}></View>
             <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); addTag(addingTag)}}>
               Confirm Tag Addition
             </Button>
+            <View style={styles.buttonSpacing}></View>
             <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); removeTag(addingTag)}}>
               Confirm Tag Removal
+            </Button>
+            <View style={styles.buttonSpacing}></View>
+            <Button icon="trash-can" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); clearTags()}}>
+              Clear Tags
             </Button>
             <View style={styles.buttonSpacing}></View>
             <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>

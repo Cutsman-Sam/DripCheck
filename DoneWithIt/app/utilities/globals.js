@@ -6,4 +6,7 @@ global.accountDate;
 global.outfitBase64;
 global.closetLoaded;
 global.outfitArray;
-global.calendarPalette;
+global.allAddedTags;
+
+global.foo = "foo";
+

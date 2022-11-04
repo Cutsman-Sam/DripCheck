@@ -99,7 +99,12 @@ function CalendarScreen(navigation) {
       assignedDate: o_day,
       notes: ""
     };
-    //console.log(calendarDay);
+    for (let i = 0; i < global.outfitArray.length; i++) {
+      if (o_outfit === global.outfitArray[i]) {
+        console.log(global.outfitArray[i].name);
+        global.outfitArray[i].date = o_day;
+      }
+    }
     setDayArray(dayArray.concat(calendarDay));
   }
   

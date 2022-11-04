@@ -67,6 +67,7 @@ function LoginScreen({navigation}) {
 //<Button onPress={showDialog}>Show Dialog</Button>
 
 async function handleLogin(){
+    global.allAddedTags = [];
     //console.log("LoginScreen: called userExists");
     let previousData = await userExists(global.userEmail)
     //if user exists do nothing, else add them to database.
