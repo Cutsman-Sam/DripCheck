@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, View} from 'react-native';
 import { Text, Button, Paragraph, DefaultTheme, Portal, Dialog, Switch } from 'react-native-paper';
-import { requestData, deleteUser } from '../utilities/requestData';
-import {sendEmail} from '../utilities/sendEmail'
+import { userExists, deleteUser } from '../utilities/requestData';
+import {sendEmail, sendEmailAttach} from '../utilities/sendEmail'
 
 const redTheme = {
   ...DefaultTheme,
@@ -61,10 +61,25 @@ function SettingsScreen({navigation}) {
             <Button onPress={() => {
               setVisible2(false); 
               async function getData(){
-                let data = await requestData(global.userEmail); 
+                let data = await userExists(global.userEmail); 
                 let formattedString = "Username: " + data.document.displayName + ", Creation Date: " + data.document.dateCreated + ", Email: " + data.document.email;
-                sendEmail(global.userEmail, global.displayName + " Data Requested - Dripcheck", formattedString);
-              }
+                if(global.outfitArray != -1){
+                  let str = ""
+                  for(var i = 0; i < global.outfitArray.length; i++){
+                    if(global.outfitArray[i] != null){
+                      let item = {
+                        name: global.outfitArray[i].name,
+                        tags: global.outfitArray[i].tags,
+                        image: global.outfitArray[i].image
+                      }
+                      str += "{Outfit: " + item.name + ", Tags: " + item.tags +  "Raw Image Data: " + item.image + "}";
+                    }
+                  }
+                  sendEmail(global.userEmail, global.displayName + " Data Requested - Dripcheck", formattedString + " " + str);
+                } else {
+                  sendEmail(global.userEmail, global.displayName + " Data Requested - Dripcheck", formattedString);
+                }
+               }
               getData();
             }
               }>Yes</Button>

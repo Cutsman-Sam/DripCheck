@@ -12,4 +12,5 @@ const options = {
   body: '{"personalizations":[{"to":[{"email":' + '"' + to + '"' + '}],"subject":' + '"' + subject + '"' + '}],"from":{"email":"dripcheck307@gmail.com"},"content":[{"type":"text/plain","value":' + '"' + body + '"' + '}]}'
 };
 const stat = (await fetch(url, options)).status
+console.log(stat);
 }
