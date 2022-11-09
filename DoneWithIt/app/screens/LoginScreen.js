@@ -70,7 +70,6 @@ async function handleLogin(){
     global.allAddedTags = [];
     //console.log("LoginScreen: called userExists");
     let previousData = await userExists(global.userEmail)
-    //if user exists do nothing, else add them to database.
     if(previousData == false) {
       //console.log("LoginScreen: called insertNewUser");
       global.accountDate = getCurrentDate();
@@ -112,8 +111,8 @@ async function handleLogin(){
       } else {
         global.outfitArray = -1
       }
-      console.log("ready")
     }
+    console.log("ready")
 }
 const styles = StyleSheet.create({
     container: {
