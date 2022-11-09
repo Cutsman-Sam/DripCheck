@@ -107,6 +107,17 @@ function CalendarScreen(navigation) {
     }
     setDayArray(dayArray.concat(calendarDay));
   }
+
+  function removeCalendarDay(o_day) {
+    let arr = dayArray;
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].assignedDate.dateString === o_day.dateString) {
+        arr.splice(i, 1);
+        break;
+      }
+    }
+    setDayArray(arr);
+  }
   
   
   
@@ -200,6 +211,9 @@ function CalendarScreen(navigation) {
           />
           <View style={styles.buttonSpacing}></View>
           <TextInput label="Notes" value={addNotes} onChangeText={addNotes => setAddNotes(addNotes)}/>
+          <Button icon="trash-can" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); removeCalendarDay(currentDay)}}>
+            Clear Day
+          </Button>
           <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
             Close
           </Button>
