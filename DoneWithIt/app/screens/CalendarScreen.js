@@ -60,7 +60,6 @@ function CalendarScreen(navigation) {
     setNotesMenu(true);
     for (let i = 0; i < dayArray.length; i++) {
       if (dayArray[i].assignedDate.dateString === global.trueDay.dateString) {
-        console.log(global.trueDay.dateString)
         setNotesOutfit(dayArray[i].outfit)
         setAddNotes(dayArray[i].notes)
       }
@@ -101,11 +100,19 @@ function CalendarScreen(navigation) {
     };
     for (let i = 0; i < global.outfitArray.length; i++) {
       if (o_outfit === global.outfitArray[i]) {
-        console.log(global.outfitArray[i].name);
         global.outfitArray[i].date = o_day;
       }
     }
-    setDayArray(dayArray.concat(calendarDay));
+    let insertIndex = 0;
+    let arr = dayArray;
+    for (insertIndex = 0; insertIndex < arr.length; insertIndex++) {
+      if (arr[insertIndex].assignedDate > calendarDay.assignedDate) {
+        break;
+      }
+    }
+    arr.splice(insertIndex, 0, calendarDay);
+    console.log(arr);
+    setDayArray(arr);
   }
 
   function removeCalendarDay(o_day) {
@@ -132,7 +139,6 @@ function CalendarScreen(navigation) {
         onDayPress={day => {
           setCurrentDay(day);
           global.trueDay = day;
-          //console.log('selected day', day);
           if (outfitArray.length != 0) {
             let alreadyAssigned = false;
             for (let i = 0; i < markedDaysArray.length; i++) {
