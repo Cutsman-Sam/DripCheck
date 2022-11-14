@@ -18,6 +18,10 @@ function InspirationScreen(props) {
         onValueChange={toggleSwitch}
         value={isEnabled}
       />
+      <Text>
+        Everyone
+
+      </Text>
 
       <ScrollView style={styles.scrollView}>
       <Text style={styles.text}> 
