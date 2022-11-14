@@ -122,7 +122,7 @@ function ClosetScreen(props) {
       let newIndex = numOutfits;
       setNumOutfits(newOutfits);
       setIndex(newIndex);
-      addNewOutfit(global.userEmail, o_name, "", o_image);
+      addNewOutfit(global.userEmail, o_name, "", o_image, o_tag);
     }
   }
   // Deletes an outfit from the closet.
