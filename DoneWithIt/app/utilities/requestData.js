@@ -318,7 +318,6 @@ export async function updateOutfit(outfitID, email, outfitName, description, ima
                 '"update": {' + 
                     '"email" : "' + email + '",' + 
                     '"outfitName" : "' + outfitName + '",' + 
-                    '"dateCreated" : "' + date + '",' + 
                     '"imageString" : "' + imageString + '",' + 
                     '"tags" : "' + tagString + '",' + 
                     '"description" : "' + description + '"' +
