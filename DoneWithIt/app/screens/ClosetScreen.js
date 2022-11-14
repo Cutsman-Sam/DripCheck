@@ -13,6 +13,8 @@ function ClosetScreen(props) {
   const [addingOutfitMenu, setAddingOutfitMenu] = React.useState(false);
   const [editOutfitMenu, setEditOutfitMenu] = React.useState(false);
   const [addTagMenu, setAddTagMenu] = React.useState(false);
+  const [sortMenu, setSortMenu] = React.useState(false);
+
   const [addingName, setAddingName] = React.useState("");
   const [addingTag, setAddingTag] = React.useState("");
 
@@ -97,11 +99,17 @@ function ClosetScreen(props) {
     setAddingTag("");
   }
 
+  function showModalSort() {
+    setSortMenu(true);
+    setAddingTag("");
+  }
+
   // Hides all modal menus.
   function hideModalAll() {
     setAddingOutfitMenu(false);
     setEditOutfitMenu(false);
     setAddTagMenu(false);
+    setSortMenu(false);
   }
 
   //----------------------------
@@ -231,6 +239,11 @@ function ClosetScreen(props) {
   if (numOutfits > 0) {
     return (
       <View style={styles.container}>
+        <View style={styles.containerSettings}>
+          <Button icon="cog" mode="outlined" onPress={showModalSort} style={styles.settingsButton}>
+            Sort By
+          </Button>
+        </View>
         <Text variant="headlineSmall" style={styles.outfitText}>{outfitArray[index].name}</Text>
         <Text variant="headerLarge" style={styles.dateText}>Last Worn: {outfitArray[index].date}</Text>
         <Text variant="headerLarge" style={styles.dateText}>Tags: {outfitArray[index].tags}</Text>
@@ -265,7 +278,7 @@ function ClosetScreen(props) {
         
 
 
-
+        
         <Portal>
           <Modal visible={editOutfitMenu} style={styles.modalMenu} dismissable={false}>
             <Text variant="headlineSmall" style={styles.outfitText}>Edit Outfit</Text>
@@ -296,8 +309,9 @@ function ClosetScreen(props) {
             <View style={styles.buttonSpacing}></View>
             <TextInput label="Outfit Name" value={addingName} onChangeText={addingName => setAddingName(addingName)}/>
             <UploadOutfit style={{alignSelf: "center"}}/>
+            <View style={styles.buttonSpacing}></View>
             <TextInput
-              label="Tag Name"
+              label="Tag Name (Optional)"
               value={addingTag}
               onChangeText={addingTag => setAddingTag(addingTag)}
             />
@@ -362,6 +376,33 @@ function ClosetScreen(props) {
             </Button>
           </Modal>
         </Portal>
+
+        <Portal>
+          <Modal visible={sortMenu} style={styles.modalMenu} dismissable={false}>
+            <Text variant="headlineSmall" style={styles.outfitText}>Sort Closet</Text>
+            <View style={styles.buttonSpacing}></View>
+            <DropDown
+              label={"Select Existing Tag"}
+              mode={"outlined"}
+              visible={showDropDown}
+              showDropDown={() => setShowDropDown(true)}
+              onDismiss={() => setShowDropDown(false)}
+              value={addingTag}
+              setValue={setAddingTag}
+              list={tagList}
+            />
+            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
+              Sort By Tag
+            </Button>
+            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
+              Sort By Date
+            </Button>
+            <View style={styles.buttonSpacing}></View>
+            <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
+              Cancel
+            </Button>
+          </Modal>
+        </Portal>
       </View>
     );
   } else {
@@ -377,8 +418,9 @@ function ClosetScreen(props) {
             <View style={styles.buttonSpacing}></View>
             <TextInput label="Outfit Name" value={addingName} onChangeText={addingName => setAddingName(addingName)}/>
             <UploadOutfit/>
+            <View style={styles.buttonSpacing}></View>
             <TextInput
-              label="Tag Name"
+              label="Tag Name (Optional)"
               value={addingTag}
               onChangeText={addingTag => setAddingTag(addingTag)}
             />
@@ -414,6 +456,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5fafc',
     alignItems: 'center',
   },
+  containerSettings: {
+    paddingTop: 0,
+    paddingRight: 10,
+    backgroundColor: '#f5fafc',
+    flexDirection: "row",
+    alignSelf: 'flex-end',
+  },
+  settingsButton: {
+    width: 120,
+  },
   imageContainer: {
     paddingBottom: 10,
   },
@@ -446,7 +498,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   closetPicture: {
-    height: 340,
+    height: 280,
     width: 280,
     borderRadius: 20,
     borderWidth: 1,
