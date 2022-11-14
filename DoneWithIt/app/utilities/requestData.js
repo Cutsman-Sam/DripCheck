@@ -751,6 +751,28 @@ export async function getUserPosts(email) {
      return data.documents;
 }
 
+
+//DONT USE THIS, HAVEN'T TESTED IT 
+async function getFollowingPosts(followingEmailArr) {
+    const mergedDocs = {};
+
+    for(let i = 0; i < followingEmailArr.length; i++) {
+        const doc = await getFollowingPosts(followingEmailArr[i]);
+
+        //TODO: add if to make sure return from Mongo is good
+
+        //supposedly this works
+        mergedDocs = {
+            ...mergedDocs,
+            ...doc
+        };
+
+    }
+
+    //return all docs as one massive json
+    return retval
+}
+
 /**
  * Helper method to get current date
  * @returns current date in MM-DD-YYYY format
