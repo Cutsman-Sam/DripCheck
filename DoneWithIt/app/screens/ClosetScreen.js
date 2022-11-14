@@ -202,6 +202,12 @@ function ClosetScreen(props) {
         setOutfitArray(tempArray);
       }
     }
+    for(var i = 0; i < global.outfitArray.length; i++){
+      if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
+        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, "", outfitArray[index].image, outfitArray[index].tags)
+        break;
+      }
+    }
   }
 
   // Removes a tag from an outfit's tag list if it is present.
@@ -227,6 +233,12 @@ function ClosetScreen(props) {
       replaceOutfit.tags = dupeArray.toString();
       tempArray.splice(index, 1, replaceOutfit);
     }
+    for(var i = 0; i < global.outfitArray.length; i++){
+      if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
+        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, "", outfitArray[index].image, outfitArray[index].tags)
+        break;
+      }
+    }
   }
 
   function clearTags() {
@@ -235,6 +247,12 @@ function ClosetScreen(props) {
     replaceOutfit.tags = "";
     tempArray.splice(index, 1, replaceOutfit);
     setOutfitArray(tempArray);
+    for(var i = 0; i < global.outfitArray.length; i++){
+      if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
+        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, "", outfitArray[index].image, outfitArray[index].tags)
+        break;
+      }
+    }
   }
 
   if (numOutfits > 0) {
