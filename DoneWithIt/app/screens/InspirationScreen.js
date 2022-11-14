@@ -1,19 +1,22 @@
-import React from 'react';
+import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';  //status-bar replaced with 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { Switch } from 'react-native-paper';
+import { useState } from 'react';
 
-const InspirationScreen = () => {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-}
 
 function InspirationScreen(props) {
-    return (
+
+  const [isEnabled, setIsEnabled] = React.useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  
+  return (
     <View style={styles.container}>
-      <Switch
-        //trackColor={{ false: "#767577", true:}}
-      
+      <Switch style={styles.switchButton}
+        trackColor={{ false: "#2BFF00", true: "2BFF00"}}
+        thumbColor={isEnabled ? "#2BFF00" : "#FD6868"}
+        onValueChange={toggleSwitch}
+        value={isEnabled}
       />
 
       <ScrollView style={styles.scrollView}>
@@ -45,6 +48,11 @@ const styles = StyleSheet.create({
     },
     text: {
       fontSize: 42,
+    },
+    switchButton: {
+      marginLeft: 150,
+      marginBottom: 10,
+      marginTop: 10 
     }
 });
 
