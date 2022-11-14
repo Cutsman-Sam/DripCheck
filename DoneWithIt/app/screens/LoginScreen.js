@@ -56,7 +56,7 @@ function LoginScreen({navigation}) {
               <Paragraph>Dripcheck collects certain data about the user, such as uploaded photos, email addresses, and liked posts. Do you consent to this collection of data?</Paragraph>
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={() => {setVisible(false); navigation.navigate("BottomTabs"); handleLogin()}}>Accept</Button>
+              <Button onPress={async () => {setVisible(false); navigation.navigate("Loading"); await handleLogin(); navigation.navigate("BottomTabs")}}>Accept</Button>
               <Button onPress={hideDialog}>Decline</Button>
             </Dialog.Actions>
           </Dialog>
@@ -112,6 +112,7 @@ async function handleLogin(){
         global.outfitArray = -1
       }
     }
+    global.ready = 1;
     console.log("ready")
 }
 const styles = StyleSheet.create({

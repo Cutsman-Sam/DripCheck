@@ -13,6 +13,7 @@ import SettingsScreen from './app/screens/SettingsScreen';
 import CalendarScreen from './app/screens/CalendarScreen';
 import ClosetScreen from './app/screens/ClosetScreen';
 import InspirationScreen from './app/screens/InspirationScreen';
+import LoadingScreen from './app/screens/LoadingScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -46,7 +47,7 @@ function ProfileStack() {
 
 function BottomTabs() {
   return (
-    <Tab.Navigator initialRouteName="Inspiration">
+    <Tab.Navigator initialRouteName="Profile">
       <Tab.Screen name="ProfileStack" component={ProfileStack} 
         options={{tabBarIcon: () => (<Image source={require("./app/assets/icon-profile.jpg")} 
         style={{width: 32, height: 32}} />), title: "Profile", headerShown: false}}/>
@@ -78,8 +79,11 @@ export default function App({navigation}) {
       screenOptions={{headerBackVisible: false}}>
         <Stack.Screen name="Login" component={LoginScreen}
           options={{headerShown: false}}/>
+        <Stack.Screen name="Loading" component={LoadingScreen}
+          options={{headerShown: false}}/>
         <Stack.Screen name="BottomTabs" component={BottomTabs} 
           options={{headerShown: false}}/>
+        
       </Stack.Navigator>
     </NavigationContainer>
     </PaperProvider>

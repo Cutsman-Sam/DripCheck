@@ -7,6 +7,6 @@ global.outfitBase64;
 global.closetLoaded;
 global.outfitArray;
 global.allAddedTags;
-
+global.ready;
 global.foo = "foo";
 
