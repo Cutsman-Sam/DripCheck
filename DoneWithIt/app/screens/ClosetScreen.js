@@ -391,9 +391,11 @@ function ClosetScreen(props) {
               setValue={setAddingTag}
               list={tagList}
             />
+            <View style={styles.buttonSpacing}></View>
             <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
               Sort By Tag
             </Button>
+            <View style={styles.buttonSpacing}></View>
             <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
               Sort By Date
             </Button>
