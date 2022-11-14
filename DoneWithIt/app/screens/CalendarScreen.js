@@ -60,7 +60,6 @@ function CalendarScreen(navigation) {
     setNotesMenu(true);
     for (let i = 0; i < dayArray.length; i++) {
       if (dayArray[i].assignedDate.dateString === global.trueDay.dateString) {
-        console.log(global.trueDay.dateString)
         setNotesOutfit(dayArray[i].outfit)
         setAddNotes(dayArray[i].notes)
       }
@@ -101,11 +100,30 @@ function CalendarScreen(navigation) {
     };
     for (let i = 0; i < global.outfitArray.length; i++) {
       if (o_outfit === global.outfitArray[i]) {
-        console.log(global.outfitArray[i].name);
         global.outfitArray[i].date = o_day;
       }
     }
-    setDayArray(dayArray.concat(calendarDay));
+    let insertIndex = 0;
+    let arr = dayArray;
+    for (insertIndex = 0; insertIndex < arr.length; insertIndex++) {
+      if (arr[insertIndex].assignedDate > calendarDay.assignedDate) {
+        break;
+      }
+    }
+    arr.splice(insertIndex, 0, calendarDay);
+    console.log(arr);
+    setDayArray(arr);
+  }
+
+  function removeCalendarDay(o_day) {
+    let arr = dayArray;
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].assignedDate.dateString === o_day.dateString) {
+        arr.splice(i, 1);
+        break;
+      }
+    }
+    setDayArray(arr);
   }
   
   
@@ -121,7 +139,6 @@ function CalendarScreen(navigation) {
         onDayPress={day => {
           setCurrentDay(day);
           global.trueDay = day;
-          //console.log('selected day', day);
           if (outfitArray.length != 0) {
             let alreadyAssigned = false;
             for (let i = 0; i < markedDaysArray.length; i++) {
@@ -200,6 +217,9 @@ function CalendarScreen(navigation) {
           />
           <View style={styles.buttonSpacing}></View>
           <TextInput label="Notes" value={addNotes} onChangeText={addNotes => setAddNotes(addNotes)}/>
+          <Button icon="trash-can" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); removeCalendarDay(currentDay)}}>
+            Clear Day
+          </Button>
           <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
             Close
           </Button>
