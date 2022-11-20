@@ -228,6 +228,20 @@ function ClosetScreen(props) {
     }
   }
 
+  // Removes a tag from an outfit's tag list if it is present.
+  function sortByTag() {
+    let tempArray = [];
+    for (let i = 0; i < outfitArray.length; i++) {
+      if (outfitArray[i].tags.includes(addingTag)) {
+        tempArray.push(outfitArray[i]);
+      }
+      
+    }
+    setNumOutfits(tempArray.length);
+    setIndex(0);
+    setOutfitArray(tempArray);
+  }
+
   function clearTags() {
     let tempArray = outfitArray;
     let replaceOutfit = outfitArray[index];
@@ -392,7 +406,7 @@ function ClosetScreen(props) {
               list={tagList}
             />
             <View style={styles.buttonSpacing}></View>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
+            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(), sortByTag()}}>
               Sort By Tag
             </Button>
             <View style={styles.buttonSpacing}></View>
