@@ -8,5 +8,6 @@ global.closetLoaded;
 global.outfitArray;
 global.allAddedTags;
 
+
 global.foo = "foo";
 

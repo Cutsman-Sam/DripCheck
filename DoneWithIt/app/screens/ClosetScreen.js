@@ -4,6 +4,8 @@ import { Text, Button, Portal, Modal, TextInput } from 'react-native-paper';
 import UploadOutfit from '../utilities/UploadOutfit';
 import {addNewOutfit, updateOutfit, deleteOutfitDB} from '../utilities/requestData';
 import DropDown from "react-native-paper-dropdown";
+import GestureRecognizer, { swipeDirections } from "react-native-swipe-detect";
+
 global.currentImage;
 
 function ClosetScreen(props) {
@@ -250,6 +252,26 @@ function ClosetScreen(props) {
     setOutfitArray(tempArray);
   }
 
+  const config = {
+    velocityThreshold: 0.3,
+    directionalOffsetThreshold: 80,
+  };
+
+  function onSwipe(gestureName, gestureState) {
+    const { SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT } = swipeDirections;
+    this.setState({ gestureName: gestureName });
+    switch (gestureName) {
+      case SWIPE_UP:
+        break;
+      case SWIPE_DOWN:
+        break;
+      case SWIPE_LEFT:
+        break;
+      case SWIPE_RIGHT:
+        break;
+    }
+  }
+
   if (numOutfits > 0) {
     return (
       <View style={styles.container}>
@@ -258,15 +280,25 @@ function ClosetScreen(props) {
             Sort By
           </Button>
         </View>
+        
         <Text variant="headlineSmall" style={styles.outfitText}>{outfitArray[index].name}</Text>
         <Text variant="headerLarge" style={styles.dateText}>Last Worn: {outfitArray[index].date}</Text>
         <Text variant="headerLarge" style={styles.dateText}>Tags: {outfitArray[index].tags}</Text>
+        <GestureRecognizer
+        onSwipe={(direction, state) => this.onSwipe(direction, state)}
+        onSwipeUp={(state) => this.onSwipeUp(state)}
+        onSwipeDown={(state) => this.onSwipeDown(state)}
+        onSwipeLeft={(state) => this.onSwipeLeft(state)}
+        onSwipeRight={(state) => this.onSwipeRight(state)}
+        config={config}
+        >
         <View style={styles.imageContainer}>
           <Image
             style={styles.closetPicture}
             source={{ uri: "data:image/png;base64,"+outfitname }}
           />
         </View>
+        </GestureRecognizer>
         <View style={styles.buttonRowContainer}>
           <Button icon="arrow-left-bold" mode="contained-tonal" style={styles.navButtons} onPress={prevOutfit}>
             Previous
