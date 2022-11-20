@@ -3,7 +3,6 @@ import { StyleSheet, View, Image } from 'react-native';
 import { Text, Button, Portal, Modal, TextInput } from 'react-native-paper';
 import { Calendar } from 'react-native-calendars';
 import { getAllOutfits, addNewDay, deleteDay } from '../utilities/requestData';
-
 global.trueDay = new Date();
 
 function CalendarScreen(navigation) {
@@ -29,19 +28,36 @@ function CalendarScreen(navigation) {
   //Get days from database
   if(global.dayArray != -1 && global.calendarLoaded == null){
     var arr = new Array();
+    var fit;
     for(var i = 0; i < global.dayArray.length; i++){
       if(global.dayArray[i] != null){
+        for(var j = 0; j < global.outfitArray.length; j++){
+          if(global.outfitArray[j] != null && global.outfitArray[j].id == global.dayArray[i].id){
+              fit = global.outfitArray[j];
+              break;
+          }
+        }
+        let outfit = {
+          name: fit.name,
+          date: fit.date,
+          image: fit.image,
+          tags: fit.tags,
+          id: fit.id,
+          description: ""
+        };
+        //console.log(outfit)
         let day = {
-            id: global.dayArray[i].id,
-            text: global.dayArray[i].text,
-            email: global.dayArray[i].email,
+            outfit: outfit,
+            notes: "",
             assignedDate: global.dayArray[i].date
         };
         arr.push(day);
-        setDayArray(arr);
+        
         //addOldOutfit(global.outfitArray[i].name, global.outfitArray[i].image,global.outfitArray[i].date,global.outfitArray[i].tags);
       }
     }
+    
+    setDayArray(arr);
   }
   global.calendarLoaded = 1;
 
@@ -131,7 +147,7 @@ function CalendarScreen(navigation) {
     }
     arr.splice(insertIndex, 0, calendarDay);
     setDayArray(arr);
-    addNewDay(global.userEmail, id, "", calendarDay.assignedDate.dateString);
+    addNewDay(global.userEmail, id, "", calendarDay.assignedDate);
   }
 
   function removeCalendarDay(o_day) {

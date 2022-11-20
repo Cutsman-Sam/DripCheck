@@ -407,14 +407,19 @@ export async function addNewDay(email,outfitID,text,date) {
                     '"email" : "' + email + '",' + 
                     '"outfitID" : "' + outfitID + '",' +
                     '"text" : "' + text + '",' +
-                    '"date" : "' + date + '"' +
+                    '"date" : {' +
+                        '"dateString" : "' + date.dateString + '",' +
+                        '"day" : "' + date.day + '",' +
+                        '"month" : "' + date.month + '",' +
+                        '"timestamp" : "' + date.timestamp + '",' +
+                        '"year" : "' + date.year + '"' +
+                    '}' +
                 '}' +
             '}'
     };
 
     let response = await fetch(url,options);
     let data = await response.json();    
-
     //checks if JSON document is null, meaning user doesn't exist
     if(data.document == null) {
         return -1;
