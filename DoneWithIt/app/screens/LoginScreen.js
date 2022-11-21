@@ -125,9 +125,11 @@ async function handleLogin(){
           let email = global.userEmail
           let text = days[i].text
           let date = days[i].date
-          let id = days[i].outfitID
+          let outfitId = days[i].outfitID
+          let id = days[i]._id
           let day = {
             id: id,
+            outfitId : outfitId,
             text: text,
             email: email,
             date: date

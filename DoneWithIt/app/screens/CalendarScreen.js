@@ -32,7 +32,7 @@ function CalendarScreen(navigation) {
     for(var i = 0; i < global.dayArray.length; i++){
       if(global.dayArray[i] != null){
         for(var j = 0; j < global.outfitArray.length; j++){
-          if(global.outfitArray[j] != null && global.outfitArray[j].id == global.dayArray[i].id){
+          if(global.outfitArray[j] != null && global.outfitArray[j].id == global.dayArray[i].outfitId){
               fit = global.outfitArray[j];
               break;
           }
@@ -159,6 +159,12 @@ function CalendarScreen(navigation) {
       }
     }
     setDayArray(arr);
+    for(var i = 0; i < global.dayArray.length; i++){
+      if(global.dayArray[i] != null && global.dayArray[i].date.dateString === o_day.dateString){
+        deleteDay(global.dayArray[i].id)
+        break;
+      }
+    }
   }
   
   
