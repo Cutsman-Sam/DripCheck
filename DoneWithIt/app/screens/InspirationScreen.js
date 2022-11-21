@@ -28,7 +28,7 @@ function InspirationScreen(props) {
           <UserInfo>
             <UserImg source={require('../assets/blank-profile-pic.png')}/>
             <UserInfoText> 
-              <UserName> {global.userEmail} </UserName> 
+              <UserName> {global.displayName} </UserName> 
               <PostTime>4 hours ago</PostTime>
             </UserInfoText>
           </UserInfo>
@@ -50,7 +50,7 @@ function InspirationScreen(props) {
           <UserInfo>
             <UserImg source={require('../assets/blank-profile-pic.png')}/>
             <UserInfoText> 
-              <UserName> {global.userEmail} </UserName> 
+              <UserName> {global.displayName} </UserName> 
               <PostTime>6 hours ago</PostTime>
             </UserInfoText>
           </UserInfo>
@@ -72,7 +72,7 @@ function InspirationScreen(props) {
           <UserInfo>
             <UserImg source={require('../assets/blank-profile-pic.png')}/>
             <UserInfoText> 
-              <UserName> {global.userEmail} </UserName> 
+              <UserName> {global.displayName} </UserName> 
               <PostTime>8 hours ago</PostTime>
             </UserInfoText>
           </UserInfo>
