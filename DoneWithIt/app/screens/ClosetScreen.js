@@ -132,7 +132,7 @@ function ClosetScreen(props) {
       let newIndex = numOutfits;
       setNumOutfits(newOutfits);
       setIndex(newIndex);
-      addNewOutfit(global.userEmail, o_name, "", o_image);
+      addNewOutfit(global.userEmail, o_name, "", o_image, o_tag);
     }
   }
   // Deletes an outfit from the closet.
@@ -141,6 +141,7 @@ function ClosetScreen(props) {
       for(var i = 0; i < global.outfitArray.length; i++){
         if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
           deleteOutfitDB(global.outfitArray[i].id);
+          break;
         }
       }
     }
@@ -158,6 +159,13 @@ function ClosetScreen(props) {
 
   // Changes the outfit at the current index to the new values provided.
   function changeOutfit(o_name, o_image) {
+    for(var i = 0; i < global.outfitArray.length; i++){
+      if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
+        updateOutfit(global.outfitArray[i].id, global.userEmail, o_name, "", o_image, outfitArray[index].tags)
+        break;
+      }
+    }
+    
     if (o_name != "" && o_image != "") {
       let outfit = {
         name: o_name,
@@ -168,6 +176,7 @@ function ClosetScreen(props) {
       let tempArray = outfitArray;
       tempArray.splice(index, 1, outfit);
       setOutfitArray(tempArray);
+      
     }
   }
 
@@ -203,6 +212,12 @@ function ClosetScreen(props) {
         setOutfitArray(tempArray);
       }
     }
+    for(var i = 0; i < global.outfitArray.length; i++){
+      if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
+        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, "", outfitArray[index].image, outfitArray[index].tags)
+        break;
+      }
+    }
   }
 
   // Removes a tag from an outfit's tag list if it is present.
@@ -227,6 +242,12 @@ function ClosetScreen(props) {
       let replaceOutfit = outfitArray[index];
       replaceOutfit.tags = dupeArray.toString();
       tempArray.splice(index, 1, replaceOutfit);
+    }
+    for(var i = 0; i < global.outfitArray.length; i++){
+      if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
+        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, "", outfitArray[index].image, outfitArray[index].tags)
+        break;
+      }
     }
   }
 
@@ -257,6 +278,12 @@ function ClosetScreen(props) {
     replaceOutfit.tags = "";
     tempArray.splice(index, 1, replaceOutfit);
     setOutfitArray(tempArray);
+    for(var i = 0; i < global.outfitArray.length; i++){
+      if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
+        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, "", outfitArray[index].image, outfitArray[index].tags)
+        break;
+      }
+    }
   }
 
   const config = {
