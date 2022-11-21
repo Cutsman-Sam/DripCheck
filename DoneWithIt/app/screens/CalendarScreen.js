@@ -130,8 +130,8 @@ function CalendarScreen(navigation) {
   
   if (c_outfit != null) {
   return (
+    <>
     <View style={styles.container}>
-      <View style={{ paddingTop: 50}}>
         <Calendar
         // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
         maxDate = {Date()}
@@ -225,7 +225,8 @@ function CalendarScreen(navigation) {
           </Button>
         </Modal>
       </Portal>
-    </View>
+    
+    </>
   );
   }
   return (
@@ -238,6 +239,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5fafc',
     alignItems: 'center',
+    paddingTop: 50
   },
   modalMenu: {
     backgroundColor: '#ffffff',
