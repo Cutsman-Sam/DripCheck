@@ -244,6 +244,13 @@ function ClosetScreen(props) {
     setOutfitArray(tempArray);
   }
 
+  function restoreSort() {
+    let tempArray = outfitArray;
+    setNumOutfits(tempArray.length);
+    setIndex(0);
+    setOutfitArray(tempArray);
+  }
+
   function clearTags() {
     let tempArray = outfitArray;
     let replaceOutfit = outfitArray[index];
@@ -446,7 +453,7 @@ function ClosetScreen(props) {
               Sort By Date
             </Button>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
+            <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(), restoreSort()}}>
               Cancel
             </Button>
           </Modal>
