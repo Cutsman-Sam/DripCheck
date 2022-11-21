@@ -405,9 +405,17 @@ export async function addNewDay(email,outfitID,text,date) {
                 '"collection": "days",' + 
                 '"document": {' + 
                     '"email" : "' + email + '",' + 
-                    '"outfitID" : "' + outfitID + '",' +
+                    '"outfitID" : {' + 
+                        '"$oid": "' + outfitID + '"' +
+                    '},' + 
                     '"text" : "' + text + '",' +
-                    '"date" : "' + date + '"' +
+                    '"date" : {' +
+                        '"dateString" : "' + date.dateString + '",' +
+                        '"day" : "' + date.day + '",' +
+                        '"month" : "' + date.month + '",' +
+                        '"timestamp" : "' + date.timestamp + '",' +
+                        '"year" : "' + date.year + '"' +
+                    '}' +
                 '}' +
             '}'
     };
