@@ -3,9 +3,9 @@ import styled from 'styled-components/native';
 
 export const Post = styled.View`
   flex: 1;
-  align-items: center;
+  align-content: center;
   background-color: #fff;
-  padding: 20px;
+  padding: 45px;
 `;
 
 export const Card = styled.View`
@@ -53,7 +53,7 @@ export const PostText = styled.Text`
 `;
 
 export const PostImg = styled.Image`
-  width: 100%
+  width: 100%;
   height: 350px;
   margin-top: 15px;
 `;

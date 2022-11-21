@@ -99,19 +99,19 @@ function InspirationScreen(props) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    scrollView: {
-      //backgroundColor: 'orange',
-      marginHorizontal: 10,
-    },
-    text: {
-      fontSize: 42,
-    },
+    // container: {
+    //   flex: 1,
+    //   backgroundColor: '#fff',
+    //   alignItems: 'center',
+    //   justifyContent: 'center',
+    // },
+    // scrollView: {
+    //   //backgroundColor: 'orange',
+    //   marginHorizontal: 10,
+    // },
+    // text: {
+    //   fontSize: 42,
+    // },
     switchButton: {
       marginLeft: 150,
       marginBottom: 10,
