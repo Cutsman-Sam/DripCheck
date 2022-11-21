@@ -4,9 +4,12 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { Switch } from 'react-native-paper';
 import { useState } from 'react';
 
-import {Post, Card, UserImg, UserInfo, UserName, UserInfoText} from '../styles/postStyle';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+
+import {Post, Card, UserImg, UserInfo, UserName, UserInfoText, PostTime, PostText, PostImg, InteractionWrapper, Interaction, InteractionText} from '../styles/postStyle';
 
 
+//UPDATE LIKES
 function InspirationScreen(props) {
 
   const [isEnabled, setIsEnabled] = React.useState(false);
@@ -20,26 +23,78 @@ function InspirationScreen(props) {
         onValueChange={toggleSwitch}
         value={isEnabled}
       />
-      <Text> Everyone </Text>
       <ScrollView style={styles.scrollView}>
         <Card>
           <UserInfo>
             <UserImg source={require('../assets/blank-profile-pic.png')}/>
-            <UserName> {global.userEmail} </UserName>
+            <UserInfoText> 
+              <UserName> {global.userEmail} </UserName> 
+              <PostTime>4 hours ago</PostTime>
+            </UserInfoText>
           </UserInfo>
+          <PostText> This is a test 1</PostText>
+          <PostImg source={require('../closetimages/sample1.jpg')} />
+          <InteractionWrapper>
+          <Interaction active>
+              <Ionicons name="heart" size={25} color="#2e64e5"/>
+              <InteractionText active>Like</InteractionText> 
+            </Interaction>
+            <Interaction>
+              <Ionicons name="pricetags" size={25}/>
+              <InteractionText>Tags</InteractionText>
+            </Interaction>
+          </InteractionWrapper>
         </Card>
-      <Text style={styles.text}> 
-        THIS IS A TEST FOR SCROLLING. 
-        Place the definitions in an include (.h) file, and use the same file in both client and
-        server software
-        – Instead of defining individual hex values for each possible request and response,
-        define a “response” bit and use it in the definition of message types 
-        Having a separate function for communication allows extra messages to be sent that are
-        not in the request queue (e.g., a control message to delete a disk)
-      </Text>
+
+        <Card>
+          <UserInfo>
+            <UserImg source={require('../assets/blank-profile-pic.png')}/>
+            <UserInfoText> 
+              <UserName> {global.userEmail} </UserName> 
+              <PostTime>6 hours ago</PostTime>
+            </UserInfoText>
+          </UserInfo>
+          <PostText> This is a test 2</PostText>
+          <PostImg source={require('../closetimages/sample2.jpg')} />
+          <InteractionWrapper>
+            <Interaction active>
+              <Ionicons name="heart" size={25} color="#2e64e5"/>
+              <InteractionText active>Like</InteractionText>
+            </Interaction>
+            <Interaction>
+              <Ionicons name="pricetags" size={25}/>
+              <InteractionText>Tags</InteractionText>
+            </Interaction>
+          </InteractionWrapper>
+        </Card>
+
+        <Card>
+          <UserInfo>
+            <UserImg source={require('../assets/blank-profile-pic.png')}/>
+            <UserInfoText> 
+              <UserName> {global.userEmail} </UserName> 
+              <PostTime>8 hours ago</PostTime>
+            </UserInfoText>
+          </UserInfo>
+          <PostText> This is a test 3</PostText>
+          <PostImg source={require('../closetimages/sample3.jpg')} />
+          <InteractionWrapper>
+          <Interaction active>
+              <Ionicons name="heart" size={25} color="#2e64e5"/>
+              <InteractionText active>Like</InteractionText>
+            </Interaction>
+            <Interaction>
+              <Ionicons name="pricetags" size={25}/>
+              <InteractionText>Tags</InteractionText>
+            </Interaction>
+          </InteractionWrapper>
+        </Card>
+
       </ScrollView>
       <StatusBar style="auto" />
     </Post>
+
+    
     );
 }
 
@@ -51,8 +106,8 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     scrollView: {
-      backgroundColor: 'orange',
-      marginHorizontal: 20,
+      //backgroundColor: 'orange',
+      marginHorizontal: 10,
     },
     text: {
       fontSize: 42,
