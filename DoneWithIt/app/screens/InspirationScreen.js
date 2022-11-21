@@ -4,6 +4,8 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { Switch } from 'react-native-paper';
 import { useState } from 'react';
 
+import {Post, Card, UserImg, UserInfo, UserName, UserInfoText} from '../styles/postStyle';
+
 
 function InspirationScreen(props) {
 
@@ -11,19 +13,21 @@ function InspirationScreen(props) {
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   
   return (
-    <View style={styles.container}>
+    <Post>
       <Switch style={styles.switchButton}
         trackColor={{ false: "#2BFF00", true: "2BFF00"}}
         thumbColor={isEnabled ? "#2BFF00" : "#FD6868"}
         onValueChange={toggleSwitch}
         value={isEnabled}
       />
-      <Text>
-        Everyone
-
-      </Text>
-
+      <Text> Everyone </Text>
       <ScrollView style={styles.scrollView}>
+        <Card>
+          <UserInfo>
+            <UserImg source={require('../assets/blank-profile-pic.png')}/>
+            <UserName> {global.userEmail} </UserName>
+          </UserInfo>
+        </Card>
       <Text style={styles.text}> 
         THIS IS A TEST FOR SCROLLING. 
         Place the definitions in an include (.h) file, and use the same file in both client and
@@ -35,7 +39,7 @@ function InspirationScreen(props) {
       </Text>
       </ScrollView>
       <StatusBar style="auto" />
-    </View>
+    </Post>
     );
 }
 
