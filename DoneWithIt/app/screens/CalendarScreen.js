@@ -2,8 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Text, Button, Portal, Modal, TextInput } from 'react-native-paper';
 import { Calendar } from 'react-native-calendars';
-import { getAllOutfits } from '../utilities/requestData';
-
+import { getAllOutfits, addNewDay, deleteDay } from '../utilities/requestData';
 global.trueDay = new Date();
 
 function CalendarScreen(navigation) {
@@ -26,7 +25,41 @@ function CalendarScreen(navigation) {
 
   const [notesOutfit, setNotesOutfit] = React.useState(outfitSample);
 
-  
+  //Get days from database
+  if(global.dayArray != -1 && global.calendarLoaded == null){
+    var arr = new Array();
+    var fit;
+    for(var i = 0; i < global.dayArray.length; i++){
+      if(global.dayArray[i] != null){
+        for(var j = 0; j < global.outfitArray.length; j++){
+          if(global.outfitArray[j] != null && global.outfitArray[j].id == global.dayArray[i].outfitId){
+              fit = global.outfitArray[j];
+              break;
+          }
+        }
+        let outfit = {
+          name: fit.name,
+          date: fit.date,
+          image: fit.image,
+          tags: fit.tags,
+          id: fit.id,
+          description: ""
+        };
+        //console.log(outfit)
+        let day = {
+            outfit: outfit,
+            notes: "",
+            assignedDate: global.dayArray[i].date
+        };
+        arr.push(day);
+        
+        //addOldOutfit(global.outfitArray[i].name, global.outfitArray[i].image,global.outfitArray[i].date,global.outfitArray[i].tags);
+      }
+    }
+    
+    setDayArray(arr);
+  }
+  global.calendarLoaded = 1;
 
   // Marks days with outfits on them
   let markedDaysArray = [];
@@ -98,9 +131,11 @@ function CalendarScreen(navigation) {
       assignedDate: o_day,
       notes: ""
     };
+    let id = null;
     for (let i = 0; i < global.outfitArray.length; i++) {
       if (o_outfit === global.outfitArray[i]) {
         global.outfitArray[i].date = o_day;
+        id = global.outfitArray[i].id;
       }
     }
     let insertIndex = 0;
@@ -111,8 +146,8 @@ function CalendarScreen(navigation) {
       }
     }
     arr.splice(insertIndex, 0, calendarDay);
-    console.log(arr);
     setDayArray(arr);
+    addNewDay(global.userEmail, id, "", calendarDay.assignedDate);
   }
 
   function removeCalendarDay(o_day) {
@@ -124,6 +159,12 @@ function CalendarScreen(navigation) {
       }
     }
     setDayArray(arr);
+    for(var i = 0; i < global.dayArray.length; i++){
+      if(global.dayArray[i] != null && global.dayArray[i].date.dateString === o_day.dateString){
+        deleteDay(global.dayArray[i].id)
+        break;
+      }
+    }
   }
   
   

@@ -243,7 +243,17 @@ export async function deleteUser(email) {
 
      let response = await fetch(url, options)
      let data = await response.json();
-
+     var temp = global.outfitArray
+     let outfit = {
+        id: data.insertedId,
+        description: description,
+        name: outfitName,
+        date: date,
+        image: imageString,
+        tags: tagString
+      };
+    temp.push(outfit)
+    global.outfitArray = temp
      //handle return 
      if(data.document == null) {
         return -1;
@@ -275,7 +285,6 @@ export async function removeAllOutfits(emailAddress) {
 
     let response = await fetch(url, options);
     let data = await response.json();
-    console.log(data);
 
     //handle return 
     if(data.deleteResult == null) {
@@ -422,13 +431,21 @@ export async function addNewDay(email,outfitID,text,date) {
 
     let response = await fetch(url,options);
     let data = await response.json();    
-
-    //checks if JSON document is null, meaning user doesn't exist
-    if(data.document == null) {
+    var temp = global.dayArray
+    let day = {
+      id: data.insertedId,
+      outfitId : outfitID,
+      text: text,
+      email: email,
+      date: date
+    };
+    temp.push(day)
+    global.dayArray = temp
+    if(data.insertedId == null) {
         return -1;
     } else {
         //returns user document if true
-        return data.document._id;
+        return data.insertedId;
     }
 }
 
@@ -493,12 +510,8 @@ export async function deleteDay(dayID) {
  
     let response = await fetch(url,options);
     let data = await response.json();    
-    
     //handle return 
-    if(data.deleteResult.deletedCount == 1) {
-        return 1;
-    }
-    return -1;
+    return data;
 }
 
 /**
