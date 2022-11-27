@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import * as Google from 'expo-auth-session/providers/google';
-import {insertNewUser, userExists, getCurrentDate, getAllOutfits} from '../utilities/requestData'
+import {insertNewUser, userExists, getCurrentDate, getAllOutfits, getDaysUser} from '../utilities/requestData'
 
 
 function LoginScreen({navigation}) {
@@ -110,6 +110,36 @@ async function handleLogin(){
       console.log("Added old outfits");
       } else {
         global.outfitArray = -1
+      }
+      let d = await getDaysUser(global.userEmail)
+      var items = JSON.parse(JSON.stringify(d));
+      var days = [];
+      for(var i in items) {
+          if(items[i] != null){
+            days.push(items[i]);
+          }
+      }
+      if(days.length != 0){
+        let temp = new Array(days.length);
+        for(var i = 0; i < days.length; i++){
+          let email = global.userEmail
+          let text = days[i].text
+          let date = days[i].date
+          let outfitId = days[i].outfitID
+          let id = days[i]._id
+          let day = {
+            id: id,
+            outfitId : outfitId,
+            text: text,
+            email: email,
+            date: date
+          };
+          temp.push(day);
+        }
+      global.dayArray = temp;
+      console.log("Added calendar data");
+      } else {
+        global.dayArray = -1;
       }
     }
     global.ready = 1;
