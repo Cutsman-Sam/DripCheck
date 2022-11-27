@@ -405,7 +405,9 @@ export async function addNewDay(email,outfitID,text,date) {
                 '"collection": "days",' + 
                 '"document": {' + 
                     '"email" : "' + email + '",' + 
-                    '"outfitID" : "' + outfitID + '",' +
+                    '"outfitID" : {' + 
+                        '"$oid": "' + outfitID + '"' +
+                    '},' + 
                     '"text" : "' + text + '",' +
                     '"date" : {' +
                         '"dateString" : "' + date.dateString + '",' +
