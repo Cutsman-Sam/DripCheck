@@ -243,7 +243,17 @@ export async function deleteUser(email) {
 
      let response = await fetch(url, options)
      let data = await response.json();
-
+     var temp = global.outfitArray
+     let outfit = {
+        id: data.insertedId,
+        description: description,
+        name: outfitName,
+        date: date,
+        image: imageString,
+        tags: tagString
+      };
+    temp.push(outfit)
+    global.outfitArray = temp
      //handle return 
      if(data.document == null) {
         return -1;
@@ -275,7 +285,6 @@ export async function removeAllOutfits(emailAddress) {
 
     let response = await fetch(url, options);
     let data = await response.json();
-    console.log(data);
 
     //handle return 
     if(data.deleteResult == null) {
@@ -422,7 +431,6 @@ export async function addNewDay(email,outfitID,text,date) {
 
     let response = await fetch(url,options);
     let data = await response.json();    
-    //checks if JSON document is null, meaning user doesn't exist
     var temp = global.dayArray
     let day = {
       id: data.insertedId,
