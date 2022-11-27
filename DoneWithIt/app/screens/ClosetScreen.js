@@ -151,7 +151,7 @@ function ClosetScreen(props) {
   function changeOutfit(o_name, o_image) {
     for(var i = 0; i < global.outfitArray.length; i++){
       if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
-        updateOutfit(global.outfitArray[i].id, global.userEmail, o_name, "", o_image, outfitArray[index].tags)
+        updateOutfit(global.outfitArray[i].id, global.userEmail, o_name, "","", o_image, outfitArray[index].tags);
         break;
       }
     }
@@ -204,7 +204,7 @@ function ClosetScreen(props) {
     }
     for(var i = 0; i < global.outfitArray.length; i++){
       if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
-        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, "", outfitArray[index].image, outfitArray[index].tags)
+        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, outfitArray[index].dateCreated,"", outfitArray[index].image, outfitArray[index].tags)
         break;
       }
     }
@@ -235,7 +235,7 @@ function ClosetScreen(props) {
     }
     for(var i = 0; i < global.outfitArray.length; i++){
       if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
-        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, "", outfitArray[index].image, outfitArray[index].tags)
+        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, "","", outfitArray[index].image, outfitArray[index].tags)
         break;
       }
     }
@@ -249,7 +249,7 @@ function ClosetScreen(props) {
     setOutfitArray(tempArray);
     for(var i = 0; i < global.outfitArray.length; i++){
       if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
-        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, "", outfitArray[index].image, outfitArray[index].tags)
+        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, "","", outfitArray[index].image, outfitArray[index].tags)
         break;
       }
     }
