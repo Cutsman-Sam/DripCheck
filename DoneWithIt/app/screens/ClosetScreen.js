@@ -127,6 +127,7 @@ function ClosetScreen(props) {
         tags: o_tag
       };
       if (!allAddedTags.includes(o_tag)) {allAddedTags.push(o_tag)};
+      global.outfitArray = outfitArray.concat(outfit);
       setOutfitArray(outfitArray.concat(outfit));
       let newOutfits = numOutfits + 1;
       let newIndex = numOutfits;
@@ -147,6 +148,7 @@ function ClosetScreen(props) {
     }
     let tempArray = outfitArray;
     tempArray.splice(index, 1);
+    global.outfitArray = tempArray;
     setOutfitArray(tempArray);
 
     let newOutfits = numOutfits - 1;
@@ -175,8 +177,9 @@ function ClosetScreen(props) {
       };
       let tempArray = outfitArray;
       tempArray.splice(index, 1, outfit);
+
+      global.outfitArray = tempArray;
       setOutfitArray(tempArray);
-      
     }
   }
 
@@ -201,6 +204,8 @@ function ClosetScreen(props) {
           replaceOutfit.tags += ", " + tag;
           tempArray.splice(index, 1, replaceOutfit);
           if (!allAddedTags.includes(tag)) {allAddedTags.push(tag)};
+
+          global.outfitArray = tempArray;
           setOutfitArray(tempArray);
         }
       } else {
@@ -209,6 +214,8 @@ function ClosetScreen(props) {
         replaceOutfit.tags = tag;
         tempArray.splice(index, 1, replaceOutfit);
         if (!allAddedTags.includes(tag)) {allAddedTags.push(tag)};
+
+        global.outfitArray = tempArray;
         setOutfitArray(tempArray);
       }
     }
@@ -230,10 +237,7 @@ function ClosetScreen(props) {
       let dupeArray = strArray;
       for (var i = 0; i < arrayLength; i++) {
         if (strArray[i] !== undefined) {
-          let upperTag = strArray[i].toUpperCase();
-          console.log(i);
-          console.log(upperTag);
-          if (upperTag === tag.toUpperCase()) {
+          if (strArray[i].toUpperCase() === tag.toUpperCase()) {
             dupeArray.splice(i, 1);
           }
         }
@@ -242,6 +246,9 @@ function ClosetScreen(props) {
       let replaceOutfit = outfitArray[index];
       replaceOutfit.tags = dupeArray.toString();
       tempArray.splice(index, 1, replaceOutfit);
+
+      global.outfitArray = tempArray;
+      setOutfitArray(tempArray);
     }
     for(var i = 0; i < global.outfitArray.length; i++){
       if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
