@@ -4,6 +4,8 @@ import { Text, Button, Portal, Modal, TextInput } from 'react-native-paper';
 import UploadOutfit from '../utilities/UploadOutfit';
 import {addNewOutfit, updateOutfit, deleteOutfitDB} from '../utilities/requestData';
 import DropDown from "react-native-paper-dropdown";
+import GestureRecognizer, { swipeDirections } from "react-native-swipe-detect";
+
 global.currentImage;
 
 function ClosetScreen(props) {
@@ -13,6 +15,8 @@ function ClosetScreen(props) {
   const [addingOutfitMenu, setAddingOutfitMenu] = React.useState(false);
   const [editOutfitMenu, setEditOutfitMenu] = React.useState(false);
   const [addTagMenu, setAddTagMenu] = React.useState(false);
+  const [sortMenu, setSortMenu] = React.useState(false);
+
   const [addingName, setAddingName] = React.useState("");
   const [addingTag, setAddingTag] = React.useState("");
 
@@ -40,7 +44,7 @@ function ClosetScreen(props) {
   if (numOutfits > 0) {
     outfitname = outfitArray[index].image;
   }
-  if(global.outfitArray != -1 && global.closetLoaded == null){
+  if(global.outfitArray.length != 0 && global.closetLoaded == null){
     var arr = new Array();
     for(var i = 0; i < global.outfitArray.length; i++){
       if(global.outfitArray[i] != null){
@@ -97,11 +101,17 @@ function ClosetScreen(props) {
     setAddingTag("");
   }
 
+  function showModalSort() {
+    setSortMenu(true);
+    setAddingTag("");
+  }
+
   // Hides all modal menus.
   function hideModalAll() {
     setAddingOutfitMenu(false);
     setEditOutfitMenu(false);
     setAddTagMenu(false);
+    setSortMenu(false);
   }
 
   //----------------------------
@@ -117,6 +127,7 @@ function ClosetScreen(props) {
         tags: o_tag
       };
       if (!allAddedTags.includes(o_tag)) {allAddedTags.push(o_tag)};
+      global.outfitArray = outfitArray.concat(outfit);
       setOutfitArray(outfitArray.concat(outfit));
       let newOutfits = numOutfits + 1;
       let newIndex = numOutfits;
@@ -137,6 +148,7 @@ function ClosetScreen(props) {
     }
     let tempArray = outfitArray;
     tempArray.splice(index, 1);
+    global.outfitArray = tempArray;
     setOutfitArray(tempArray);
 
     let newOutfits = numOutfits - 1;
@@ -149,9 +161,16 @@ function ClosetScreen(props) {
 
   // Changes the outfit at the current index to the new values provided.
   function changeOutfit(o_name, o_image) {
+    
     for(var i = 0; i < global.outfitArray.length; i++){
       if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
-        updateOutfit(global.outfitArray[i].id, global.userEmail, o_name, "","", o_image, outfitArray[index].tags);
+        if(o_name == undefined) {
+          o_name = outfitArray[index].name;
+        }
+        if(o_image == undefined) {
+          o_image = outfitArray[index].image;
+        }
+        updateOutfit(global.outfitArray[i].id, global.userEmail, o_name, global.outfitArray[i].dateCreated,"", o_image, outfitArray[index].tags);
         break;
       }
     }
@@ -165,8 +184,9 @@ function ClosetScreen(props) {
       };
       let tempArray = outfitArray;
       tempArray.splice(index, 1, outfit);
+
+      global.outfitArray = tempArray;
       setOutfitArray(tempArray);
-      
     }
   }
 
@@ -191,6 +211,8 @@ function ClosetScreen(props) {
           replaceOutfit.tags += ", " + tag;
           tempArray.splice(index, 1, replaceOutfit);
           if (!allAddedTags.includes(tag)) {allAddedTags.push(tag)};
+
+          global.outfitArray = tempArray;
           setOutfitArray(tempArray);
         }
       } else {
@@ -199,12 +221,14 @@ function ClosetScreen(props) {
         replaceOutfit.tags = tag;
         tempArray.splice(index, 1, replaceOutfit);
         if (!allAddedTags.includes(tag)) {allAddedTags.push(tag)};
+
+        global.outfitArray = tempArray;
         setOutfitArray(tempArray);
       }
     }
     for(var i = 0; i < global.outfitArray.length; i++){
       if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
-        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, outfitArray[index].dateCreated,"", outfitArray[index].image, outfitArray[index].tags)
+        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, global.outfitArray[i].dateCreated, "", outfitArray[index].image, outfitArray[index].tags)
         break;
       }
     }
@@ -220,10 +244,7 @@ function ClosetScreen(props) {
       let dupeArray = strArray;
       for (var i = 0; i < arrayLength; i++) {
         if (strArray[i] !== undefined) {
-          let upperTag = strArray[i].toUpperCase();
-          console.log(i);
-          console.log(upperTag);
-          if (upperTag === tag.toUpperCase()) {
+          if (strArray[i].toUpperCase() === tag.toUpperCase()) {
             dupeArray.splice(i, 1);
           }
         }
@@ -232,6 +253,9 @@ function ClosetScreen(props) {
       let replaceOutfit = outfitArray[index];
       replaceOutfit.tags = dupeArray.toString();
       tempArray.splice(index, 1, replaceOutfit);
+
+      global.outfitArray = tempArray;
+      setOutfitArray(tempArray);
     }
     for(var i = 0; i < global.outfitArray.length; i++){
       if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
@@ -239,6 +263,30 @@ function ClosetScreen(props) {
         break;
       }
     }
+  }
+
+  // Removes a tag from an outfit's tag list if it is present.
+  function sortByTag() {
+    let tempArray = [];
+    for (let i = 0; i < outfitArray.length; i++) {
+      if (outfitArray[i].tags.includes(addingTag)) {
+        tempArray.push(outfitArray[i]);
+      }
+    }
+    for (let i = 0; i < outfitArray.length; i++) {
+      if (!tempArray.includes(outfitArray[i])) {
+        tempArray.push(outfitArray[i]);
+      }
+    }
+    setIndex(0);
+    setOutfitArray(tempArray);
+  }
+
+  function restoreSort() {
+    let tempArray = outfitArray;
+    setNumOutfits(tempArray.length);
+    setIndex(0);
+    setOutfitArray(tempArray);
   }
 
   function clearTags() {
@@ -255,18 +303,53 @@ function ClosetScreen(props) {
     }
   }
 
+  const config = {
+    velocityThreshold: 0.3,
+    directionalOffsetThreshold: 80,
+  };
+
+  function onSwipe(gestureName, gestureState) {
+    const { SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT } = swipeDirections;
+    this.setState({ gestureName: gestureName });
+    switch (gestureName) {
+      case SWIPE_UP:
+        break;
+      case SWIPE_DOWN:
+        break;
+      case SWIPE_LEFT:
+        break;
+      case SWIPE_RIGHT:
+        break;
+    }
+  }
+
   if (numOutfits > 0) {
     return (
       <View style={styles.container}>
+        <View style={styles.containerSettings}>
+          <Button icon="cog" mode="outlined" onPress={showModalSort} style={styles.settingsButton}>
+            Sort By
+          </Button>
+        </View>
+        
         <Text variant="headlineSmall" style={styles.outfitText}>{outfitArray[index].name}</Text>
         <Text variant="headerLarge" style={styles.dateText}>Last Worn: {outfitArray[index].date}</Text>
         <Text variant="headerLarge" style={styles.dateText}>Tags: {outfitArray[index].tags}</Text>
+        <GestureRecognizer
+        onSwipe={(direction, state) => this.onSwipe(direction, state)}
+        onSwipeUp={(state) => this.onSwipeUp(state)}
+        onSwipeDown={(state) => this.onSwipeDown(state)}
+        onSwipeLeft={(state) => this.onSwipeLeft(state)}
+        onSwipeRight={(state) => this.onSwipeRight(state)}
+        config={config}
+        >
         <View style={styles.imageContainer}>
           <Image
             style={styles.closetPicture}
             source={{ uri: "data:image/png;base64,"+outfitname }}
           />
         </View>
+        </GestureRecognizer>
         <View style={styles.buttonRowContainer}>
           <Button icon="arrow-left-bold" mode="contained-tonal" style={styles.navButtons} onPress={prevOutfit}>
             Previous
@@ -292,7 +375,7 @@ function ClosetScreen(props) {
         
 
 
-
+        
         <Portal>
           <Modal visible={editOutfitMenu} style={styles.modalMenu} dismissable={false}>
             <Text variant="headlineSmall" style={styles.outfitText}>Edit Outfit</Text>
@@ -323,8 +406,9 @@ function ClosetScreen(props) {
             <View style={styles.buttonSpacing}></View>
             <TextInput label="Outfit Name" value={addingName} onChangeText={addingName => setAddingName(addingName)}/>
             <UploadOutfit style={{alignSelf: "center"}}/>
+            <View style={styles.buttonSpacing}></View>
             <TextInput
-              label="Tag Name"
+              label="Tag Name (Optional)"
               value={addingTag}
               onChangeText={addingTag => setAddingTag(addingTag)}
             />
@@ -389,6 +473,35 @@ function ClosetScreen(props) {
             </Button>
           </Modal>
         </Portal>
+
+        <Portal>
+          <Modal visible={sortMenu} style={styles.modalMenu} dismissable={false}>
+            <Text variant="headlineSmall" style={styles.outfitText}>Sort Closet</Text>
+            <View style={styles.buttonSpacing}></View>
+            <DropDown
+              label={"Select Existing Tag"}
+              mode={"outlined"}
+              visible={showDropDown}
+              showDropDown={() => setShowDropDown(true)}
+              onDismiss={() => setShowDropDown(false)}
+              value={addingTag}
+              setValue={setAddingTag}
+              list={tagList}
+            />
+            <View style={styles.buttonSpacing}></View>
+            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(), sortByTag()}}>
+              Sort By Tag
+            </Button>
+            <View style={styles.buttonSpacing}></View>
+            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
+              Sort By Date
+            </Button>
+            <View style={styles.buttonSpacing}></View>
+            <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(), restoreSort()}}>
+              Cancel
+            </Button>
+          </Modal>
+        </Portal>
       </View>
     );
   } else {
@@ -404,8 +517,9 @@ function ClosetScreen(props) {
             <View style={styles.buttonSpacing}></View>
             <TextInput label="Outfit Name" value={addingName} onChangeText={addingName => setAddingName(addingName)}/>
             <UploadOutfit/>
+            <View style={styles.buttonSpacing}></View>
             <TextInput
-              label="Tag Name"
+              label="Tag Name (Optional)"
               value={addingTag}
               onChangeText={addingTag => setAddingTag(addingTag)}
             />
@@ -441,6 +555,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5fafc',
     alignItems: 'center',
   },
+  containerSettings: {
+    paddingTop: 0,
+    paddingRight: 10,
+    backgroundColor: '#f5fafc',
+    flexDirection: "row",
+    alignSelf: 'flex-end',
+  },
+  settingsButton: {
+    width: 120,
+  },
   imageContainer: {
     paddingBottom: 10,
   },
@@ -473,7 +597,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   closetPicture: {
-    height: 340,
+    height: 280,
     width: 280,
     borderRadius: 20,
     borderWidth: 1,

@@ -26,7 +26,7 @@ function CalendarScreen(navigation) {
   const [notesOutfit, setNotesOutfit] = React.useState(outfitSample);
 
   //Get days from database
-  if(global.dayArray != -1 && global.calendarLoaded == null){
+  if(global.dayArray.length != 0 && global.calendarLoaded == null){
     var arr = new Array();
     var fit;
     for(var i = 0; i < global.dayArray.length; i++){
@@ -171,8 +171,8 @@ function CalendarScreen(navigation) {
   
   if (c_outfit != null) {
   return (
+    <>
     <View style={styles.container}>
-      <View style={{ paddingTop: 50}}>
         <Calendar
         // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
         maxDate = {Date()}
@@ -266,7 +266,8 @@ function CalendarScreen(navigation) {
           </Button>
         </Modal>
       </Portal>
-    </View>
+    
+    </>
   );
   }
   return (
@@ -279,6 +280,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5fafc',
     alignItems: 'center',
+    paddingTop: 50
   },
   modalMenu: {
     backgroundColor: '#ffffff',
