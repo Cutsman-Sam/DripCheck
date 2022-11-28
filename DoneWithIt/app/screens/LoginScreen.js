@@ -3,6 +3,7 @@ import { StyleSheet, View, Image } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import * as Google from 'expo-auth-session/providers/google';
 import {insertNewUser, userExists, getCurrentDate, getAllOutfits, getDaysUser} from '../utilities/requestData'
+import { testDatabaseFunctions } from '../utilities/testDatabaseFunctions';
 
 
 function LoginScreen({navigation}) {
@@ -147,6 +148,7 @@ async function handleLogin(){
     }
     global.ready = 1;
     console.log("ready")
+    testDatabaseFunctions();
 }
 const styles = StyleSheet.create({
     container: {
