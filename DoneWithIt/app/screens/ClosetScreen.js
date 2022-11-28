@@ -265,9 +265,12 @@ function ClosetScreen(props) {
       if (outfitArray[i].tags.includes(addingTag)) {
         tempArray.push(outfitArray[i]);
       }
-      
     }
-    setNumOutfits(tempArray.length);
+    for (let i = 0; i < outfitArray.length; i++) {
+      if (!tempArray.includes(outfitArray[i])) {
+        tempArray.push(outfitArray[i]);
+      }
+    }
     setIndex(0);
     setOutfitArray(tempArray);
   }
