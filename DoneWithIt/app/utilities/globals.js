@@ -10,5 +10,4 @@ global.outfitArray;
 global.allAddedTags;
 global.ready;
 global.dayArray;
-global.foo = "foo";
 
