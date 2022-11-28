@@ -342,7 +342,7 @@ export async function removeAllOutfits(emailAddress) {
  * @param {*} imageString the base64 URI of the image
  * @param {*} tagString the string containing tag info
  */
-export async function updateOutfit(outfitID, email, outfitName, description, imageString, tagString) {
+export async function updateOutfit(outfitID, email, outfitName, date, description, imageString, tagString) {
     
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/updateOne';
 

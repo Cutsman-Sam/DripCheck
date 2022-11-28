@@ -26,7 +26,7 @@ function CalendarScreen(navigation) {
   const [notesOutfit, setNotesOutfit] = React.useState(outfitSample);
 
   //Get days from database
-  if(global.dayArray != -1 && global.calendarLoaded == null){
+  if(global.dayArray.length != 0 && global.calendarLoaded == null){
     var arr = new Array();
     var fit;
     for(var i = 0; i < global.dayArray.length; i++){

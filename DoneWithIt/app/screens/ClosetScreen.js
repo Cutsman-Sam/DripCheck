@@ -40,7 +40,7 @@ function ClosetScreen(props) {
   if (numOutfits > 0) {
     outfitname = outfitArray[index].image;
   }
-  if(global.outfitArray != -1 && global.closetLoaded == null){
+  if(global.outfitArray.length != 0 && global.closetLoaded == null){
     var arr = new Array();
     for(var i = 0; i < global.outfitArray.length; i++){
       if(global.outfitArray[i] != null){
@@ -149,9 +149,16 @@ function ClosetScreen(props) {
 
   // Changes the outfit at the current index to the new values provided.
   function changeOutfit(o_name, o_image) {
+    
     for(var i = 0; i < global.outfitArray.length; i++){
       if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
-        updateOutfit(global.outfitArray[i].id, global.userEmail, o_name, "","", o_image, outfitArray[index].tags);
+        if(o_name == undefined) {
+          o_name = outfitArray[index].name;
+        }
+        if(o_image == undefined) {
+          o_image = outfitArray[index].image;
+        }
+        updateOutfit(global.outfitArray[i].id, global.userEmail, o_name, global.outfitArray[i].dateCreated,"", o_image, outfitArray[index].tags);
         break;
       }
     }
@@ -204,7 +211,7 @@ function ClosetScreen(props) {
     }
     for(var i = 0; i < global.outfitArray.length; i++){
       if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
-        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, outfitArray[index].dateCreated,"", outfitArray[index].image, outfitArray[index].tags)
+        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, global.outfitArray[i].dateCreated, "", outfitArray[index].image, outfitArray[index].tags)
         break;
       }
     }

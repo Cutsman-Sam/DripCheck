@@ -109,7 +109,7 @@ async function handleLogin(){
       global.outfitArray = arr;
       console.log("Added old outfits");
       } else {
-        global.outfitArray = -1
+        global.outfitArray = new Array();
       }
       let d = await getDaysUser(global.userEmail)
       var items = JSON.parse(JSON.stringify(d));
@@ -139,7 +139,7 @@ async function handleLogin(){
       global.dayArray = temp;
       console.log("Added calendar data");
       } else {
-        global.dayArray = -1;
+        global.dayArray = new Array();
       }
     }
     global.ready = 1;
