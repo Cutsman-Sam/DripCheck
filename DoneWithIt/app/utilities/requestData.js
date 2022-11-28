@@ -217,7 +217,6 @@ export async function deleteUser(email) {
 
     var date = getCurrentDate();
 
-    globalThis.accountDate = date;
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/insertOne';
 
     const options = {
