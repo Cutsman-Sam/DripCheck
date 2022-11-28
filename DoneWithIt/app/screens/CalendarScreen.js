@@ -271,7 +271,9 @@ function CalendarScreen(navigation) {
   );
   }
   return (
-    <View></View>
+    <View>
+      <Text style={styles.outfitText}> Before using the calendar, be sure to add some outfits to your closet!</Text>
+    </View>
   )
 }
 
