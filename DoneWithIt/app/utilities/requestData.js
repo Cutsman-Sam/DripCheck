@@ -270,7 +270,6 @@ export async function outfitExists(outfitID){
 
     var date = getCurrentDate();
 
-    globalThis.accountDate = date;
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/insertOne';
 
     const options = {

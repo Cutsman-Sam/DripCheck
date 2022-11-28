@@ -67,13 +67,15 @@ function LoginScreen({navigation}) {
 //<Button onPress={showDialog}>Show Dialog</Button>
 
 async function handleLogin(){
+    global.oCount = 0;
     global.allAddedTags = [];
     //console.log("LoginScreen: called userExists");
     let previousData = await userExists(global.userEmail)
     if(previousData == false) {
       //console.log("LoginScreen: called insertNewUser");
       global.accountDate = getCurrentDate();
-      global.outfitArray = -1;
+      global.outfitArray = new Array();
+      global.dayArray = new Array();
       insertNewUser(global.userEmail, global.displayName, 0, 0);
     } else {
       //Utilize previousData to load user's stuff
@@ -87,7 +89,7 @@ async function handleLogin(){
           }
       }
       if(res.length != 0){
-        
+        global.oCount = res.length
         let arr = new Array(res.length);
         for(var i = 0; i < res.length; i++){
           let created = res[i].dateCreated;
@@ -107,6 +109,7 @@ async function handleLogin(){
           arr.push(outfit);
         }
       global.outfitArray = arr;
+      
       console.log("Added old outfits");
       } else {
         global.outfitArray = new Array();

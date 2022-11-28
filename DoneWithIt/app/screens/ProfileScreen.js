@@ -26,6 +26,7 @@ function ProfileScreen({navigation}) {
         <Text variant="headlineSmall" style={styles.numberLabel}>Following</Text>
       </View>
       <Text>Account Created: {global.accountDate}</Text> 
+      <Text>Outfits Created: {global.oCount}</Text>
     </View>
     );
 }
