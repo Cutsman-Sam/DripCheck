@@ -913,6 +913,10 @@ export async function updatePost(postID,email,outfitID,date,postTime,saves) {
     }
 }
 
+/**
+ * Function to get all posts and outfits from the database
+ * @returns JSON file, first half of array is posts, second half is each posts' corresponding outfit
+ */
 export async function getAllPosts() {
      //endpoint url
      const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/find';
@@ -926,7 +930,7 @@ export async function getAllPosts() {
          body: '{'+
                  '"dataSource": "DripCheckApp",'+ 
                  '"database": "test",'+
-                 '"collection": "posts",' + 
+                 '"collection": "posts"' +
              '}'
      };
  
@@ -934,7 +938,14 @@ export async function getAllPosts() {
      let data = await response.json();    
      
      //checks if JSON document is null, meaning user doesn't exist
-     return data.documents;
+     let posts = JSON.parse(JSON.stringify(data.documents));
+     let len = posts.length;
+     for(let i = 0; i < len; i++) {
+        let postOutfit = await outfitExists(posts[i].outfit);
+        posts.push(JSON.parse(JSON.stringify(postOutfit)));
+     }
+
+     return posts;
 }
 
 export async function getUserPosts(email) {
@@ -974,8 +985,8 @@ export async function getUserPosts(email) {
 
 
 //DONT USE THIS, HAVEN'T TESTED IT 
-async function getFollowingPosts(followingEmailArr) {
-    var mergedDocs = [];
+export async function getFollowingPosts(followingEmailArr) {
+    let followingPosts = {};
 
     for(let i = 0; i < followingEmailArr.length; i++) { 
         console.log("Following User Docs " + i);
@@ -983,6 +994,7 @@ async function getFollowingPosts(followingEmailArr) {
         const checkUser = await userExists(followingEmailArr[i]);
         if(checkUser != false) {
             var doc = await getUserPosts(followingEmailArr[i]);//supposedly this works
+
             console.log(JSON.stringify(doc) + "\n");
 
             mergedDocs.push(JSON.parse(doc));
