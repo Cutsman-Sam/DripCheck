@@ -19,8 +19,8 @@ const Posts = [
     post:
       'Hey there, this is my test for a post of my social app in React Native.',
     postImg: require('../closetimages/sample1.jpg'), //not showing
-    liked: true,
-    likes: '14',
+    saved: true,
+    saves: '14',
     //comments: '5',
   },
   {
@@ -31,8 +31,8 @@ const Posts = [
     post:
       'Hey there, this is my test for a post of my social app in React Native.',
     postImg: require('../closetimages/sample2.jpg'),
-    liked: false,
-    likes: '8',
+    saved: false,
+    saves: '8',
     //comments: '0',
   },
   {
@@ -43,19 +43,19 @@ const Posts = [
     post:
       'Hey there, this is my test for a post of my social app in React Native.',
     postImg: require('../closetimages/sample3.jpg'),
-    liked: true,
-    likes: '1',
+    saved: true,
+    saves: '1',
     //comments: '0',
   },
 ];
 
-//UPDATE LIKES
+//UPDATE SAVES
 function InspirationScreen(props) {
 
   //use isEnabled to enable post filter
   const [isEnabled, setIsEnabled] = React.useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-  filter = isEnabled ? 'Followers' : 'Everyone';
+  filter = isEnabled ? 'Following' : 'Everyone';
   
   return (
     <Post>

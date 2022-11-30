@@ -6,15 +6,15 @@ import {Post, Card, UserImg, UserInfo, UserName, UserInfoText, PostTime, PostTex
 
 const uploadPost = ({item}) => {
 
-        likeIcon = item.liked ? 'heart' : 'heart-outline';
-        likeIconColor = item.liked ? '#2e64e5' : '#333';
+        saveIcon = item.saved ? 'heart' : 'heart-outline';
+        saveIconColor = item.saved ? '#2e64e5' : '#333';
 
-        if(item.likes == 1) {
-            likeText = '1 Like';
-        } else if(item.likes > 1) {
-            likeText = item.likes + ' Likes';
+        if(item.saves == 1) {
+            saveText = '1 Save';
+        } else if(item.saves > 1) {
+            saveText = item.saves + ' Saves';
         } else {
-            likeText = 'Like';
+            saveText = 'Save';
         }
 
     return(
@@ -30,9 +30,9 @@ const uploadPost = ({item}) => {
           <PostImg source={item.PostImg} /> 
 
           <InteractionWrapper>
-          <Interaction active={item.liked}>
-              <Ionicons name={likeIcon} size={25} color={likeIconColor}/>
-              <InteractionText active={item.liked}>{likeText}</InteractionText> 
+          <Interaction active={item.saved}>
+              <Ionicons name={saveIcon} size={25} color={saveIconColor}/>
+              <InteractionText active={item.saved}>{saveText}</InteractionText> 
             </Interaction>
             <Interaction>
               <Ionicons name="pricetags" size={25}/>
