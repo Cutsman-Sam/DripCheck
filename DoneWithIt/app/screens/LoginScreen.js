@@ -98,6 +98,7 @@ async function handleLogin(){
           let imageString = res[i].imageString;
           let outfitName = res[i].outfitName; 
           let description = res[i].description
+          let lastWorn = res[i].lastWorn;
           let id = res[i]._id
           let outfit = {
             id: id,
@@ -105,7 +106,8 @@ async function handleLogin(){
             name: outfitName,
             date: created,
             image: imageString,
-            tags: tags
+            tags: tags,
+            lastWorn: lastWorn
           };
           arr.push(outfit);
         }

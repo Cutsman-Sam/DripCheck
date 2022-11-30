@@ -52,7 +52,7 @@ export async function userExists(email) {
  * @param {*} outfitCount displayName of user
  * @returns _id of user in database
  */
-export async function insertNewUser(email, displayName, streak, outfitCount) {
+export async function insertNewUser(email, displayName, streak, outfitCount, profilePic, settingsString) {
 
     //get current date
     var date = getCurrentDate();
@@ -74,7 +74,10 @@ export async function insertNewUser(email, displayName, streak, outfitCount) {
                 '"lastStreakDate" : "00-00-0000",' +
                 '"outfitCount" : "' + outfitCount + '",' +
                 '"displayName" : "' + displayName + '",' +
-                '"dateCreated" : "' + date + '"  }}'
+                '"dateCreated" : "' + date + '",' +
+                '"profilePic" : "' + profilePic + '",' +
+                '"settingsString" : "' + settingsString + '"' +
+                '}}'
     };
 
     let response = await fetch(url, options);
@@ -125,13 +128,15 @@ export async function deleteUser(email) {
  * updates a user in the database, MUST PASS ALL USER DATA, NOT JUST UPDATED VALUES
  * @param {*} email email address of user
  * @param {*} displayName user's display name
+ * @param {*} date account creation date, this should never change
  * @param {*} streak integer number of current streak
- * @param {*} outfitCount total number of outfits the user has.
  * @param {*} lastStreakDay last date user's streak went up
- * @param {*} dateCreated account creation date, this should never change
+ * @param {*} outfitCount total number of outfits the user has.
+ * @param {*} profilePic profile picture of this user
+ * @param {*} settingsString settings string containing settings details for user.
  * @returns 1 if user updated correctly, -1 on fail
  */
- export async function updateUser(email, displayName, dateCreated, streak, lastStreakDay, outfitCount) {
+ export async function updateUser(email, displayName, date, streak, lastStreakDay, outfitCount, profilePic, settingsString) {
 
     
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/updateOne';
@@ -155,7 +160,9 @@ export async function deleteUser(email) {
                     '"lastStreakDate" : "' + lastStreakDay + '",' +
                     '"outfitCount" : "' + outfitCount + '",' +
                     '"displayName" : "' + displayName + '",' + 
-                    '"dateCreated" : "' + dateCreated + '"' +
+                    '"dateCreated" : "' + date + '",' +
+                    '"profilePic" : "' + profilePic + '",' +
+                    '"settingsString" : "' + settingsString + '"' +
                 '}' +
             '}'
      };
@@ -257,6 +264,7 @@ export async function outfitExists(outfitID){
  * @param {*} description outfit description
  * @param {*} imageString Base64 URI image string
  * @param {*} tagString tag string passed from UI
+ * @param {*} lastWorn last date an outfit was worn
  * @returns _id of inserted outfit or -1 on failure
  */
  export async function addNewOutfit(email, outfitName, description, imageString, tagString) {
@@ -288,14 +296,15 @@ export async function outfitExists(outfitID){
                 '"dateCreated" : "' + date + '",' + 
                 '"imageString" : "' + imageString + '",' + 
                 '"tags" : "' + tagString + '",' + 
+                '"lastWorn" : "' + '0000-00-00' + '",' +
                 '"description" : "' + description + '"' +
             '}' +
         '}'
      };
 
-     let response = await fetch(url, options)
+     let response = await fetch(url, options);
      let data = await response.json();
-     var temp = global.outfitArray
+     var temp = global.outfitArray;
      let outfit = {
         id: data.insertedId,
         description: description,
@@ -304,16 +313,17 @@ export async function outfitExists(outfitID){
         image: imageString,
         tags: tagString
       };
-    temp.push(outfit)
-    global.outfitArray = temp
-     //handle return 
-     if(data == null) {
+    temp.push(outfit);
+    global.outfitArray = temp;
+
+     try {
+        //else return outfitID
+         return data.insertedId;
+     } catch (error) {
+        console.error(error);
         return -1;
      }
-
-     //else return outfitID
-     return data.insertedId;
-}
+}   
 
 /**
  * method to delete ALL outfits of a user from database given user's email.
@@ -408,8 +418,9 @@ export async function removeAllOutfits(email) {
  * @param {*} description just pass "" or null for now
  * @param {*} imageString the base64 URI of the image
  * @param {*} tagString the string containing tag info
+ * @param {*} lastWorn tlast Date an outfit was worn
  */
-export async function updateOutfit(outfitID, email, outfitName, dateCreated, description, imageString, tagString) {
+export async function updateOutfit(outfitID, email, outfitName, dateCreated, description, imageString, tagString, lastWorn) {
      
     //make sure the user trying to add an outfit exists in the database.
     const checkUser = await userExists(email);
@@ -440,6 +451,7 @@ export async function updateOutfit(outfitID, email, outfitName, dateCreated, des
                     '"dateCreated" : "' + dateCreated + '",' + 
                     '"imageString" : "' + imageString + '",' + 
                     '"tags" : "' + tagString + '",' + 
+                    '"lastWorn" : "' + lastWorn + '",' + 
                     '"description" : "' + description + '"' +
                 '}' +
             '}'
@@ -718,9 +730,10 @@ export async function updateDay(email,dayID,text,date,outfitID) {
  * Inserts a new post in the database with 
  * @param {*} userEmail email of user creating post
  * @param {*} outfitID id value of attached outfit
+ * @param {*} postTime time post was made
  * @returns id of inserted post or -1 on fail
  */
-export async function addNewPost(email, outfitID) {
+export async function addNewPost(email, outfitID, postTime) {
 
     //make sure the user trying to add an outfit exists in the database.
     const checkUser = await userExists(email);
@@ -746,6 +759,9 @@ export async function addNewPost(email, outfitID) {
         body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "posts",' + 
                 ' "document": {' + 
                 '"email" : "' + email + '",' +
+                '"saves" : "' + 0 + '",' +
+                '"postTime" : "' + postTime + '",' +
+                '"text" : "' + postTime + '",' +
                 '"saves" : "' + 0 + '",' +
                 '"outfit" : {' + 
                     '"$oid": "' + outfitID + '"' +
@@ -840,9 +856,12 @@ export async function deletePost(postID) {
  * @param {*} email email of user
  * @param {*} outfitID id of outfit
  * @param {*} date date field of post
+ * @param {*} postTime time post was made
+ * @param {*} saves number of times post has been saved
+ * @param {*} lastWorn last date the outfit was worn
  * @returns 1 on success, -1 on fail
  */
-export async function updatePost(postID,email,outfitID,date) {
+export async function updatePost(postID,email,outfitID,date,postTime,saves) {
 
     //make sure the user trying to add an outfit exists in the database.
     const checkUser = await userExists(email);
@@ -876,10 +895,11 @@ export async function updatePost(postID,email,outfitID,date) {
                 '},' +
                 ' "update": {' + 
                     '"email" : "' + email + '",' +
-                    '"saves" : "' + 0 + '",' +
+                    '"saves" : "' + saves + '",' +
+                    '"postTime" : "' + postTime + '",' +
                     '"outfitID" : "' + outfitID + '",' +
-                    '"dateCreated" : "' + date + 
-                    '"  }}'
+                    '"dateCreated" : "' + date + '"' +
+                    '}}'
      };
 
     let response = await fetch(url, options)
@@ -912,7 +932,7 @@ export async function getAllPosts() {
  
      let response = await fetch(url,options);
      let data = await response.json();    
- 
+     
      //checks if JSON document is null, meaning user doesn't exist
      return data.documents;
 }

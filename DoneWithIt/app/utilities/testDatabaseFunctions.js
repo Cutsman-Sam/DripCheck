@@ -76,7 +76,7 @@ export async function testDatabaseFunctions() {
     const outfitUser = "testUser2@gmail.com"
     const userName = "testUser2"
     var outfitID;
-    Database.insertNewUser(outfitUser,userName,0,0);
+    await Database.insertNewUser(outfitUser,userName,0,0);
 
     //add outfit
     console.log("Testing addNewOutfit:");
@@ -86,7 +86,7 @@ export async function testDatabaseFunctions() {
         if(outfitID != -1 && functionReturn2 == -1) {
             console.log("\t\t-> succeeded.");
         } else {
-            console.error("\taddNewOutfit -> failed.\n\t\t" + functionReturn);
+            console.error("\taddNewOutfit -> failed.\n\t\t" + functionReturn2);
         }
     } catch (error) {
         console.error("\taddNewOutfit -> failed.\n\t\t" + error);
@@ -323,11 +323,19 @@ export async function testDatabaseFunctions() {
         console.error("\tdeleteAllPosts -> failed.\n\t\t" + error);
     }
 
-    Database.deleteAllPosts(outfitUser);
-    Database.removeAllOutfits(userEmail);
-    Database.removeAllOutfits(outfitUser);
-    Database.deleteUser(outfitUser);
-    Database.deleteUser("testUser1");
-    Database.deleteUser("testUser2");
-    Database.deleteUser("testUser3");
+    await Database.deleteAllPosts(outfitUser);
+    await Database.removeAllOutfits(outfitUser);
+    await Database.deleteUser(outfitUser);
+    await Database.deleteAllPosts(userEmail);
+    await Database.removeAllOutfits(userEmail);
+    await Database.deleteUser(userEmail);
+    await Database.deleteUser("testUser1");
+    await Database.removeAllOutfits("testUser1");
+    await Database.deleteUser("testUser1");
+    await Database.deleteUser("testUser2");
+    await Database.removeAllOutfits("testUser2");
+    await Database.deleteUser("testUser2");
+    await Database.deleteUser("testUser3");
+    await Database.removeAllOutfits("testUser3");
+    await Database.deleteUser("testUser3");
 }

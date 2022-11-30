@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Text, Button, Portal, Modal, TextInput } from 'react-native-paper';
 import { Calendar } from 'react-native-calendars';
-import { getAllOutfits, addNewDay, deleteDay } from '../utilities/requestData';
+import { getCurrentDate, addNewDay, deleteDay, updateOutfit } from '../utilities/requestData';
 global.trueDay = new Date();
 
 function CalendarScreen(navigation) {
@@ -132,10 +132,12 @@ function CalendarScreen(navigation) {
       notes: ""
     };
     let id = null;
+    let outfit = null;
     for (let i = 0; i < global.outfitArray.length; i++) {
       if (o_outfit === global.outfitArray[i]) {
         global.outfitArray[i].date = o_day;
         id = global.outfitArray[i].id;
+        outfit = global.outfitArray[i];
       }
     }
     let insertIndex = 0;
@@ -148,9 +150,36 @@ function CalendarScreen(navigation) {
     arr.splice(insertIndex, 0, calendarDay);
     setDayArray(arr);
     addNewDay(global.userEmail, id, "", calendarDay.assignedDate);
+    
+    //updates lastWorn in global array if the new date is earlier than the last date
+    if(outfit.lastWorn.substring(0,4) <  o_day.year) { //just year is larger (more recent)
+      outfit.lastWorn = o_day.dateString;
+      updateOutfit(id, global.userEmail, outfit.name, outfit.dateCreated,"", outfit.image, outfit.tags, outfit.lastWorn);
+
+    } else if (outfit.lastWorn.substring(0,4) ==  o_day.year && outfit.lastWorn.substring(5,7) <  o_day.month) { //year is equal, just month is larger (more recent)
+      outfit.lastWorn = o_day.dateString;
+      updateOutfit(id, global.userEmail, outfit.name, outfit.dateCreated,"", outfit.image, outfit.tags, outfit.lastWorn);
+
+    } else if (outfit.lastWorn.substring(0,4) ==  o_day.year && outfit.lastWorn.substring(5,7) ==  o_day.month && outfit.lastWorn.substring(8) <  o_day.day) { //year and month are same, just day is larger
+      outfit.lastWorn = o_day.dateString;
+      updateOutfit(id, global.userEmail, outfit.name, outfit.dateCreated,"", outfit.image, outfit.tags, outfit.lastWorn);
+      
+    }
   }
 
-  function removeCalendarDay(o_day) {
+  function removeCalendarDay(o_day, o_outfit) {
+
+    //get outfit in global array to find last date outfit was worn.
+    let outfit = null;
+    for (let i = 0; i < global.outfitArray.length; i++) {
+      if(global.outfitArray[i] != null) {
+        if (o_outfit.name === global.outfitArray[i].name) {
+          outfit = global.outfitArray[i];
+        }
+      }
+    }
+    let prevWorn = "0000-00-00";
+    
     let arr = dayArray;
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].assignedDate.dateString === o_day.dateString) {
@@ -158,13 +187,24 @@ function CalendarScreen(navigation) {
         break;
       }
     }
+
     setDayArray(arr);
     for(var i = 0; i < global.dayArray.length; i++){
-      if(global.dayArray[i] != null && global.dayArray[i].date.dateString === o_day.dateString){
+      
+      if(global.dayArray[i] != null && global.dayArray[i].date.dateString === o_day.dateString) {
         deleteDay(global.dayArray[i].id)
+        //TODO: on outfit removal, find the last day the outfit was worn. 
+
         break;
       }
+      //find last date outfit was worn before removal day
+      /*else if(global.dayArray[i] != null && global.dayArray[i].outfitId === outfit.id) {
+        prevWorn = global.dayArray[i].date.dateString
+        console.log(prevWorn);
+      }*/
     }
+
+
   }
   
   
@@ -258,7 +298,7 @@ function CalendarScreen(navigation) {
           />
           <View style={styles.buttonSpacing}></View>
           <TextInput label="Notes" value={addNotes} onChangeText={addNotes => setAddNotes(addNotes)}/>
-          <Button icon="trash-can" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); removeCalendarDay(currentDay)}}>
+          <Button icon="trash-can" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); removeCalendarDay(currentDay,c_outfit)}}>
             Clear Day
           </Button>
           <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>

@@ -52,7 +52,8 @@ function ClosetScreen(props) {
           name: global.outfitArray[i].name,
           date: global.outfitArray[i].date,
           image: global.outfitArray[i].image,
-          tags: global.outfitArray[i].tags
+          tags: global.outfitArray[i].tags,
+          lastWorn: global.outfitArray[i].lastWorn
         };
         arr.push(outfit);
         setOutfitArray(arr);
@@ -170,7 +171,7 @@ function ClosetScreen(props) {
         if(o_image == undefined) {
           o_image = outfitArray[index].image;
         }
-        updateOutfit(global.outfitArray[i].id, global.userEmail, o_name, global.outfitArray[i].dateCreated,"", o_image, outfitArray[index].tags);
+        updateOutfit(global.outfitArray[i].id, global.userEmail, o_name, global.outfitArray[i].dateCreated,"", o_image, outfitArray[index].tags, global.outfitArray[i].lastWorn);
         break;
       }
     }
@@ -228,7 +229,7 @@ function ClosetScreen(props) {
     }
     for(var i = 0; i < global.outfitArray.length; i++){
       if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
-        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, global.outfitArray[i].dateCreated, "", outfitArray[index].image, outfitArray[index].tags)
+        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, global.outfitArray[i].dateCreated, "", outfitArray[index].image, outfitArray[index].tags, global.outfitArray[i].lastWorn)
         break;
       }
     }
@@ -259,7 +260,7 @@ function ClosetScreen(props) {
     }
     for(var i = 0; i < global.outfitArray.length; i++){
       if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
-        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, "","", outfitArray[index].image, outfitArray[index].tags)
+        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, "","", outfitArray[index].image, outfitArray[index].tags, global.outfitArray[i].lastWorn)
         break;
       }
     }
@@ -297,7 +298,7 @@ function ClosetScreen(props) {
     setOutfitArray(tempArray);
     for(var i = 0; i < global.outfitArray.length; i++){
       if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
-        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, "","", outfitArray[index].image, outfitArray[index].tags)
+        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, "","", outfitArray[index].image, outfitArray[index].tags, global.outfitArray[i].lastWorn)
         break;
       }
     }
@@ -333,7 +334,7 @@ function ClosetScreen(props) {
         </View>
         
         <Text variant="headlineSmall" style={styles.outfitText}>{outfitArray[index].name}</Text>
-        <Text variant="headerLarge" style={styles.dateText}>Last Worn: {outfitArray[index].date}</Text>
+        <Text variant="headerLarge" style={styles.dateText}>Last Worn: {outfitArray[index].lastWorn}</Text>
         <Text variant="headerLarge" style={styles.dateText}>Tags: {outfitArray[index].tags}</Text>
         <GestureRecognizer
         onSwipe={(direction, state) => this.onSwipe(direction, state)}
