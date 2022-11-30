@@ -5,8 +5,9 @@ global.displayName;
 global.accountDate;
 global.outfitBase64;
 global.closetLoaded;
+global.calendarLoaded;
 global.outfitArray;
 global.allAddedTags;
 global.ready;
-global.foo = "foo";
-
+global.dayArray;
+global.oCount;

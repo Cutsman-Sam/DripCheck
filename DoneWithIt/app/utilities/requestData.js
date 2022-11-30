@@ -8,10 +8,10 @@ const KEY = 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA';
 
 /**
  * Function to check if a user exists in the database or not
- * @param {*} emailAddress email address of registering user
+ * @param {*} email email address of registering user
  * @returns false if user doesnt exist. User JSON object if user exists
  */
-export async function userExists(emailAddress) {
+export async function userExists(email) {
     //endpoint url
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/findOne';
 
@@ -26,7 +26,7 @@ export async function userExists(emailAddress) {
             '"database": "test",' + 
             '"collection": "users",' +
             '"filter": {' +
-                '"email": "' + emailAddress +
+                '"email": "' + email +
             '" }' +
         '}'
     };
@@ -132,6 +132,8 @@ export async function deleteUser(email) {
  * @returns 1 if user updated correctly, -1 on fail
  */
  export async function updateUser(email, displayName, dateCreated, streak, lastStreakDay, outfitCount) {
+
+    
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/updateOne';
 
     const options = {
@@ -158,7 +160,7 @@ export async function deleteUser(email) {
             '}'
      };
 
-    let response = await fetch(url, options)
+    let response = await fetch(url, options);
     let data = await response.json();
     //return 1 on success, -1 on failure
     if(data.matchedCount == 1 && data.modifiedCount == 1) {
@@ -174,14 +176,58 @@ export async function deleteUser(email) {
  * OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT OUTFIT
  */
 
+/**
+ * checks if an outfit exists in database
+ * @param {*} outfitID _id field of outfit to add
+ * @returns false if outfit doesnt exist, outfitID if outfit exists
+ */
+export async function outfitExists(outfitID){
+     //endpoint url
+     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/findOne';
+
+     const options = {
+         method: 'POST',
+         headers: {
+             'content-type': 'application/json',
+             'api-key': KEY,
+         },
+         body: '{' + 
+            '"dataSource": "DripCheckApp",' + 
+            '"database": "test",' + 
+            '"collection": "outfits",' +
+            '"filter": {' +
+                '"_id" : {' + 
+                    '"$oid": "' + outfitID + '"' +
+                '}' +
+            '}' +
+        '}'
+     };
+ 
+     let response = await fetch(url,options);
+     let data = await response.json();
+
+     //checks if JSON document is null, meaning user doesn't exist
+     if(data.document == null) {
+         return false;
+     } else {
+         //returns user document if true
+         return data.document;
+     }
+}
 
 /**
  * Method to get all outfits in database from a specific user given the user's email
- * @param {*} emailAddress email address of user 
+ * @param {*} email email address of user 
  * @returns array of outfit objects in database from that user
  */
- export async function getAllOutfits(emailAddress) {
+ export async function getAllOutfits(email) {
 
+
+    //make sure the user trying to add an outfit exists in the database.
+    const checkUser = await userExists(email);
+    if(checkUser == false) {
+        return -1;
+    }
     //TODO: Make db function to gather all outfits belonging to a specific user
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/getOutfits';
 
@@ -191,7 +237,7 @@ export async function deleteUser(email) {
             'content-type': 'application/json',
             'api-key': KEY,
         },
-        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits", "document": { "email": "' + emailAddress + '" }}'
+        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits", "document": { "email": "' + email + '" }}'
     };
 
     let response = await fetch(url, options)
@@ -215,9 +261,15 @@ export async function deleteUser(email) {
  */
  export async function addNewOutfit(email, outfitName, description, imageString, tagString) {
 
+
+    //make sure the user trying to add an outfit exists in the database.
+    const checkUser = await userExists(email);
+    if(checkUser == false) {
+        return -1;
+    }
+
     var date = getCurrentDate();
 
-    globalThis.accountDate = date;
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/insertOne';
 
     const options = {
@@ -243,26 +295,42 @@ export async function deleteUser(email) {
 
      let response = await fetch(url, options)
      let data = await response.json();
-
+     var temp = global.outfitArray
+     let outfit = {
+        id: data.insertedId,
+        description: description,
+        name: outfitName,
+        date: date,
+        image: imageString,
+        tags: tagString
+      };
+    temp.push(outfit)
+    global.outfitArray = temp
      //handle return 
-     if(data.document == null) {
+     if(data == null) {
         return -1;
      }
 
      //else return outfitID
-     return data;
+     return data.insertedId;
 }
 
 /**
  * method to delete ALL outfits of a user from database given user's email.
  * DO NOT REMOVE USER BEFORE REMOVING OUTFITS
- * @param {*} emailAddress email of user
+ * @param {*} email email of user
  * @returns number of outfits removed from database
  */
-export async function removeAllOutfits(emailAddress) {
+export async function removeAllOutfits(email) {
+
+     //make sure the user trying to add an outfit exists in the database.
+     const checkUser = await userExists(email);
+     if(checkUser == false) {
+         return -1;
+     }
 
     //TODO: Make db function to gather all outfits belonging to a specific user
-    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/deleteAllUserOutfits';
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteMany';
 
     const options = {
         method: 'POST',
@@ -270,34 +338,85 @@ export async function removeAllOutfits(emailAddress) {
             'content-type': 'application/json',
             'api-key': KEY,
         },
-        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "outfits", "document": { "email": "' + emailAddress + '" }}'
-    };
+        body: '{'+
+                '"dataSource": "DripCheckApp",'+ 
+                '"database": "test",'+
+                '"collection": "outfits",' + 
+                '"filter":  {' +
+                   '"email" : "' + email + '"' +
+                '}' +
+            '}'
+        };
 
     let response = await fetch(url, options);
     let data = await response.json();
-    console.log(data);
 
     //handle return 
-    if(data.deleteResult == null) {
-        return -1;
+    try{
+        return data.deletedCount;
+    } catch(error) {
+        console.error("Return from Mongo Failed:\n" + JSON.stringify(data));
     }
+    return -1;
+}
 
-    //return document passed
-    return data.deleteResult.deletedCount;
+/**
+ * function to delete a specific outfit from the database
+ * @param {*} outfitID ID of day to delete
+ * @returns 1 on success, -1 on failure
+ */
+ export async function deleteOutfitDB(outfitID) {
+    
+    //endpoint url
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteOne';
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'api-key': KEY,
+        },
+        body: '{'+
+                '"dataSource": "DripCheckApp",'+ 
+                '"database": "test",'+
+                '"collection": "outfits",' + 
+                '"filter":  {' +
+                   '"_id" : {' + 
+                       '"$oid": "' + outfitID + '"' +
+                   '}' +
+                '}' +
+            '}'
+    };
+ 
+    let response = await fetch(url,options);
+    let data = await response.json();    
+    
+    //handle return 
+    if(data.deletedCount == 1) {
+        return 1;
+    }
+    return -1;
 }
 
 /**
  * updates an outfits information in the database,
  * MUST PASS ALL VALUES, EVEN ONES THAT ARENT CHANGING
  * @param {*} outfitID _id field of the outfit
- * @param {*} emailAddress email of the user 
+ * @param {*} email email of the user 
  * @param {*} outfitName name of outfit
+ * @param {*} dateCreated dateCreated
  * @param {*} description just pass "" or null for now
  * @param {*} imageString the base64 URI of the image
  * @param {*} tagString the string containing tag info
  */
-export async function updateOutfit(outfitID, email, outfitName, description, imageString, tagString) {
-    
+export async function updateOutfit(outfitID, email, outfitName, dateCreated, description, imageString, tagString) {
+     
+    //make sure the user trying to add an outfit exists in the database.
+    const checkUser = await userExists(email);
+    if(checkUser == false) {
+        return -1;
+    }
+
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/updateOne';
 
     const options = {
@@ -318,6 +437,7 @@ export async function updateOutfit(outfitID, email, outfitName, description, ima
                 '"update": {' + 
                     '"email" : "' + email + '",' + 
                     '"outfitName" : "' + outfitName + '",' + 
+                    '"dateCreated" : "' + dateCreated + '",' + 
                     '"imageString" : "' + imageString + '",' + 
                     '"tags" : "' + tagString + '",' + 
                     '"description" : "' + description + '"' +
@@ -352,6 +472,19 @@ export async function updateOutfit(outfitID, email, outfitName, description, ima
  * @returns -1 on fail, new day ID on success
  */
 export async function addNewDay(email,outfitID,text,date) {
+
+    //make sure the user trying to add an outfit exists in the database.
+    const checkUser = await userExists(email);
+    if(checkUser == false) {
+        console.error("Can't add a day to a user that doesn't exist.");
+        return -1;
+    }
+
+    const checkOutfit = await outfitExists(outfitID);
+    if(checkOutfit == false) {
+        console.error("Can't add an outfit that doesn't exist to a day.");
+        return -1;
+    }
     //endpoint url
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/insertOne';
 
@@ -367,22 +500,41 @@ export async function addNewDay(email,outfitID,text,date) {
                 '"collection": "days",' + 
                 '"document": {' + 
                     '"email" : "' + email + '",' + 
-                    '"outfitID" : "' + outfitID + '",' +
+                    '"outfitID" : {' + 
+                        '"$oid": "' + outfitID + '"' +
+                    '},' + 
                     '"text" : "' + text + '",' +
-                    '"date" : "' + date + '"' +
+                    '"date" : {' +
+                        '"dateString" : "' + date.dateString + '",' +
+                        '"day" : "' + date.day + '",' +
+                        '"month" : "' + date.month + '",' +
+                        '"timestamp" : "' + date.timestamp + '",' +
+                        '"year" : "' + date.year + '"' +
+                    '}' +
                 '}' +
             '}'
     };
 
     let response = await fetch(url,options);
     let data = await response.json();    
+    /*var temp = global.dayArray
 
-    //checks if JSON document is null, meaning user doesn't exist
-    if(data.document == null) {
+    let day = {
+      id: data.insertedId,
+      outfitId : outfitID,
+      text: text,
+      email: email,
+      date: date
+    };
+    temp.push(day);
+
+    global.dayArray = temp*/
+
+    if(data.insertedId == null) {
         return -1;
     } else {
         //returns user document if true
-        return data.document._id;
+        return data.insertedId;
     }
 }
 
@@ -392,6 +544,14 @@ export async function addNewDay(email,outfitID,text,date) {
  * @returns array of days from that user
  */
 export async function getDaysUser(email) {
+
+    //make sure the user trying to add an outfit exists in the database.
+    const checkUser = await userExists(email);
+    if(checkUser == false) {
+        return -1;
+    }
+
+
     //endpoint url
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/find';
 
@@ -414,46 +574,10 @@ export async function getDaysUser(email) {
     let response = await fetch(url,options);
     let data = await response.json();    
 
-    //checks if JSON document is null, meaning user doesn't exist
+
     return data.documents;
 }
 
-/**
- * function to delete a specific outfit from the database
- * @param {*} outfitID ID of day to delete
- * @returns 1 on success, -1 on failure
- */
- export async function deleteOutfitDB(outfitID) {
-    //endpoint url
-    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteOne';
-
-    const options = {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json',
-            'api-key': KEY,
-        },
-        body: '{'+
-                '"dataSource": "DripCheckApp",'+ 
-                '"database": "test",'+
-                '"collection": "outfits",' + 
-                '"filter":  {' +
-                   '"_id" : {' + 
-                       '"$oid": "' + outfitID + '"' +
-                   '}' +
-                '}' +
-            '}'
-    };
- 
-    let response = await fetch(url,options);
-    let data = await response.json();    
-    
-    //handle return 
-    if(data.deletedCount == 1) {
-        return 1;
-    }
-    return -1;
-}
 /**
  * function to delete a specific day from the database
  * @param {*} dayID ID of day to delete
@@ -483,9 +607,8 @@ export async function deleteDay(dayID) {
  
     let response = await fetch(url,options);
     let data = await response.json();    
-    
     //handle return 
-    if(data.deleteResult.deletedCount == 1) {
+    if(data.deletedCount == 1) {
         return 1;
     }
     return -1;
@@ -497,6 +620,14 @@ export async function deleteDay(dayID) {
  * @returns number of days deleted
  */
 export async function deleteAllDays(email) {
+
+    //make sure the user trying to add an outfit exists in the database.
+    const checkUser = await userExists(email);
+    if(checkUser == false) {
+        return -1;
+    }
+
+
     //endpoint url
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteMany';
 
@@ -518,25 +649,26 @@ export async function deleteAllDays(email) {
  
     let response = await fetch(url,options);
     let data = await response.json();    
-    
-    //handle return 
-    if(data.deleteResult == null) {
-        return -1;
-    }
 
-    return data.deleteResult.deletedCount;
+    return data.deletedCount;
 }
 
 /**
  * 
  * @param {*} email email of user day belongs to
- * @param {*} dayID ID of the day
+ * @param {*} dayID ID of the day, used as filter to select day to update
  * @param {*} text notes attached to day
  * @param {*} date date of day
  * @param {*} outfitID outfit ID attached to day
  * @returns 
  */
 export async function updateDay(email,dayID,text,date,outfitID) {
+    //make sure the user trying to add an outfit exists in the database.
+    const checkUser = await userExists(email);
+    if(checkUser == false) {
+        return -1;
+    }
+
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/updateOne';
 
     const options = {
@@ -576,6 +708,270 @@ export async function updateDay(email,dayID,text,date,outfitID) {
     }
 }
 
+/**
+ * POST POST POST POST POST POST POST POST POST POST POST POST POST POST POST POST POST POST POST 
+ * POST POST POST POST POST POST POST POST POST POST POST POST POST POST POST POST POST POST POST
+ * POST POST POST POST POST POST POST POST POST POST POST POST POST POST POST POST POST POST POST
+ */
+
+/**
+ * Inserts a new post in the database with 
+ * @param {*} userEmail email of user creating post
+ * @param {*} outfitID id value of attached outfit
+ * @returns id of inserted post or -1 on fail
+ */
+export async function addNewPost(email, outfitID) {
+
+    //make sure the user trying to add an outfit exists in the database.
+    const checkUser = await userExists(email);
+    if(checkUser == false) {
+        return -1;
+    }
+
+    //must have number of saves, outfitID, owner email, [...]
+    
+    //get current date
+    var date = getCurrentDate();
+
+    //endpoint url
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/insertOne';
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'api-key': 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA',
+        },
+       
+        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "posts",' + 
+                ' "document": {' + 
+                '"email" : "' + email + '",' +
+                '"saves" : "' + 0 + '",' +
+                '"outfit" : {' + 
+                    '"$oid": "' + outfitID + '"' +
+                '},' +
+                '"dateCreated" : "' + date +
+            '"  }}'
+    };
+
+    let response = await fetch(url, options);
+    let data = await response.json();
+    try {
+        return data.insertedId;
+    } catch (error) {
+        return -1;
+    }
+}
+
+/**
+ * deletes a post given the postID
+ * @param {*} postID _id of post to delete
+ * @returns 1 on success, -1 on failure
+ */
+export async function deletePost(postID) {
+
+    //endpoint url
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteOne';
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'api-key': KEY,
+        },
+        body: '{'+
+                '"dataSource": "DripCheckApp",'+ 
+                '"database": "test",'+
+                '"collection": "posts",' + 
+                '"filter":  {' +
+                   '"_id" : {' + 
+                       '"$oid": "' + postID + '"' +
+                   '}' +
+                '}' +
+            '}'
+    };
+ 
+    let response = await fetch(url,options);
+    let data = await response.json();    
+    
+    //handle return 
+    if(data.deletedCount == 1) {
+        return 1;
+    }
+    return -1;
+}
+
+/**
+ * deletes a post given the user email
+ * @param {*} email _id of post to delete
+ * @returns number of deletedPosts
+ */
+ export async function deleteAllPosts(email) {
+
+    //endpoint url
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteMany';
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'api-key': KEY,
+        },
+        body: '{'+
+                '"dataSource": "DripCheckApp",'+ 
+                '"database": "test",'+
+                '"collection": "posts",' + 
+                '"filter":  {' +
+                   '"email" : "' + email + '"' +
+                   '}' +
+                '}' +
+            '}'
+    };
+ 
+    let response = await fetch(url,options);
+    let data = await response.json();    
+    
+    return data.deletedCount;
+}
+
+/**
+ * updates a post inside the database, must pass all params
+ * @param {*} postID _id of post to update
+ * @param {*} email email of user
+ * @param {*} outfitID id of outfit
+ * @param {*} date date field of post
+ * @returns 1 on success, -1 on fail
+ */
+export async function updatePost(postID,email,outfitID,date) {
+
+    //make sure the user trying to add an outfit exists in the database.
+    const checkUser = await userExists(email);
+    if(checkUser == false) {
+        console.error("Can't update post of nonexistant user");
+        return -1;
+    }
+
+    //make sure the user trying to add an outfit exists in the database.
+    const checkOutfit = await outfitExists(outfitID);
+    if(checkOutfit == false) {
+        console.error("Can't update post with invalid outfit");
+        return -1;
+    }
+    const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/updateOne';
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'api-key': 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA',
+        },
+        body: '{'+
+                '"dataSource": "DripCheckApp",'+ 
+                '"database": "test",'+
+                '"collection": "posts",' + 
+                '"filter": {' +
+                    '"_id" : {' + 
+                        '"$oid": "' + postID + '"' +
+                    '}' +
+                '},' +
+                ' "update": {' + 
+                    '"email" : "' + email + '",' +
+                    '"saves" : "' + 0 + '",' +
+                    '"outfitID" : "' + outfitID + '",' +
+                    '"dateCreated" : "' + date + 
+                    '"  }}'
+     };
+
+    let response = await fetch(url, options)
+    let data = await response.json();
+    
+    //return 1 on success, -1 on failure
+    if(data.matchedCount == 1 && data.modifiedCount == 1) {
+        return 1;
+    } else {
+        return -1;
+    }
+}
+
+export async function getAllPosts() {
+     //endpoint url
+     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/find';
+
+     const options = {
+         method: 'POST',
+         headers: {
+             'content-type': 'application/json',
+             'api-key': KEY,
+         },
+         body: '{'+
+                 '"dataSource": "DripCheckApp",'+ 
+                 '"database": "test",'+
+                 '"collection": "posts",' + 
+             '}'
+     };
+ 
+     let response = await fetch(url,options);
+     let data = await response.json();    
+ 
+     //checks if JSON document is null, meaning user doesn't exist
+     return data.documents;
+}
+
+export async function getUserPosts(email) {
+
+    //make sure the user trying to add an outfit exists in the database.
+    const checkUser = await userExists(email);
+    if(checkUser == false) {
+        return -1;
+    }
+
+
+     //endpoint url
+     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/find';
+
+     const options = {
+         method: 'POST',
+         headers: {
+             'content-type': 'application/json',
+             'api-key': KEY,
+         },
+         body: '{'+
+                 '"dataSource": "DripCheckApp",'+ 
+                 '"database": "test",'+
+                 '"collection": "posts",' + 
+                 '"filter": {' + 
+                     '"email" : "' + email + '"' +
+                 '}' +
+             '}'
+     };
+ 
+     let response = await fetch(url,options);
+     let data = await response.json();    
+ 
+     //checks if JSON document is null, meaning user doesn't exist
+     return data.documents;
+}
+
+
+//DONT USE THIS, HAVEN'T TESTED IT 
+async function getFollowingPosts(followingEmailArr) {
+    var mergedDocs = [];
+
+    for(let i = 0; i < followingEmailArr.length; i++) { 
+        console.log("Following User Docs " + i);
+        //make sure the user trying to add an outfit exists in the database.
+        const checkUser = await userExists(followingEmailArr[i]);
+        if(checkUser != false) {
+            var doc = await getUserPosts(followingEmailArr[i]);//supposedly this works
+            console.log(JSON.stringify(doc) + "\n");
+
+            mergedDocs.push(JSON.parse(doc));
+        }
+    }
+
+    //return all docs as one massive json
+    return mergedDocs;
+}
 
 /**
  * Helper method to get current date
