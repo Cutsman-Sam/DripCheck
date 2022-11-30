@@ -11,3 +11,4 @@ global.allAddedTags;
 global.ready;
 global.dayArray;
 global.oCount;
+global.calendarStreak;

@@ -140,6 +140,24 @@ async function handleLogin(){
           };
           temp.push(day);
         }
+          let today = new Date().toDateString()
+          global.calendarStreak = 0;
+          let curr = new Date(today).getTime();
+          let streaking = true;
+          while(streaking){
+            let streak = global.calendarStreak;
+            for(var i = 0; i < temp.length; i++){
+              if(temp[i] != null){
+                if(curr - new Date(temp[i].date.dateString).getTime() <= (1000 * 3600 * 30) && curr - new Date(temp[i].date.dateString).getTime() > 0){
+                  global.calendarStreak++;
+                  curr = new Date(temp[i].date.dateString).getTime();
+                }
+              }
+            }
+            if(global.calendarStreak == streak){
+              streaking = false;
+            }
+          }
       global.dayArray = temp;
       console.log("Added calendar data");
       } else {
@@ -148,7 +166,7 @@ async function handleLogin(){
     }
     global.ready = 1;
     console.log("ready")
-    testDatabaseFunctions();
+    //testDatabaseFunctions();
 }
 const styles = StyleSheet.create({
     container: {

@@ -27,6 +27,7 @@ function ProfileScreen({navigation}) {
       </View>
       <Text>Account Created: {global.accountDate}</Text> 
       <Text>Outfits Created: {global.oCount}</Text>
+      <Text>Calendar Streak: {global.calendarStreak} 🔥</Text>
     </View>
     );
 }
