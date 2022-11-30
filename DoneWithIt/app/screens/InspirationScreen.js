@@ -1,30 +1,81 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';  //status-bar replaced with 'react'
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, FlatList } from 'react-native';
 import { Switch } from 'react-native-paper';
 import { useState } from 'react';
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
-import {Post, Card, UserImg, UserInfo, UserName, UserInfoText, PostTime, PostText, PostImg, InteractionWrapper, Interaction, InteractionText} from '../styles/postStyle';
+import {Post, Card, UserImg, UserInfo, UserName, UserInfoText, PostTime, PostText, PostImg, InteractionWrapper, Interaction, InteractionText, ContentFilter} from '../styles/postStyle';
 
+import UploadPost from '../utilities/UploadPost';
+
+const Posts = [
+  {
+    id: '1',
+    userName: global.displayName, //doesn't work properly? manually inputted into UploadPost
+    userImg: require('../assets/blank-profile-pic.png'), //not showing
+    postTime: '4 mins ago',
+    post:
+      'Hey there, this is my test for a post of my social app in React Native.',
+    postImg: require('../closetimages/sample1.jpg'), //not showing
+    liked: true,
+    likes: '14',
+    //comments: '5',
+  },
+  {
+    id: '2',
+    userName: global.displayName,
+    userImg: require('../assets/blank-profile-pic.png'),
+    postTime: '2 hours ago',
+    post:
+      'Hey there, this is my test for a post of my social app in React Native.',
+    postImg: require('../closetimages/sample2.jpg'),
+    liked: false,
+    likes: '8',
+    //comments: '0',
+  },
+  {
+    id: '3',
+    userName: global.displayName,
+    userImg: require('../assets/blank-profile-pic.png'),
+    postTime: '1 hours ago',
+    post:
+      'Hey there, this is my test for a post of my social app in React Native.',
+    postImg: require('../closetimages/sample3.jpg'),
+    liked: true,
+    likes: '1',
+    //comments: '0',
+  },
+];
 
 //UPDATE LIKES
 function InspirationScreen(props) {
 
+  //use isEnabled to enable post filter
   const [isEnabled, setIsEnabled] = React.useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  filter = isEnabled ? 'Followers' : 'Everyone';
   
   return (
     <Post>
-      <Switch style={styles.switchButton}
+      <ContentFilter>
+        <Text style={styles.text}>{filter}</Text>
+        <Switch style={styles.switchButton}
         trackColor={{ false: "#2BFF00", true: "2BFF00"}}
         thumbColor={isEnabled ? "#2BFF00" : "#FD6868"}
         onValueChange={toggleSwitch}
         value={isEnabled}
-      />
-      <ScrollView style={styles.scrollView}>
-        <Card>
+        />
+      </ContentFilter>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <FlatList
+          data={Posts}
+          renderItem={({item}) => <UploadPost item={item}/>}
+          keyExtractor={item=>item.id}
+          
+        />
+        {/* <Card>
           <UserInfo>
             <UserImg source={require('../assets/blank-profile-pic.png')}/>
             <UserInfoText> 
@@ -88,7 +139,7 @@ function InspirationScreen(props) {
               <InteractionText>Tags</InteractionText>
             </Interaction>
           </InteractionWrapper>
-        </Card>
+        </Card> */}
 
       </ScrollView>
       <StatusBar style="auto" />
@@ -109,15 +160,18 @@ const styles = StyleSheet.create({
     //   //backgroundColor: 'orange',
     //   marginHorizontal: 10,
     // },
-    // text: {
-    //   fontSize: 42,
-    // },
+    text: {
+       fontSize: 30,
+       marginLeft: 30,
+       marginTop: 5
+    },
     switchButton: {
-      marginLeft: 150,
-      marginBottom: 10,
-      marginTop: 10 
+      marginLeft: 100,
+      marginBottom: 15,
+      marginTop: 10,
     }
 });
+
 
 export default InspirationScreen;
 

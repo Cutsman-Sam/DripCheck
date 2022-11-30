@@ -5,7 +5,7 @@ export const Post = styled.View`
   flex: 1;
   align-content: center;
   background-color: #fff;
-  padding: 45px;
+  padding: 30px;
 `;
 
 export const Card = styled.View`
@@ -79,4 +79,10 @@ export const InteractionText = styled.Text`
   color: ${props => props.active ? '#2e64e5' : '#333'};
   margin-top: 5px;
   margin-left: 5px;
+`;
+
+export const ContentFilter = styled.View`
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 10px;
 `;
