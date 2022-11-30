@@ -77,6 +77,8 @@ async function handleLogin(){
       global.accountDate = getCurrentDate();
       global.outfitArray = new Array();
       global.dayArray = new Array();
+      global.oCount = 0;
+      global.calendarStreak = 0;
       insertNewUser(global.userEmail, global.displayName, 0, 0);
     } else {
       //Utilize previousData to load user's stuff
