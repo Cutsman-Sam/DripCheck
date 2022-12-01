@@ -68,11 +68,11 @@ function InspirationScreen(props) {
         value={isEnabled}
         />
       </ContentFilter>
-      <ScrollView showsVerticalScrollIndicator={false}>
         <FlatList
           data={Posts}
           renderItem={({item}) => <UploadPost item={item}/>}
           keyExtractor={item=>item.id}
+          showsVerticalScrollIndicator={false}
           
         />
         {/* <Card>
@@ -140,8 +140,6 @@ function InspirationScreen(props) {
             </Interaction>
           </InteractionWrapper>
         </Card> */}
-
-      </ScrollView>
       <StatusBar style="auto" />
     </Post>
 
