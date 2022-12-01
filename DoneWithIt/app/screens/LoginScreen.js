@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import * as Google from 'expo-auth-session/providers/google';
-import {insertNewUser, userExists, getCurrentDate, getAllOutfits, getDaysUser} from '../utilities/requestData'
+import {insertNewUser, userExists, getCurrentDate, getAllOutfits, getDaysUser, getAllPosts} from '../utilities/requestData'
 import { testDatabaseFunctions } from '../utilities/testDatabaseFunctions';
 
 
@@ -68,12 +68,21 @@ function LoginScreen({navigation}) {
 //<Button onPress={showDialog}>Show Dialog</Button>
 
 async function handleLogin(){
+
+    //get all inspiration posts
+    global.postArray = new Array();
+    let posts = await getAllPosts();
+    
+    for(var i in posts) {
+        if(posts[i] != null){
+            global.postArray.push(posts[i]);
+        }
+    }
+    console.log("Posts loaded")
     global.oCount = 0;
     global.allAddedTags = [];
-    //console.log("LoginScreen: called userExists");
     let previousData = await userExists(global.userEmail)
     if(previousData == false) {
-      //console.log("LoginScreen: called insertNewUser");
       global.accountDate = getCurrentDate();
       global.outfitArray = new Array();
       global.dayArray = new Array();

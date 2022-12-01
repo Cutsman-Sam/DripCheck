@@ -13,3 +13,5 @@ global.dayArray;
 global.oCount;
 global.calendarStreak;
 global.pfp64;
+global.postArray;
+global.inspirationLoaded;

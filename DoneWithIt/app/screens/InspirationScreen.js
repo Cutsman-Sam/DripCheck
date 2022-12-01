@@ -9,46 +9,9 @@ import {Post, Card, UserImg, UserInfo, UserName, UserInfoText, PostTime, PostTex
 
 import UploadPost from '../utilities/UploadPost';
 import { set } from 'date-fns';
+import { addNewPost } from '../utilities/requestData';
 
 
-let Posts = [
-  {
-    id: '1',
-    userName: global.displayName, //doesn't work properly? manually inputted into UploadPost
-    userImg: require('../assets/blank-profile-pic.png'), //not showing
-    postTime: '4 mins ago',
-    post:
-      'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: require('../closetimages/sample1.jpg'), //not showing
-    saved: true,
-    saves: '14',
-    //comments: '5',
-  },
-  {
-    id: '2',
-    userName: global.displayName,
-    userImg: require('../assets/blank-profile-pic.png'),
-    postTime: '2 hours ago',
-    post:
-      'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: require('../closetimages/sample2.jpg'),
-    saved: false,
-    saves: '8',
-    //comments: '0',
-  },
-  {
-    id: '3',
-    userName: global.displayName,
-    userImg: require('../assets/blank-profile-pic.png'),
-    postTime: '1 hours ago',
-    post:
-      'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: require('../closetimages/sample3.jpg'),
-    saved: true,
-    saves: '1',
-    //comments: '0',
-  },
-];
 
 //UPDATE SAVES
 function InspirationScreen(props) {
@@ -64,7 +27,29 @@ function InspirationScreen(props) {
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   filter = isEnabled ? 'Following' : 'Everyone';
   
-
+  if(global.inspirationLoaded == null){
+    for(var i = 0; i < global.postArray.length; i++){
+      if(global.postArray[i] == null){
+        continue;
+      }
+      let temp = posts;
+      let post = {
+        id: i + 1,
+        userName: global.postArray[i].userName,
+        userImg: global.postArray[i].profilePic,
+        postTime: global.postArray[i].postTime,
+        post: global.postArray[i].post,
+        postImg: global.postArray[i].postImg,
+        saves: global.postArray[i].saves
+      }
+      temp.push(post);
+      let newPosts = numPosts + 1;
+      setPosts(temp);
+      setNumPosts(newPosts);
+    }
+    global.inspirationLoaded = true;
+  }
+  
   function addPost(id, profilePic, postText, postImg, saves){
     let temp = posts;
     let post = {
@@ -80,6 +65,7 @@ function InspirationScreen(props) {
     let newPosts = numPosts + 1;
     setPosts(temp);
     setNumPosts(newPosts);
+    addNewPost(post.userName, post.saves, post.postTime, post.postImg, post.post, post.postTime, post.userImg);
   }
   function nextOutfit() {
     if (index < iter.length - 1) {

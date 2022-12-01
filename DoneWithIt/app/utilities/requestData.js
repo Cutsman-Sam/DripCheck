@@ -921,7 +921,6 @@ export async function getAllPosts() {
  
      let response = await fetch(url,options);
      let data = await response.json();    
-     
      return data.documents;
 }
 
