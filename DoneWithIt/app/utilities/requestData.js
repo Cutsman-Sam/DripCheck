@@ -734,9 +734,10 @@ export async function updateDay(email,dayID,text,date,outfitID) {
  * @param {*} postImg Base64 URI image from outfit post was created with
  * @param {*} post post text associated with post
  * @param {*} dateCreated date post was created
+ * @param {*} profilePic base64 URI image for profile pic of posting user
  * @returns id value of post that is created, or -1 on fail
  */
-export async function addNewPost(userName, saves, postTime, postImg, post, dateCreated) {
+export async function addNewPost(userName, saves, postTime, postImg, post, dateCreated, profilePic) {
 
     //get current date
     var date = getCurrentDate();
@@ -758,6 +759,7 @@ export async function addNewPost(userName, saves, postTime, postImg, post, dateC
                 '"postTime" : "' + postTime + '",' +
                 '"postImg" : "' + postImg + '",' +
                 '"post" : "' + post + '",' +
+                '"profilePic" : "' + profilePic + '",' +
                 '"dateCreated" : "' + dateCreated + '"' +
             '}}'
     };
@@ -853,7 +855,7 @@ export async function deletePost(postID) {
  * @param {*} dateCreated date post was created
  * @returns id value of post that is created, or -1 on fail
  */
-export async function updatePost(postID, userName, saves, postTime, postImg, post, dateCreated) {
+export async function updatePost(postID, userName, saves, postTime, postImg, post, dateCreated, profilePic) {
 
     
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/updateOne';
@@ -879,6 +881,7 @@ export async function updatePost(postID, userName, saves, postTime, postImg, pos
                     '"postTime" : "' + postTime + '",' +
                     '"postImg" : "' + postImg + '",' +
                     '"post" : "' + post + '",' +
+                    '"profilePic" : "' + profilePic + '",' +
                     '"dateCreated" : "' + dateCreated + '"' +
                 '}}'
      };
