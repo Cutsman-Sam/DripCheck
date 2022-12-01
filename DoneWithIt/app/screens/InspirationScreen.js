@@ -102,7 +102,8 @@ function InspirationScreen(props) {
   
 
   let c_outfit = iter[index]
-  return (
+  if(c_outfit != null){
+    return (
 <View style={styles.container}>
     <Post>
       <ContentFilter>
@@ -168,6 +169,35 @@ function InspirationScreen(props) {
     </View>
     
     );
+  } else {
+    return (
+      <View style={styles.container}>
+          <Post>
+            <ContentFilter>
+              <Text style={styles.text}>{filter}</Text>
+              <Switch style={styles.switchButton}
+              trackColor={{ false: "#2BFF00", true: "2BFF00"}}
+              thumbColor={isEnabled ? "#2BFF00" : "#FD6868"}
+              onValueChange={toggleSwitch}
+              value={isEnabled}
+              />
+            </ContentFilter>
+              <FlatList
+                data={posts}
+                renderItem={({item}) => <UploadPost item={item}/>}
+                keyExtractor={item=>item.id}
+                showsVerticalScrollIndicator={false}
+                
+              />
+            {/* </ScrollView> */}
+            <StatusBar style="auto" />
+          </Post>
+          </View>
+          
+          );
+  }
+  
+
 }
 
 const styles = StyleSheet.create({
