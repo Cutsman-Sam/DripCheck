@@ -114,11 +114,11 @@ function InspirationScreen(props) {
         value={isEnabled}
         />
       </ContentFilter>
-      {/* <ScrollView showsVerticalScrollIndicator={false}> */}
         <FlatList
           data={posts}
           renderItem={({item}) => <UploadPost item={item}/>}
           keyExtractor={item=>item.id}
+          showsVerticalScrollIndicator={false}
           
         />
       {/* </ScrollView> */}
