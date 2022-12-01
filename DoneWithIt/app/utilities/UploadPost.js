@@ -20,7 +20,7 @@ const uploadPost = ({item}) => {
     return(
         <Card>
           <UserInfo>
-            <UserImg source={item.UserImg}/>
+            <UserImg source={{uri: "data:image/png;base64," + item.userImg}}/>
             <UserInfoText> 
               <UserName> {global.displayName} </UserName> 
               <PostTime> {item.postTime} </PostTime>

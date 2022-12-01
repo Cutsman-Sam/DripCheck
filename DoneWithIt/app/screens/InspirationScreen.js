@@ -100,7 +100,6 @@ function InspirationScreen(props) {
     }
   }
   
-
   let c_outfit = iter[index]
   if(c_outfit != null){
     return (
@@ -157,7 +156,7 @@ function InspirationScreen(props) {
               onChangeText={PostText => setPostText(PostText)}
             />
             <View style={{flexDirection: "row"}}>
-            <Button style={styles.postButton} onPress={() => {setAddingPostMenu(false); addPost(numPosts + 1, "", PostText, c_outfit.image, 0); setPostText("")}}>Post</Button>
+            <Button style={styles.postButton} onPress={() => {setAddingPostMenu(false); addPost(numPosts + 1, global.pfp64, PostText, c_outfit.image, 0); setPostText("")}}>Post</Button>
             <Button style={styles.postButton} onPress={() => {setAddingPostMenu(false); setPostText("")}}>Cancel</Button>
             </View>
             <View style={styles.modalMargin}/>

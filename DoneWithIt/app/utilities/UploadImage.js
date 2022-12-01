@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Image, View, Platform, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import { updateUser } from './requestData';
 
 
 //https://www.waldo.com/blog/add-an-image-picker-react-native-app
@@ -25,13 +26,18 @@ export default function UploadImage() {
       allowsEditing: true,
       aspect: [4,3],
       quality: 1,
+      base64: true
     });
-    console.log(JSON.stringify(_image));
     if (!_image.cancelled) {
       setImage(_image.uri);
       global.currentImage = _image.uri;
+      global.pfp64 = _image.base64;
+      updateUser(global.userEmail, global.displayName, global.accountDate, global.calendarStreak, "00-00-0000", global.oCount, global.pfp64, "undefined");
     }
   };
+  if(String(image).indexOf(global.pfp64) == -1 && global.pfp64 != "undefined"){
+    setImage("data:image/png;base64," + global.pfp64)
+  } 
   return (
             <View style={imageUploaderStyles.container}>
                 {

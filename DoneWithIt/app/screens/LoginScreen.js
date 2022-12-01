@@ -83,6 +83,7 @@ async function handleLogin(){
     } else {
       //Utilize previousData to load user's stuff
       global.accountDate = JSON.parse(JSON.stringify(previousData)).dateCreated
+      global.pfp64 = JSON.parse(JSON.stringify(previousData)).profilePic
       let outfits = await getAllOutfits(global.userEmail);
       var obj = JSON.parse(JSON.stringify(outfits));
       var res = [];

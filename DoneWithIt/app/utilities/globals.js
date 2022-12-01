@@ -12,3 +12,4 @@ global.ready;
 global.dayArray;
 global.oCount;
 global.calendarStreak;
+global.pfp64;
