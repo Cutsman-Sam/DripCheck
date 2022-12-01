@@ -419,6 +419,7 @@ export async function removeAllOutfits(email) {
  * @param {*} imageString the base64 URI of the image
  * @param {*} tagString the string containing tag info
  * @param {*} lastWorn tlast Date an outfit was worn
+ * @returns 1 on success, -1 on failure
  */
 export async function updateOutfit(outfitID, email, outfitName, dateCreated, description, imageString, tagString, lastWorn) {
      
