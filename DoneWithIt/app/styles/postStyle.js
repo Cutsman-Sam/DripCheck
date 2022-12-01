@@ -30,7 +30,6 @@ export const UserImg = styled.Image`
 export const UserName = styled.Text`
   font-size: 14px;
   font-weight: bold;
-  font-family: 'Lato-Regular';
 `;
 
 export const UserInfoText = styled.View`
@@ -41,13 +40,11 @@ export const UserInfoText = styled.View`
 
 export const PostTime = styled.Text`
     font-size: 12px;
-    font-family: 'Lato-Regular';
     color: #666; 
 `;
 
 export const PostText = styled.Text`
   font-size: 14px;
-  font-family: 'Lato-Regular';
   padding-left: 15px;
   padding-right: 15px;
 `;
@@ -74,7 +71,6 @@ export const Interaction = styled.TouchableOpacity`
 
 export const InteractionText = styled.Text`
   font-size: 12px;
-  font-family: 'Lato-Regular';
   font-weigth: bold;
   color: ${props => props.active ? '#2e64e5' : '#333'};
   margin-top: 5px;

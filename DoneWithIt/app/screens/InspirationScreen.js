@@ -1,16 +1,17 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';  //status-bar replaced with 'react'
-import { StyleSheet, Text, View, ScrollView, FlatList } from 'react-native';
-import { Switch } from 'react-native-paper';
-import { useState } from 'react';
+import { StyleSheet, View, ScrollView, FlatList, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Text, Button, Portal, Modal, TextInput, Switch } from 'react-native-paper';
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import {Post, Card, UserImg, UserInfo, UserName, UserInfoText, PostTime, PostText, PostImg, InteractionWrapper, Interaction, InteractionText, ContentFilter} from '../styles/postStyle';
 
 import UploadPost from '../utilities/UploadPost';
+import { set } from 'date-fns';
 
-const Posts = [
+
+let Posts = [
   {
     id: '1',
     userName: global.displayName, //doesn't work properly? manually inputted into UploadPost
@@ -48,16 +49,46 @@ const Posts = [
     //comments: '0',
   },
 ];
+let numPosts = Posts.length;
 
+const DismissKeyboard = ({ children }) => (
+  <TouchableWithoutFeedback 
+  onPress={() => Keyboard.dismiss()}> {children}
+  </TouchableWithoutFeedback>
+  );
 //UPDATE SAVES
 function InspirationScreen(props) {
 
   //use isEnabled to enable post filter
+  const [posts, setPosts] = React.useState([]);
+  const [numPosts, setNumPosts] = React.useState(0);
+  const [addingPostMenu, setAddingPostMenu] = React.useState(false);
   const [isEnabled, setIsEnabled] = React.useState(false);
+  const [PostText, setPostText] = React.useState("");
+
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   filter = isEnabled ? 'Following' : 'Everyone';
   
+
+  function addPost(id, profilePic, postText, postImg, saves){
+    let temp = posts;
+    let post = {
+      id: id,
+      userName: global.displayName,
+      userImg: profilePic,
+      postTime: new Date().toDateString(),
+      post: postText,
+      postImg: postImg,
+      saves: saves
+    }
+    temp.push(post);
+    let newPosts = numPosts + 1;
+    setPosts(temp);
+    setNumPosts(newPosts);
+  }
+
   return (
+<View style={styles.container}>
     <Post>
       <ContentFilter>
         <Text style={styles.text}>{filter}</Text>
@@ -68,9 +99,9 @@ function InspirationScreen(props) {
         value={isEnabled}
         />
       </ContentFilter>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      {/* <ScrollView showsVerticalScrollIndicator={false}> */}
         <FlatList
-          data={Posts}
+          data={posts}
           renderItem={({item}) => <UploadPost item={item}/>}
           keyExtractor={item=>item.id}
           
@@ -141,25 +172,61 @@ function InspirationScreen(props) {
           </InteractionWrapper>
         </Card> */}
 
-      </ScrollView>
+      {/* </ScrollView> */}
       <StatusBar style="auto" />
     </Post>
-
+    <Button style={styles.postButton} onPress={() => {setAddingPostMenu(true)}}>Post</Button>
+    <Portal>
+          
+          <Modal visible={addingPostMenu} style={styles.modalMenu} dismissable={false}>
+            <TextInput
+              multiline={true}
+              blurOnSubmit={true}
+              label="Post Text"
+              value={PostText}
+              placeholder="These are winter boots..."
+              onChangeText={PostText => setPostText(PostText)}
+            />
+            <View style={{flexDirection: "row"}}>
+            <Button style={styles.postButton} onPress={() => {setAddingPostMenu(false); addPost(numPosts + 1, "", PostText, "", 0)}}>Post</Button>
+            <Button style={styles.postButton} onPress={() => {setAddingPostMenu(false)}}>Cancel</Button>
+            </View>
+            
+          </Modal>
+          
+          
+    </Portal>
+    </View>
     
     );
 }
 
 const styles = StyleSheet.create({
-    // container: {
-    //   flex: 1,
-    //   backgroundColor: '#fff',
-    //   alignItems: 'center',
-    //   justifyContent: 'center',
-    // },
-    // scrollView: {
-    //   //backgroundColor: 'orange',
-    //   marginHorizontal: 10,
-    // },
+    container: {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    modalButton: {
+      width: 190,
+      borderWidth: 1,
+      borderColor: "black",
+      alignSelf: "center"
+    },
+    modalMenu: {
+      backgroundColor: '#ffffff',
+      padding: 20
+    },
+    postButton: {
+      borderWidth: 1,
+      marginTop: 0,
+      borderColor: "black",
+    },
+    scrollView: {
+      //backgroundColor: 'orange',
+      marginHorizontal: 10,
+    },
     text: {
        fontSize: 30,
        marginLeft: 30,
