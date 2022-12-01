@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-
+import { StyleSheet, View, ScrollView, FlatList, Image } from 'react-native';
 import {Post, Card, UserImg, UserInfo, UserName, UserInfoText, PostTime, PostText, PostImg, InteractionWrapper, Interaction, InteractionText} from '../styles/postStyle';
 
 
@@ -16,7 +16,7 @@ const uploadPost = ({item}) => {
         } else {
             saveText = 'Save';
         }
-
+       
     return(
         <Card>
           <UserInfo>
@@ -27,7 +27,7 @@ const uploadPost = ({item}) => {
             </UserInfoText>
           </UserInfo>
           <PostText> {item.post} </PostText>
-          <PostImg source={item.PostImg} /> 
+          <PostImg source={{ uri: "data:image/png;base64,"+ item.postImg}} /> 
 
           <InteractionWrapper>
           <Interaction active={item.saved}>
