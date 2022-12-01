@@ -32,14 +32,11 @@ function ClosetScreen(props) {
   const [showDropDown, setShowDropDown] = React.useState(false);
   
   let tagList = [];
-  console.log(global.allAddedTags);
   for (let i = 0; i < global.allAddedTags.length; i++) {
     let obj = {label: global.allAddedTags[i], value: global.allAddedTags[i] }
     tagList.push(obj);
   }
   
-
-
   var outfitname = "";
   if (numOutfits > 0) {
     outfitname = outfitArray[index].image;
@@ -355,7 +352,7 @@ function ClosetScreen(props) {
           <Button icon="arrow-left-bold" mode="contained-tonal" style={styles.navButtons} onPress={prevOutfit}>
             Previous
           </Button>
-          <View style={styles.buttonSpacing}></View>
+          <Text variant="headlineSmall" style={styles.indexText}>{index+1} / {numOutfits}</Text>
           <Button icon="arrow-right-bold" mode="contained-tonal" style={styles.navButtons} onPress={nextOutfit} contentStyle={{flexDirection: 'row-reverse'}}>
             Next
           </Button>
@@ -404,12 +401,12 @@ function ClosetScreen(props) {
         <Portal>
           <Modal visible={addingOutfitMenu} style={styles.modalMenu} dismissable={false}>
             <Text variant="headlineSmall" style={styles.outfitText}>Outfit Details</Text>
-            <View style={styles.buttonSpacing}></View>
-            <TextInput label="Outfit Name" value={addingName} onChangeText={addingName => setAddingName(addingName)}/>
             <UploadOutfit style={{alignSelf: "center"}}/>
+
+            <TextInput label="Outfit Name" value={addingName} onChangeText={addingName => setAddingName(addingName)}/>
             <View style={styles.buttonSpacing}></View>
             <TextInput
-              label="Tag Name (Optional)"
+              label="Tag (Optional)"
               value={addingTag}
               onChangeText={addingTag => setAddingTag(addingTag)}
             />
@@ -515,12 +512,12 @@ function ClosetScreen(props) {
         <Portal>
           <Modal visible={addingOutfitMenu} style={styles.modalMenu} dismissable={false}>
             <Text variant="headlineSmall" style={styles.outfitText}>Outfit Details</Text>
+            <UploadOutfit style={{alignSelf: "center"}}/>
             <View style={styles.buttonSpacing}></View>
             <TextInput label="Outfit Name" value={addingName} onChangeText={addingName => setAddingName(addingName)}/>
-            <UploadOutfit/>
             <View style={styles.buttonSpacing}></View>
             <TextInput
-              label="Tag Name (Optional)"
+              label="Tag (Optional)"
               value={addingTag}
               onChangeText={addingTag => setAddingTag(addingTag)}
             />
@@ -557,11 +554,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   containerSettings: {
-    paddingTop: 0,
+    paddingTop: 10,
     paddingRight: 10,
     backgroundColor: '#f5fafc',
     flexDirection: "row",
     alignSelf: 'flex-end',
+  },
+  indexText: {
+    alignSelf: "center",
+    paddingTop: 0,
+    paddingLeft: 7,
+    paddingRight: 7,
   },
   settingsButton: {
     width: 120,

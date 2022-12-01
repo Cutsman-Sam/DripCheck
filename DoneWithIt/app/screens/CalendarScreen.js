@@ -235,7 +235,7 @@ function CalendarScreen(navigation) {
           }
         }}
         // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-        monthFormat={'MMM d, yyyy'}
+        monthFormat={'MMM yyyy'}
         // Handler which gets executed when visible month changes in calendar. Default = undefined
         onMonthChange={month => {
           //console.log('month changed', month);
@@ -250,7 +250,7 @@ function CalendarScreen(navigation) {
         // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
         firstDay={0}
 
-        customHeaderTitle={<Text>Outfits</Text>}
+        //customHeaderTitle={<Text>Outfits</Text>}
         
         markedDates={markedDays}
       />
@@ -270,7 +270,7 @@ function CalendarScreen(navigation) {
             <Button icon="arrow-left-bold" mode="contained-tonal" style={styles.navButtons} onPress={prevOutfit}>
               Previous
             </Button>
-            <View style={styles.buttonSpacing}></View>
+            <Text variant="headlineSmall" style={styles.indexText}>{index+1} / {iter.length}</Text>
             <Button icon="arrow-right-bold" mode="contained-tonal" style={styles.navButtons} onPress={nextOutfit} contentStyle={{flexDirection: 'row-reverse'}}>
               Next
             </Button>
@@ -298,9 +298,11 @@ function CalendarScreen(navigation) {
           />
           <View style={styles.buttonSpacing}></View>
           <TextInput label="Notes" value={addNotes} onChangeText={addNotes => setAddNotes(addNotes)}/>
+          <View style={styles.buttonSpacing}></View>
           <Button icon="trash-can" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); removeCalendarDay(currentDay,c_outfit)}}>
             Clear Day
           </Button>
+          <View style={styles.buttonSpacing}></View>
           <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
             Close
           </Button>
@@ -334,6 +336,13 @@ const styles = StyleSheet.create({
     borderColor: "black",
     alignSelf: "center"
   },
+  indexText: {
+    alignSelf: "center",
+    paddingTop: 0,
+    paddingLeft: 7,
+    paddingRight: 7,
+  },
+
   buttonRowContainer: {
     alignSelf: "center",
     paddingTop: 10,
