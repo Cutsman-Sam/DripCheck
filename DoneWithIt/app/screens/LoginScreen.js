@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import * as Google from 'expo-auth-session/providers/google';
-import {insertNewUser, userExists, getCurrentDate, getAllOutfits, getDaysUser} from '../utilities/requestData'
+import {insertNewUser, userExists, getCurrentDate, getAllOutfits, getDaysUser, getAllPosts} from '../utilities/requestData'
 import { testDatabaseFunctions } from '../utilities/testDatabaseFunctions';
 
 
@@ -170,7 +170,7 @@ async function handleLogin(){
     }
     global.ready = 1;
     console.log("ready")
-    //testDatabaseFunctions();
+    await testDatabaseFunctions();
 }
 const styles = StyleSheet.create({
     container: {

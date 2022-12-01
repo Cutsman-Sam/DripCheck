@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';  //status-bar replaced with 'react'
-import { StyleSheet, Text, View, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, Text, FlatList } from 'react-native';
 import { Switch } from 'react-native-paper';
 import { useState } from 'react';
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
-import {Post, Card, UserImg, UserInfo, UserName, UserInfoText, PostTime, PostText, PostImg, InteractionWrapper, Interaction, InteractionText, ContentFilter} from '../styles/postStyle';
+import {Post, ContentFilter} from '../styles/postStyle';
 
 import UploadPost from '../utilities/UploadPost';
 
@@ -68,7 +68,6 @@ function InspirationScreen(props) {
         value={isEnabled}
         />
       </ContentFilter>
-      <ScrollView showsVerticalScrollIndicator={false}>
         <FlatList
           data={Posts}
           renderItem={({item}) => <UploadPost item={item}/>}
@@ -140,8 +139,6 @@ function InspirationScreen(props) {
             </Interaction>
           </InteractionWrapper>
         </Card> */}
-
-      </ScrollView>
       <StatusBar style="auto" />
     </Post>
 

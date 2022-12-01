@@ -729,11 +729,11 @@ export async function updateDay(email,dayID,text,date,outfitID) {
 /**
  * Inserts a new post in the database with 
  * @param {*} userEmail email of user creating post
- * @param {*} outfitID id value of attached outfit
+ * @param {*} outfit outfit object from global.outfitArray
  * @param {*} postTime time post was made
  * @returns id of inserted post or -1 on fail
  */
-export async function addNewPost(email, outfitID, postTime) {
+export async function addNewPost(email, outfit, postTime) {
 
     //make sure the user trying to add an outfit exists in the database.
     const checkUser = await userExists(email);
@@ -764,7 +764,14 @@ export async function addNewPost(email, outfitID, postTime) {
                 '"text" : "' + postTime + '",' +
                 '"saves" : "' + 0 + '",' +
                 '"outfit" : {' + 
-                    '"$oid": "' + outfitID + '"' +
+                    '"$oid": "' + outfit.id + '",' +
+                    '"email" : "' + outfit.userEmail + '",' + 
+                    '"outfitName" : "' + outfit.name + '",' + 
+                    '"dateCreated" : "' + outfit.dateCreated + '",' + 
+                    '"imageString" : "' + outfit.image + '",' + 
+                    '"tags" : "' + outfit.tags + '",' + 
+                    '"lastWorn" : "' + outfit.lastWorn+ '",' +
+                    '"description" : "' + outfit.description + '"' +
                 '},' +
                 '"dateCreated" : "' + date +
             '"  }}'
@@ -854,14 +861,14 @@ export async function deletePost(postID) {
  * updates a post inside the database, must pass all params
  * @param {*} postID _id of post to update
  * @param {*} email email of user
- * @param {*} outfitID id of outfit
+ * @param {*} outfit outfit object from global.outfitArray
  * @param {*} date date field of post
  * @param {*} postTime time post was made
  * @param {*} saves number of times post has been saved
  * @param {*} lastWorn last date the outfit was worn
  * @returns 1 on success, -1 on fail
  */
-export async function updatePost(postID,email,outfitID,date,postTime,saves) {
+export async function updatePost(postID,email,outfit,date,postTime,saves) {
 
     //make sure the user trying to add an outfit exists in the database.
     const checkUser = await userExists(email);
@@ -871,7 +878,8 @@ export async function updatePost(postID,email,outfitID,date,postTime,saves) {
     }
 
     //make sure the user trying to add an outfit exists in the database.
-    const checkOutfit = await outfitExists(outfitID);
+    console.log(outfit.id);
+    const checkOutfit = await outfitExists(JSON.stringify(outfit));
     if(checkOutfit == false) {
         console.error("Can't update post with invalid outfit");
         return -1;
@@ -897,7 +905,16 @@ export async function updatePost(postID,email,outfitID,date,postTime,saves) {
                     '"email" : "' + email + '",' +
                     '"saves" : "' + saves + '",' +
                     '"postTime" : "' + postTime + '",' +
-                    '"outfitID" : "' + outfitID + '",' +
+                    '"outfit" : {' + 
+                        '"$oid": "' + outfit.id + '",' +
+                        '"email" : "' + outfit.userEmail + '",' + 
+                        '"outfitName" : "' + outfit.name + '",' + 
+                        '"dateCreated" : "' + outfit.dateCreated + '",' + 
+                        '"imageString" : "' + outfit.image + '",' + 
+                        '"tags" : "' + outfit.tags + '",' + 
+                        '"lastWorn" : "' + outfit.lastWorn+ '",' +
+                        '"description" : "' + outfit.description + '"' +
+                    '},' +
                     '"dateCreated" : "' + date + '"' +
                     '}}'
      };
@@ -937,15 +954,9 @@ export async function getAllPosts() {
      let response = await fetch(url,options);
      let data = await response.json();    
      
-     //checks if JSON document is null, meaning user doesn't exist
-     let posts = JSON.parse(JSON.stringify(data.documents));
-     let len = posts.length;
-     for(let i = 0; i < len; i++) {
-        let postOutfit = await outfitExists(posts[i].outfit);
-        posts.push(JSON.parse(JSON.stringify(postOutfit)));
-     }
+     console.log(JSON.stringify(data));
 
-     return posts;
+     return data;
 }
 
 export async function getUserPosts(email) {
@@ -979,30 +990,37 @@ export async function getUserPosts(email) {
      let response = await fetch(url,options);
      let data = await response.json();    
  
-     //checks if JSON document is null, meaning user doesn't exist
-     return data.documents;
+     console.log(JSON.stringify(data));
+
+     return data;
 }
 
 
-//DONT USE THIS, HAVEN'T TESTED IT 
+/**
+ * 
+ * @param {*} followingEmailArr 
+ * @returns 
+ */
 export async function getFollowingPosts(followingEmailArr) {
-    let followingPosts = {};
-
+    var followingPosts = { 
+        "posts" : []
+    }
     for(let i = 0; i < followingEmailArr.length; i++) { 
         console.log("Following User Docs " + i);
         //make sure the user trying to add an outfit exists in the database.
         const checkUser = await userExists(followingEmailArr[i]);
+        console.log(JSON.stringify(checkUser));
         if(checkUser != false) {
             var doc = await getUserPosts(followingEmailArr[i]);//supposedly this works
-
-            console.log(JSON.stringify(doc) + "\n");
-
-            mergedDocs.push(JSON.parse(doc));
+            console.log("POSTS + OUTFITS: " + JSON.stringify(doc));
+            //add user's posts to array
+            followingPosts.posts.push(doc);
         }
     }
 
+    console.log(JSON.stringify(followingPosts.posts));
     //return all docs as one massive json
-    return mergedDocs;
+    return followingPosts.posts;
 }
 
 /**
