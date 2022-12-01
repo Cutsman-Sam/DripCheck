@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Text, Button, Portal, Modal, TextInput } from 'react-native-paper';
 import UploadOutfit from '../utilities/UploadOutfit';
-import {addNewOutfit, updateOutfit, deleteOutfitDB} from '../utilities/requestData';
+import {getCurrentDate,addNewOutfit, updateOutfit, deleteOutfitDB} from '../utilities/requestData';
 import DropDown from "react-native-paper-dropdown";
 import GestureRecognizer, { swipeDirections } from "react-native-swipe-detect";
 
@@ -46,6 +46,8 @@ function ClosetScreen(props) {
     for(var i = 0; i < global.outfitArray.length; i++){
       if(global.outfitArray[i] != null){
         let outfit = {
+          id: global.outfitArray[i].id,
+          description: global.outfitArray[i].description,
           name: global.outfitArray[i].name,
           date: global.outfitArray[i].date,
           image: global.outfitArray[i].image,
@@ -119,10 +121,13 @@ function ClosetScreen(props) {
   function addOutfit(o_name, o_image, o_tag) {
     if (o_name != "" && o_image != "") {
       let outfit = {
+        id: "",
+        description: "",
         name: o_name,
-        date: "N/A",
+        date: getCurrentDate(),
         image: o_image,
-        tags: o_tag
+        tags: o_tag,
+        lastWorn: "0000-00-00"
       };
       if (!allAddedTags.includes(o_tag)) {allAddedTags.push(o_tag)};
       global.outfitArray = outfitArray.concat(outfit);
@@ -131,14 +136,14 @@ function ClosetScreen(props) {
       let newIndex = numOutfits;
       setNumOutfits(newOutfits);
       setIndex(newIndex);
-      addNewOutfit(global.userEmail, o_name, "", o_image, o_tag);
+      global.outfitArray[newIndex].id = addNewOutfit(global.userEmail, o_name, "", o_image, o_tag);
     }
   }
   // Deletes an outfit from the closet.
   function deleteOutfit() {
     if(global.outfitArray != -1){
       for(var i = 0; i < global.outfitArray.length; i++){
-        if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
+        if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name) {
           deleteOutfitDB(global.outfitArray[i].id);
           break;
         }
@@ -159,7 +164,7 @@ function ClosetScreen(props) {
 
   // Changes the outfit at the current index to the new values provided.
   function changeOutfit(o_name, o_image) {
-    
+    var globalArrayIndex;
     for(var i = 0; i < global.outfitArray.length; i++){
       if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
         if(o_name == undefined) {
@@ -169,16 +174,20 @@ function ClosetScreen(props) {
           o_image = outfitArray[index].image;
         }
         updateOutfit(global.outfitArray[i].id, global.userEmail, o_name, global.outfitArray[i].dateCreated,"", o_image, outfitArray[index].tags, global.outfitArray[i].lastWorn);
+        globalArrayIndex = i;
         break;
       }
     }
     
     if (o_name != "" && o_image != "") {
       let outfit = {
+        id: global.outfitArray[globalArrayIndex].id,
+        description: global.outfitArray[globalArrayIndex].description,
         name: o_name,
-        date: "N/A",
+        date: global.outfitArray[globalArrayIndex].date,
         image: o_image,
-        tags: ""
+        tags: global.outfitArray[globalArrayIndex].tags,
+        lastWorn: global.outfitArray[globalArrayIndex].lastWorn
       };
       let tempArray = outfitArray;
       tempArray.splice(index, 1, outfit);
