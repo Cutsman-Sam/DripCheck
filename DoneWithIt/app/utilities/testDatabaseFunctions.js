@@ -147,7 +147,10 @@ export async function testDatabaseFunctions() {
     }
 
 
+
+    
     outfitID = await Database.addNewOutfit(outfitUser,"testOutfit","desc","__","__");
+         
     var dayID;
     
     var date = {
@@ -228,7 +231,7 @@ export async function testDatabaseFunctions() {
     //Testing Post Functions
     console.log("Testing addNewPost:");
     try {
-        postID = await Database.addNewPost(outfitUser,outfitID);
+        postID = await Database.addNewPost("testUser2",0,"","","my post","2022-11-30");
 
         if(postID != -1) {
             console.log("\t\t-> succeeded.");
@@ -241,7 +244,7 @@ export async function testDatabaseFunctions() {
 
     console.log("Testing updatePost:");
     try {
-        functionReturn = await Database.updatePost(postID,outfitUser,outfitID,date.dateString);
+        functionReturn = await Database.updatePost(postID,"testUser2",0,"","","my post","2022-11-30");
         if(functionReturn == 1) {
             console.log("\t\t-> succeeded.");
         } else {
@@ -261,7 +264,7 @@ export async function testDatabaseFunctions() {
 
     console.log("Testing getUserPosts:");
     try {
-        functionReturn = await Database.getUserPosts(outfitUser);
+        functionReturn = await Database.getUserPosts("testUser2");
         if(functionReturn != -1) {
             console.log("\t\t-> succeeded.");
         } else {
@@ -271,33 +274,25 @@ export async function testDatabaseFunctions() {
         console.error("\tgetUserPosts -> failed.\n\t\t" + error);
     }
 
-    /*console.log("Testing getFollowingPosts:");
+    console.log("Testing getFollowingPosts:");
     try {
         const followingUsers = ["testUser1","testUser2","testUser3"];
-        await Database.insertNewUser("testUser1","testUser1",0,0);
-        await Database.insertNewUser("testUser2","testUser1",0,0);
-        await Database.insertNewUser("testUser3","testUser1",0,0);
-        const outfit1 = await Database.addNewOutfit("testUser1","outfit","desc","","");
-        const outfit2 = await Database.addNewOutfit("testUser2","outfit","desc","","");
-        const outfit3 = await Database.addNewOutfit("testUser3","outfit","desc","","");
-        const post1 = await Database.addNewPost("testUser1",outfit1);
-        const post2 = await Database.addNewPost("testUser2",outfit2);
-        const post3 = await Database.addNewPost("testUser3",outfit3);
+
+        const post1 = await Database.addNewPost("testUser1",0,"","","my post","2022-11-30");
+        const post2 = await Database.addNewPost("testUser2",0,"","","my post","2022-11-30");
+        const post3 = await Database.addNewPost("testUser3",0,"","","my post","2022-11-30");
 
         functionReturn = await Database.getFollowingPosts(followingUsers);
-        console.log(JSON.stringify(functionReturn));
+        //console.log(JSON.stringify(functionReturn));
 
         Database.deletePost(post1);
         Database.deletePost(post2);
         Database.deletePost(post3);
-        Database.deleteOutfitDB(outfit1);
-        Database.deleteOutfitDB(outfit2);
-        Database.deleteOutfitDB(outfit3);
-
+        console.log("\t\t-> succeeded.");
 
     } catch (error) {
         console.error("\tgetFollowingPosts -> failed.\n\t\t" + error);
-    }*/
+    }
 
     console.log("Testing deletePost:");
     try {
@@ -313,7 +308,7 @@ export async function testDatabaseFunctions() {
 
     console.log("Testing deleteAllPosts:");
     try {
-        functionReturn = await Database.deleteAllPosts();
+        functionReturn = await Database.deleteAllPosts("testUser2");
         if(functionReturn >= 0) {
             console.log("\t\t-> succeeded.");
         } else {
@@ -323,19 +318,18 @@ export async function testDatabaseFunctions() {
         console.error("\tdeleteAllPosts -> failed.\n\t\t" + error);
     }
 
-    await Database.deleteAllPosts(outfitUser);
+    await Database.deleteAllPosts("testUser1");
+    await Database.deleteAllPosts("testUser3");
+    await Database.deleteAllPosts("testUser2");
+    await Database.deleteUser("testUser1");
+    await Database.deleteUser("testUser3");
+    await Database.deleteUser("testUser2");
     await Database.removeAllOutfits(outfitUser);
+    await Database.removeAllOutfits("testUser1");
+    await Database.removeAllOutfits("testUser2");
+    await Database.removeAllOutfits("testUser3");
     await Database.deleteUser(outfitUser);
-    await Database.deleteAllPosts(userEmail);
+    await Database.deleteAllPosts("testEmail1");
     await Database.removeAllOutfits(userEmail);
     await Database.deleteUser(userEmail);
-    await Database.deleteUser("testUser1");
-    await Database.removeAllOutfits("testUser1");
-    await Database.deleteUser("testUser1");
-    await Database.deleteUser("testUser2");
-    await Database.removeAllOutfits("testUser2");
-    await Database.deleteUser("testUser2");
-    await Database.deleteUser("testUser3");
-    await Database.removeAllOutfits("testUser3");
-    await Database.deleteUser("testUser3");
 }

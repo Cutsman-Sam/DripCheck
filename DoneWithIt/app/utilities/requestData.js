@@ -188,7 +188,7 @@ export async function deleteUser(email) {
  * @param {*} outfitID _id field of outfit to add
  * @returns false if outfit doesnt exist, outfitID if outfit exists
  */
-export async function outfitExists(outfitID){
+export async function outfitExists(outfitID) {
      //endpoint url
      const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/findOne';
 
@@ -727,22 +727,17 @@ export async function updateDay(email,dayID,text,date,outfitID) {
  */
 
 /**
- * Inserts a new post in the database with 
- * @param {*} userEmail email of user creating post
- * @param {*} outfitID id value of attached outfit
- * @param {*} postTime time post was made
- * @returns id of inserted post or -1 on fail
+ * function to insert a new post into the database
+ * @param {*} userName userName of post creator, current user
+ * @param {*} saves number of initial saves a post has
+ * @param {*} postTime time post was created, stored as string
+ * @param {*} postImg Base64 URI image from outfit post was created with
+ * @param {*} post post text associated with post
+ * @param {*} dateCreated date post was created
+ * @returns id value of post that is created, or -1 on fail
  */
-export async function addNewPost(email, outfitID, postTime) {
+export async function addNewPost(userName, saves, postTime, postImg, post, dateCreated) {
 
-    //make sure the user trying to add an outfit exists in the database.
-    const checkUser = await userExists(email);
-    if(checkUser == false) {
-        return -1;
-    }
-
-    //must have number of saves, outfitID, owner email, [...]
-    
     //get current date
     var date = getCurrentDate();
 
@@ -758,16 +753,13 @@ export async function addNewPost(email, outfitID, postTime) {
        
         body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "posts",' + 
                 ' "document": {' + 
-                '"email" : "' + email + '",' +
-                '"saves" : "' + 0 + '",' +
+                '"userName" : "' + userName + '",' +
+                '"saves" : "' + saves + '",' +
                 '"postTime" : "' + postTime + '",' +
-                '"text" : "' + postTime + '",' +
-                '"saves" : "' + 0 + '",' +
-                '"outfit" : {' + 
-                    '"$oid": "' + outfitID + '"' +
-                '},' +
-                '"dateCreated" : "' + date +
-            '"  }}'
+                '"postImg" : "' + postImg + '",' +
+                '"post" : "' + post + '",' +
+                '"dateCreated" : "' + dateCreated + '"' +
+            '}}'
     };
 
     let response = await fetch(url, options);
@@ -818,11 +810,11 @@ export async function deletePost(postID) {
 }
 
 /**
- * deletes a post given the user email
- * @param {*} email _id of post to delete
+ * deletes a post given the user's username
+ * @param {*} userName username of user to delete all posts of
  * @returns number of deletedPosts
  */
- export async function deleteAllPosts(email) {
+ export async function deleteAllPosts(userName) {
 
     //endpoint url
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteMany';
@@ -838,7 +830,7 @@ export async function deletePost(postID) {
                 '"database": "test",'+
                 '"collection": "posts",' + 
                 '"filter":  {' +
-                   '"email" : "' + email + '"' +
+                   '"userName" : "' + userName + '"' +
                    '}' +
                 '}' +
             '}'
@@ -851,31 +843,19 @@ export async function deletePost(postID) {
 }
 
 /**
- * updates a post inside the database, must pass all params
- * @param {*} postID _id of post to update
- * @param {*} email email of user
- * @param {*} outfitID id of outfit
- * @param {*} date date field of post
- * @param {*} postTime time post was made
- * @param {*} saves number of times post has been saved
- * @param {*} lastWorn last date the outfit was worn
- * @returns 1 on success, -1 on fail
+ * function to update a new post into the database
+ * @param {*} postID id of post to be updated
+ * @param {*} userName userName of post creator, current user
+ * @param {*} saves number of initial saves a post has
+ * @param {*} postTime time post was created, stored as string
+ * @param {*} postImg Base64 URI image from outfit post was created with
+ * @param {*} post post text associated with post
+ * @param {*} dateCreated date post was created
+ * @returns id value of post that is created, or -1 on fail
  */
-export async function updatePost(postID,email,outfitID,date,postTime,saves) {
+export async function updatePost(postID, userName, saves, postTime, postImg, post, dateCreated) {
 
-    //make sure the user trying to add an outfit exists in the database.
-    const checkUser = await userExists(email);
-    if(checkUser == false) {
-        console.error("Can't update post of nonexistant user");
-        return -1;
-    }
-
-    //make sure the user trying to add an outfit exists in the database.
-    const checkOutfit = await outfitExists(outfitID);
-    if(checkOutfit == false) {
-        console.error("Can't update post with invalid outfit");
-        return -1;
-    }
+    
     const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/updateOne';
 
     const options = {
@@ -894,12 +874,13 @@ export async function updatePost(postID,email,outfitID,date,postTime,saves) {
                     '}' +
                 '},' +
                 ' "update": {' + 
-                    '"email" : "' + email + '",' +
+                    '"userName" : "' + userName + '",' +
                     '"saves" : "' + saves + '",' +
                     '"postTime" : "' + postTime + '",' +
-                    '"outfitID" : "' + outfitID + '",' +
-                    '"dateCreated" : "' + date + '"' +
-                    '}}'
+                    '"postImg" : "' + postImg + '",' +
+                    '"post" : "' + post + '",' +
+                    '"dateCreated" : "' + dateCreated + '"' +
+                '}}'
      };
 
     let response = await fetch(url, options)
@@ -918,6 +899,7 @@ export async function updatePost(postID,email,outfitID,date,postTime,saves) {
  * @returns JSON file, first half of array is posts, second half is each posts' corresponding outfit
  */
 export async function getAllPosts() {
+
      //endpoint url
      const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/find';
 
@@ -937,25 +919,10 @@ export async function getAllPosts() {
      let response = await fetch(url,options);
      let data = await response.json();    
      
-     //checks if JSON document is null, meaning user doesn't exist
-     let posts = JSON.parse(JSON.stringify(data.documents));
-     let len = posts.length;
-     for(let i = 0; i < len; i++) {
-        let postOutfit = await outfitExists(posts[i].outfit);
-        posts.push(JSON.parse(JSON.stringify(postOutfit)));
-     }
-
-     return posts;
+     return data.documents;
 }
 
-export async function getUserPosts(email) {
-
-    //make sure the user trying to add an outfit exists in the database.
-    const checkUser = await userExists(email);
-    if(checkUser == false) {
-        return -1;
-    }
-
+export async function getUserPosts(userName) {
 
      //endpoint url
      const url = 'https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/find';
@@ -971,38 +938,36 @@ export async function getUserPosts(email) {
                  '"database": "test",'+
                  '"collection": "posts",' + 
                  '"filter": {' + 
-                     '"email" : "' + email + '"' +
+                     '"userName" : "' + userName + '"' +
                  '}' +
              '}'
      };
  
      let response = await fetch(url,options);
      let data = await response.json();    
- 
-     //checks if JSON document is null, meaning user doesn't exist
+     
      return data.documents;
 }
 
 
-//DONT USE THIS, HAVEN'T TESTED IT 
-export async function getFollowingPosts(followingEmailArr) {
-    let followingPosts = {};
-
-    for(let i = 0; i < followingEmailArr.length; i++) { 
-        console.log("Following User Docs " + i);
-        //make sure the user trying to add an outfit exists in the database.
-        const checkUser = await userExists(followingEmailArr[i]);
-        if(checkUser != false) {
-            var doc = await getUserPosts(followingEmailArr[i]);//supposedly this works
-
-            console.log(JSON.stringify(doc) + "\n");
-
-            mergedDocs.push(JSON.parse(doc));
+/**
+ * function to get all posts from following users. 
+ * @param {*} followingUsernameArr an array of usernames the current user follows.
+ * @returns list of posts from each user.
+ */
+export async function getFollowingPosts(followingUsernameArr) {
+    var followingPosts = { 
+        "posts" : []
+    }
+    for(let i = 0; i < followingUsernameArr.length; i++) { 
+        var doc = await getUserPosts(followingUsernameArr[i]);//supposedly this works
+        for(let i = 0; i < doc.length; i++) {
+            followingPosts.posts.push(doc[i]);
         }
     }
 
     //return all docs as one massive json
-    return mergedDocs;
+    return followingPosts.posts;
 }
 
 /**
