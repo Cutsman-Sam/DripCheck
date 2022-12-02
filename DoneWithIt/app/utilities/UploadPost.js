@@ -17,6 +17,16 @@ import {
 } from "../styles/postStyle";
 
 import { Button, Dialog, Paragraph, Portal } from "react-native-paper";
+import {updateUser} from "../utilities/requestData";
+
+
+
+function updateFollowers(userName){
+    global.followingUsernames = global.followingUsernames + ", " + userName;
+    updateUser(global.userEmail, global.displayName, global.accountDate, global.calendarStreak, 
+        "00-00-0000", global.oCount, global.pfp64, "undefined",global.followingUsernames);
+        console.log("updated!");
+}
 
 const uploadPost = ({ item }) => {
   saveIcon = item.saved ? "heart" : "heart-outline";
@@ -41,7 +51,7 @@ const uploadPost = ({ item }) => {
           <UserName> {item.userName} </UserName>
           <PostTime> {item.postTime} </PostTime>
         </UserInfoText>
-        <Button onPress={() => {console.log("Following")}} >Follow</Button>
+        <Button onPress={() => {updateFollowers(item.userName)}} >Follow</Button>
       </UserInfo>
       <PostText> {item.post} </PostText>
       <PostImg source={{ uri: "data:image/png;base64," + item.postImg }} />
