@@ -10,8 +10,11 @@ import {
   getDaysUser,
   getAllPosts,
   getUserPosts,
+  getFollowingPosts,
 } from "../utilities/requestData";
 import { testDatabaseFunctions } from "../utilities/testDatabaseFunctions";
+import { getMediaLibraryPermissionsAsync } from "expo-image-picker";
+import { NewCalendarList } from "react-native-calendars";
 
 function LoginScreen({ navigation }) {
   //const [open, setOpen] = useState(false)
@@ -100,6 +103,7 @@ function LoginScreen({ navigation }) {
 //<Button onPress={showDialog}>Show Dialog</Button>
 
 async function handleLogin() {
+
   //get all inspiration posts
   global.postArray = new Array();
   let posts = await getAllPosts();
@@ -124,10 +128,21 @@ async function handleLogin() {
     global.accountDate = getCurrentDate();
     global.outfitArray = new Array();
     global.dayArray = new Array();
+    global.followingPosts = new Array();
     global.oCount = 0;
     global.calendarStreak = 0;
     insertNewUser(global.userEmail, global.displayName, 0, 0);
   } else {
+
+    //get list of following users
+    var userNames = JSON.parse(JSON.stringify(previousData)).following.split(',');
+    for(let i = 0; i < userNames.length; i++) {
+      userNames[i].trim();
+    }
+    if(userNames.length > 0) {
+      global.followingPosts = await getFollowingPosts(userNames);
+    }
+    console.log("added following users posts to dedicated list.");
     //Utilize previousData to load user's stuff
     global.accountDate = JSON.parse(JSON.stringify(previousData)).dateCreated;
     global.pfp64 = JSON.parse(JSON.stringify(previousData)).profilePic;
@@ -184,7 +199,7 @@ async function handleLogin() {
               if (exists != false) {
                 global.tagFrequencyList[exists - 1].frequency += 1;
               } else {
-                console.log("Adding new Tag: " + tagArr[j]);
+                //console.log("Adding new Tag: " + tagArr[j]);
                 let tagObject = {
                   tag: tagArr[j],
                   frequency: 1,
@@ -200,7 +215,7 @@ async function handleLogin() {
       global.tagFrequencyList.sort(function (a, b) {
         return parseInt(b.frequency) - parseInt(a.frequency);
       });
-      console.log(global.tagFrequencyList);
+      //console.log(global.tagFrequencyList);
       console.log(
         "Added tags to list and initialized tag frequency. Sorted descending"
       );
@@ -266,6 +281,7 @@ async function handleLogin() {
   global.ready = 1;
   console.log("ready");
   //testDatabaseFunctions();
+  console.log(global.followingPosts);
 }
 const styles = StyleSheet.create({
   container: {
