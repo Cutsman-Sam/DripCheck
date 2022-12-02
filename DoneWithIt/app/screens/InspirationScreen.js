@@ -94,6 +94,30 @@ function InspirationScreen(props) {
     setPosts(tempArray);
   }
 
+  // Removes a tag from an outfit's tag list if it is present.
+  function sortBySaves() {
+    let tempArray = [];
+    for (let i = 0; i < outfitArray.length; i++) {
+      if (!tempArray.includes(outfitArray[i])) {
+        tempArray.push(outfitArray[i]);
+      }
+    }
+    var tempOutfit;
+    //tempArray is initialized
+    for (let i = 0; i < tempArray.length - 1; i++) {
+      for (let j = 0; j < tempArray.length - i - 1; j++) {
+        if (tempArray[j].saves > tempArray[j + 1].saves) {
+          //swap them
+          tempOutfit = tempArray[j];
+          tempArray[j] = tempArray[j + 1];
+          tempArray[j + 1] = tempOutfit;
+        }
+      }
+    }
+
+    setPosts(tempArray);
+  }
+
   function addPost(id, profilePic, postText, postImg, saves, tags) {
     let temp = posts;
     let post = {
@@ -325,6 +349,17 @@ function InspirationScreen(props) {
               }}
             >
               Sort By Tag
+            </Button>
+            <Button
+              icon="check-bold"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                setSortMenu(false); 
+                sortBySaves();
+              }}
+            >
+              Sort By # Saves
             </Button>
             <View style={styles.buttonSpacing}></View>
             <Button
