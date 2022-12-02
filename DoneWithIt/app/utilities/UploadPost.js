@@ -25,7 +25,7 @@ function updateFollowers(userName){
     global.followingUsernames = global.followingUsernames + ", " + userName;
     updateUser(global.userEmail, global.displayName, global.accountDate, global.calendarStreak, 
         "00-00-0000", global.oCount, global.pfp64, "undefined",global.followingUsernames);
-        console.log("updated!");
+        console.log(global.followingUsernames);
 }
 
 const uploadPost = ({ item }) => {

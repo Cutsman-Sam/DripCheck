@@ -4,8 +4,14 @@ import { Text, Button, Paragraph } from "react-native-paper";
 import UploadImage from "../utilities/UploadImage";
 
 function ProfileScreen({ navigation }) {
-  const [followers, setFollowers] = React.useState(0);
+  //const [followers, setFollowers] = React.useState(0);
   const [following, setFollowing] = React.useState(0);
+  followers = 0;
+
+  const follower_array = global.followingUsernames.split(',');
+  const withoutDuplicates = [...new Set(follower_array)];
+  followers = withoutDuplicates.length - 1;
+
   return (
     <View style={styles.container}>
       <View style={styles.containerSettings}>
