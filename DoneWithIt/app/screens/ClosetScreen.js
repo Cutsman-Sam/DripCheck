@@ -1,15 +1,18 @@
-import * as React from 'react';
-import { StyleSheet, View, Image } from 'react-native';
-import { Text, Button, Portal, Modal, TextInput } from 'react-native-paper';
-import UploadOutfit from '../utilities/UploadOutfit';
-import {getCurrentDate,addNewOutfit, updateOutfit, deleteOutfitDB} from '../utilities/requestData';
+import * as React from "react";
+import { StyleSheet, View, Image } from "react-native";
+import { Text, Button, Portal, Modal, TextInput } from "react-native-paper";
+import UploadOutfit from "../utilities/UploadOutfit";
+import {
+  getCurrentDate,
+  addNewOutfit,
+  updateOutfit,
+  deleteOutfitDB,
+} from "../utilities/requestData";
 import DropDown from "react-native-paper-dropdown";
 
 global.currentImage;
 
 function ClosetScreen(props) {
-
-  
   // Menu properties (what menus are open, fields being changed in text prompts, etc.)
   const [addingOutfitMenu, setAddingOutfitMenu] = React.useState(false);
   const [editOutfitMenu, setEditOutfitMenu] = React.useState(false);
@@ -20,7 +23,7 @@ function ClosetScreen(props) {
   const [addingTag, setAddingTag] = React.useState("");
 
   // Closet properties, the number of outfits and outfit array respectively.
-  // I can probably nix the number of outfits hook state variable with the array length, 
+  // I can probably nix the number of outfits hook state variable with the array length,
   // might look at later?
   const [outfitArray, setOutfitArray] = React.useState([]);
   const [numOutfits, setNumOutfits] = React.useState(0);
@@ -29,25 +32,28 @@ function ClosetScreen(props) {
   const [index, setIndex] = React.useState(0);
 
   const [showDropDown, setShowDropDown] = React.useState(false);
-  
+
   let tagList = [];
   let iterlen = 5;
   if (iterlen > global.tagFrequencyList.length) {
     iterlen = global.tagFrequencyList.length;
   }
   for (let i = 0; i < iterlen; i++) {
-    let obj = {label: global.tagFrequencyList[i].tag, value: global.tagFrequencyList[i].tag }
+    let obj = {
+      label: global.tagFrequencyList[i].tag,
+      value: global.tagFrequencyList[i].tag,
+    };
     tagList.push(obj);
   }
-  
+
   var outfitname = "";
   if (numOutfits > 0) {
     outfitname = outfitArray[index].image;
   }
-  if(global.outfitArray.length != 0 && global.closetLoaded == null){
+  if (global.outfitArray.length != 0 && global.closetLoaded == null) {
     var arr = new Array();
-    for(var i = 0; i < global.outfitArray.length; i++){
-      if(global.outfitArray[i] != null){
+    for (var i = 0; i < global.outfitArray.length; i++) {
+      if (global.outfitArray[i] != null) {
         let outfit = {
           id: global.outfitArray[i].id,
           description: global.outfitArray[i].description,
@@ -55,7 +61,7 @@ function ClosetScreen(props) {
           date: global.outfitArray[i].date,
           image: global.outfitArray[i].image,
           tags: global.outfitArray[i].tags,
-          lastWorn: global.outfitArray[i].lastWorn
+          lastWorn: global.outfitArray[i].lastWorn,
         };
         arr.push(outfit);
         setOutfitArray(arr);
@@ -68,7 +74,6 @@ function ClosetScreen(props) {
     }
   }
   global.closetLoaded = 1;
-  
 
   //---------------
   // Menu Functions
@@ -86,7 +91,7 @@ function ClosetScreen(props) {
       setIndex(index - 1);
     }
   }
-  
+
   // Shows the modal for adding an outfit.
   function showModal() {
     setAddingOutfitMenu(true);
@@ -130,23 +135,35 @@ function ClosetScreen(props) {
         date: getCurrentDate(),
         image: o_image,
         tags: o_tag,
-        lastWorn: "0000-00-00"
+        lastWorn: "0000-00-00",
       };
-      if (!allAddedTags.includes(o_tag)) {allAddedTags.push(o_tag)};
+      if (!allAddedTags.includes(o_tag)) {
+        allAddedTags.push(o_tag);
+      }
       global.outfitArray = outfitArray.concat(outfit);
       setOutfitArray(outfitArray.concat(outfit));
       let newOutfits = numOutfits + 1;
       let newIndex = numOutfits;
       setNumOutfits(newOutfits);
       setIndex(newIndex);
-      global.outfitArray[newIndex].id = addNewOutfit(global.userEmail, o_name, "", o_image, o_tag);
+      global.oCount++;
+      global.outfitArray[newIndex].id = addNewOutfit(
+        global.userEmail,
+        o_name,
+        "",
+        o_image,
+        o_tag
+      );
     }
   }
   // Deletes an outfit from the closet.
   function deleteOutfit() {
-    if(global.outfitArray != -1){
-      for(var i = 0; i < global.outfitArray.length; i++){
-        if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name) {
+    if (global.outfitArray != -1) {
+      for (var i = 0; i < global.outfitArray.length; i++) {
+        if (
+          global.outfitArray[i] != null &&
+          global.outfitArray[i].name === outfitArray[index].name
+        ) {
           deleteOutfitDB(global.outfitArray[i].id);
           break;
         }
@@ -159,29 +176,43 @@ function ClosetScreen(props) {
 
     let newOutfits = numOutfits - 1;
     let newIndex = index - 1;
-    if (newIndex < 0) { newIndex = 0; }
+    if (newIndex < 0) {
+      newIndex = 0;
+    }
     setNumOutfits(newOutfits);
     setIndex(newIndex);
-    
+    global.oCount--;
   }
 
   // Changes the outfit at the current index to the new values provided.
   function changeOutfit(o_name, o_image) {
     var globalArrayIndex;
-    for(var i = 0; i < global.outfitArray.length; i++){
-      if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
-        if(o_name == undefined) {
+    for (var i = 0; i < global.outfitArray.length; i++) {
+      if (
+        global.outfitArray[i] != null &&
+        global.outfitArray[i].name === outfitArray[index].name
+      ) {
+        if (o_name == undefined) {
           o_name = outfitArray[index].name;
         }
-        if(o_image == undefined) {
+        if (o_image == undefined) {
           o_image = outfitArray[index].image;
         }
-        updateOutfit(global.outfitArray[i].id, global.userEmail, o_name, global.outfitArray[i].dateCreated,"", o_image, outfitArray[index].tags, global.outfitArray[i].lastWorn);
+        updateOutfit(
+          global.outfitArray[i].id,
+          global.userEmail,
+          o_name,
+          global.outfitArray[i].dateCreated,
+          "",
+          o_image,
+          outfitArray[index].tags,
+          global.outfitArray[i].lastWorn
+        );
         globalArrayIndex = i;
         break;
       }
     }
-    
+
     if (o_name != "" && o_image != "") {
       let outfit = {
         id: global.outfitArray[globalArrayIndex].id,
@@ -190,7 +221,7 @@ function ClosetScreen(props) {
         date: global.outfitArray[globalArrayIndex].date,
         image: o_image,
         tags: global.outfitArray[globalArrayIndex].tags,
-        lastWorn: global.outfitArray[globalArrayIndex].lastWorn
+        lastWorn: global.outfitArray[globalArrayIndex].lastWorn,
       };
       let tempArray = outfitArray;
       tempArray.splice(index, 1, outfit);
@@ -209,18 +240,20 @@ function ClosetScreen(props) {
         let str = outfitArray[index].tags.toString();
         const strArray = str.split(", ");
         var arrayLength = strArray.length;
-        
+
         for (var i = 0; i < arrayLength; i++) {
-            if (strArray[i].toUpperCase() === tag.toUpperCase()) {
-              valid = false;
-            }
+          if (strArray[i].toUpperCase() === tag.toUpperCase()) {
+            valid = false;
+          }
         }
         if (valid) {
           let tempArray = outfitArray;
           let replaceOutfit = outfitArray[index];
           replaceOutfit.tags += ", " + tag;
           tempArray.splice(index, 1, replaceOutfit);
-          if (!allAddedTags.includes(tag)) {allAddedTags.push(tag)};
+          if (!allAddedTags.includes(tag)) {
+            allAddedTags.push(tag);
+          }
 
           global.outfitArray = tempArray;
           setOutfitArray(tempArray);
@@ -230,15 +263,29 @@ function ClosetScreen(props) {
         let replaceOutfit = outfitArray[index];
         replaceOutfit.tags = tag;
         tempArray.splice(index, 1, replaceOutfit);
-        if (!allAddedTags.includes(tag)) {allAddedTags.push(tag)};
+        if (!allAddedTags.includes(tag)) {
+          allAddedTags.push(tag);
+        }
 
         global.outfitArray = tempArray;
         setOutfitArray(tempArray);
       }
     }
-    for(var i = 0; i < global.outfitArray.length; i++){
-      if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
-        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, global.outfitArray[i].dateCreated, "", outfitArray[index].image, outfitArray[index].tags, global.outfitArray[i].lastWorn)
+    for (var i = 0; i < global.outfitArray.length; i++) {
+      if (
+        global.outfitArray[i] != null &&
+        global.outfitArray[i].name === outfitArray[index].name
+      ) {
+        updateOutfit(
+          global.outfitArray[i].id,
+          global.userEmail,
+          outfitArray[index].name,
+          global.outfitArray[i].dateCreated,
+          "",
+          outfitArray[index].image,
+          outfitArray[index].tags,
+          global.outfitArray[i].lastWorn
+        );
         break;
       }
     }
@@ -249,7 +296,7 @@ function ClosetScreen(props) {
     if (tag != "") {
       let str = outfitArray[index].tags;
       const strArray = str.split(", ");
-      
+
       var arrayLength = strArray.length;
       let dupeArray = strArray;
       for (var i = 0; i < arrayLength; i++) {
@@ -267,9 +314,21 @@ function ClosetScreen(props) {
       global.outfitArray = tempArray;
       setOutfitArray(tempArray);
     }
-    for(var i = 0; i < global.outfitArray.length; i++){
-      if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
-        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, "","", outfitArray[index].image, outfitArray[index].tags, global.outfitArray[i].lastWorn)
+    for (var i = 0; i < global.outfitArray.length; i++) {
+      if (
+        global.outfitArray[i] != null &&
+        global.outfitArray[i].name === outfitArray[index].name
+      ) {
+        updateOutfit(
+          global.outfitArray[i].id,
+          global.userEmail,
+          outfitArray[index].name,
+          "",
+          "",
+          outfitArray[index].image,
+          outfitArray[index].tags,
+          global.outfitArray[i].lastWorn
+        );
         break;
       }
     }
@@ -331,9 +390,21 @@ function ClosetScreen(props) {
     replaceOutfit.tags = "";
     tempArray.splice(index, 1, replaceOutfit);
     setOutfitArray(tempArray);
-    for(var i = 0; i < global.outfitArray.length; i++){
-      if(global.outfitArray[i] != null && global.outfitArray[i].name === outfitArray[index].name){
-        updateOutfit(global.outfitArray[i].id, global.userEmail, outfitArray[index].name, "","", outfitArray[index].image, outfitArray[index].tags, global.outfitArray[i].lastWorn)
+    for (var i = 0; i < global.outfitArray.length; i++) {
+      if (
+        global.outfitArray[i] != null &&
+        global.outfitArray[i].name === outfitArray[index].name
+      ) {
+        updateOutfit(
+          global.outfitArray[i].id,
+          global.userEmail,
+          outfitArray[index].name,
+          "",
+          "",
+          outfitArray[index].image,
+          outfitArray[index].tags,
+          global.outfitArray[i].lastWorn
+        );
         break;
       }
     }
@@ -343,83 +414,167 @@ function ClosetScreen(props) {
     return (
       <View style={styles.container}>
         <View style={styles.containerSettings}>
-          <Button icon="cog" mode="outlined" onPress={showModalSort} style={styles.settingsButton}>
+          <Button
+            icon="cog"
+            mode="outlined"
+            onPress={showModalSort}
+            style={styles.settingsButton}
+          >
             Sort By
           </Button>
         </View>
-        
-        <Text variant="headlineSmall" style={styles.outfitText}>{outfitArray[index].name}</Text>
-        <Text variant="headerLarge" style={styles.dateText}>Last Worn: {outfitArray[index].lastWorn}</Text>
-        <Text variant="headerLarge" style={styles.dateText}>Tags: {outfitArray[index].tags}</Text>
-        
-        <View style={styles.imageContainer}>
-          <Image
-            style={styles.closetPicture}
-            source={{ uri: "data:image/png;base64,"+outfitname }}
-          />
-        </View>
-        
+
+        <Text variant="headlineSmall" style={styles.outfitText}>
+          {outfitArray[index].name}
+        </Text>
+        <Text variant="headerLarge" style={styles.dateText}>
+          Last Worn: {outfitArray[index].lastWorn}
+        </Text>
+        <Text variant="headerLarge" style={styles.dateText}>
+          Tags: {outfitArray[index].tags}
+        </Text>
+        <GestureRecognizer
+          onSwipe={(direction, state) => this.onSwipe(direction, state)}
+          onSwipeUp={(state) => this.onSwipeUp(state)}
+          onSwipeDown={(state) => this.onSwipeDown(state)}
+          onSwipeLeft={(state) => this.onSwipeLeft(state)}
+          onSwipeRight={(state) => this.onSwipeRight(state)}
+          config={config}
+        >
+          <View style={styles.imageContainer}>
+            <Image
+              style={styles.closetPicture}
+              source={{ uri: "data:image/png;base64," + outfitname }}
+            />
+          </View>
+        </GestureRecognizer>
         <View style={styles.buttonRowContainer}>
-          <Button icon="arrow-left-bold" mode="contained-tonal" style={styles.navButtons} onPress={prevOutfit}>
+          <Button
+            icon="arrow-left-bold"
+            mode="contained-tonal"
+            style={styles.navButtons}
+            onPress={prevOutfit}
+          >
             Previous
           </Button>
-          <Text variant="headlineSmall" style={styles.indexText}>{index+1} / {numOutfits}</Text>
-          <Button icon="arrow-right-bold" mode="contained-tonal" style={styles.navButtons} onPress={nextOutfit} contentStyle={{flexDirection: 'row-reverse'}}>
+          <Text variant="headlineSmall" style={styles.indexText}>
+            {index + 1} / {numOutfits}
+          </Text>
+          <Button
+            icon="arrow-right-bold"
+            mode="contained-tonal"
+            style={styles.navButtons}
+            onPress={nextOutfit}
+            contentStyle={{ flexDirection: "row-reverse" }}
+          >
             Next
           </Button>
         </View>
-        <Button icon="account-cowboy-hat" mode="contained" style={styles.addOutfit} onPress={showModal}>
+        <Button
+          icon="account-cowboy-hat"
+          mode="contained"
+          style={styles.addOutfit}
+          onPress={showModal}
+        >
           Add Outfit
         </Button>
-        <View style={{padding: 5}}></View>
+        <View style={{ padding: 5 }}></View>
         <View style={styles.buttonRowContainer}>
-          <Button icon="pencil" mode="contained" style={styles.addOutfit} onPress={showModalEdit}>
+          <Button
+            icon="pencil"
+            mode="contained"
+            style={styles.addOutfit}
+            onPress={showModalEdit}
+          >
             Edit Outfit
           </Button>
-          <View style={{padding: 5}}></View>
-          <Button icon="pencil" mode="contained" style={styles.addOutfit} onPress={showModalTag}>
+          <View style={{ padding: 5 }}></View>
+          <Button
+            icon="pencil"
+            mode="contained"
+            style={styles.addOutfit}
+            onPress={showModalTag}
+          >
             Tags
           </Button>
         </View>
-        
 
-
-        
         <Portal>
-          <Modal visible={editOutfitMenu} style={styles.modalMenu} dismissable={false}>
-            <Text variant="headlineSmall" style={styles.outfitText}>Edit Outfit</Text>
+          <Modal
+            visible={editOutfitMenu}
+            style={styles.modalMenu}
+            dismissable={false}
+          >
+            <Text variant="headlineSmall" style={styles.outfitText}>
+              Edit Outfit
+            </Text>
             <View style={styles.buttonSpacing}></View>
-            <TextInput label="Outfit Name" value={addingName} onChangeText={addingName => setAddingName(addingName)}/>
-            <UploadOutfit/>
+            <TextInput
+              label="Outfit Name"
+              value={addingName}
+              onChangeText={(addingName) => setAddingName(addingName)}
+            />
+            <UploadOutfit />
 
             <View style={styles.buttonSpacing}></View>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); changeOutfit(addingName, global.outfitBase64)}}>
+            <Button
+              icon="check-bold"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                hideModalAll();
+                changeOutfit(addingName, global.outfitBase64);
+              }}
+            >
               Confirm Changes
             </Button>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
+            <Button
+              icon="close-thick"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                hideModalAll();
+              }}
+            >
               Cancel Changes
             </Button>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="trash-can" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); deleteOutfit()}}>
+            <Button
+              icon="trash-can"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                hideModalAll();
+                deleteOutfit();
+              }}
+            >
               Delete Outfit
             </Button>
           </Modal>
         </Portal>
 
-
-
         <Portal>
-          <Modal visible={addingOutfitMenu} style={styles.modalMenu} dismissable={false}>
-            <Text variant="headlineSmall" style={styles.outfitText}>Outfit Details</Text>
-            <UploadOutfit style={{alignSelf: "center"}}/>
+          <Modal
+            visible={addingOutfitMenu}
+            style={styles.modalMenu}
+            dismissable={false}
+          >
+            <Text variant="headlineSmall" style={styles.outfitText}>
+              Outfit Details
+            </Text>
+            <UploadOutfit style={{ alignSelf: "center" }} />
 
-            <TextInput label="Outfit Name" value={addingName} onChangeText={addingName => setAddingName(addingName)}/>
+            <TextInput
+              label="Outfit Name"
+              value={addingName}
+              onChangeText={(addingName) => setAddingName(addingName)}
+            />
             <View style={styles.buttonSpacing}></View>
             <TextInput
               label="Tag (Optional)"
               value={addingTag}
-              onChangeText={addingTag => setAddingTag(addingTag)}
+              onChangeText={(addingTag) => setAddingTag(addingTag)}
             />
             <DropDown
               label={"Select Existing Tag"}
@@ -432,27 +587,48 @@ function ClosetScreen(props) {
               list={tagList}
             />
             <View style={styles.buttonSpacing}></View>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); addOutfit(addingName, global.outfitBase64, addingTag)}}>
+            <Button
+              icon="check-bold"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                hideModalAll();
+                addOutfit(addingName, global.outfitBase64, addingTag);
+              }}
+            >
               Confirm Outfit
             </Button>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
+            <Button
+              icon="close-thick"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                hideModalAll();
+              }}
+            >
               Cancel
             </Button>
           </Modal>
         </Portal>
 
-
-
         <Portal>
-          <Modal visible={addTagMenu} style={styles.modalMenu} dismissable={false}>
-            <Text variant="headlineSmall" style={styles.outfitText}>Tag Details</Text>
-            <Text variant="headerLarge" style={styles.dateText}>Tags: {outfitArray[index].tags}</Text>
+          <Modal
+            visible={addTagMenu}
+            style={styles.modalMenu}
+            dismissable={false}
+          >
+            <Text variant="headlineSmall" style={styles.outfitText}>
+              Tag Details
+            </Text>
+            <Text variant="headerLarge" style={styles.dateText}>
+              Tags: {outfitArray[index].tags}
+            </Text>
             <View style={styles.buttonSpacing}></View>
             <TextInput
               label="Tag Name"
               value={addingTag}
-              onChangeText={addingTag => setAddingTag(addingTag)}
+              onChangeText={(addingTag) => setAddingTag(addingTag)}
             />
             <DropDown
               label={"Select Existing Tag"}
@@ -465,27 +641,64 @@ function ClosetScreen(props) {
               list={tagList}
             />
             <View style={styles.buttonSpacing}></View>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); addTag(addingTag)}}>
+            <Button
+              icon="check-bold"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                hideModalAll();
+                addTag(addingTag);
+              }}
+            >
               Confirm Tag Addition
             </Button>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); removeTag(addingTag)}}>
+            <Button
+              icon="check-bold"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                hideModalAll();
+                removeTag(addingTag);
+              }}
+            >
               Confirm Tag Removal
             </Button>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="trash-can" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); clearTags()}}>
+            <Button
+              icon="trash-can"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                hideModalAll();
+                clearTags();
+              }}
+            >
               Clear Tags
             </Button>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
+            <Button
+              icon="close-thick"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                hideModalAll();
+              }}
+            >
               Cancel
             </Button>
           </Modal>
         </Portal>
 
         <Portal>
-          <Modal visible={sortMenu} style={styles.modalMenu} dismissable={false}>
-            <Text variant="headlineSmall" style={styles.outfitText}>Sort Closet</Text>
+          <Modal
+            visible={sortMenu}
+            style={styles.modalMenu}
+            dismissable={false}
+          >
+            <Text variant="headlineSmall" style={styles.outfitText}>
+              Sort Closet
+            </Text>
             <View style={styles.buttonSpacing}></View>
             <DropDown
               label={"Select Existing Tag"}
@@ -498,15 +711,36 @@ function ClosetScreen(props) {
               list={tagList}
             />
             <View style={styles.buttonSpacing}></View>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(), sortByTag()}}>
+            <Button
+              icon="check-bold"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                hideModalAll(), sortByTag();
+              }}
+            >
               Sort By Tag
             </Button>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(), sortByDate()}}>
+            <Button
+              icon="check-bold"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                hideModalAll(), sortByDate();
+              }}
+            >
               Sort By Date
             </Button>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(), restoreSort()}}>
+            <Button
+              icon="close-thick"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                hideModalAll(), restoreSort();
+              }}
+            >
               Cancel
             </Button>
           </Modal>
@@ -516,21 +750,38 @@ function ClosetScreen(props) {
   } else {
     return (
       <View style={styles.container}>
-        <Text variant="headlineSmall" style={styles.noOutfitText}>No Outfits Yet...</Text>
-        <Button icon="account-cowboy-hat" mode="contained" style={styles.addOutfit} onPress={showModal}>
+        <Text variant="headlineSmall" style={styles.noOutfitText}>
+          No Outfits Yet...
+        </Text>
+        <Button
+          icon="account-cowboy-hat"
+          mode="contained"
+          style={styles.addOutfit}
+          onPress={showModal}
+        >
           Add Outfit
         </Button>
         <Portal>
-          <Modal visible={addingOutfitMenu} style={styles.modalMenu} dismissable={false}>
-            <Text variant="headlineSmall" style={styles.outfitText}>Outfit Details</Text>
-            <UploadOutfit style={{alignSelf: "center"}}/>
+          <Modal
+            visible={addingOutfitMenu}
+            style={styles.modalMenu}
+            dismissable={false}
+          >
+            <Text variant="headlineSmall" style={styles.outfitText}>
+              Outfit Details
+            </Text>
+            <UploadOutfit style={{ alignSelf: "center" }} />
             <View style={styles.buttonSpacing}></View>
-            <TextInput label="Outfit Name" value={addingName} onChangeText={addingName => setAddingName(addingName)}/>
+            <TextInput
+              label="Outfit Name"
+              value={addingName}
+              onChangeText={(addingName) => setAddingName(addingName)}
+            />
             <View style={styles.buttonSpacing}></View>
             <TextInput
               label="Tag (Optional)"
               value={addingTag}
-              onChangeText={addingTag => setAddingTag(addingTag)}
+              onChangeText={(addingTag) => setAddingTag(addingTag)}
             />
             <DropDown
               label={"Select Existing Tag"}
@@ -542,13 +793,28 @@ function ClosetScreen(props) {
               setValue={setAddingTag}
               list={tagList}
             />
-            
+
             <View style={styles.buttonSpacing}></View>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(); addOutfit(addingName, global.outfitBase64, addingTag)}}>
+            <Button
+              icon="check-bold"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                hideModalAll();
+                addOutfit(addingName, global.outfitBase64, addingTag);
+              }}
+            >
               Confirm Outfit
             </Button>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="close-thick" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
+            <Button
+              icon="close-thick"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                hideModalAll();
+              }}
+            >
               Cancel
             </Button>
           </Modal>
@@ -561,15 +827,15 @@ function ClosetScreen(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5fafc',
-    alignItems: 'center',
+    backgroundColor: "#f5fafc",
+    alignItems: "center",
   },
   containerSettings: {
     paddingTop: 10,
     paddingRight: 10,
-    backgroundColor: '#f5fafc',
+    backgroundColor: "#f5fafc",
     flexDirection: "row",
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
   },
   indexText: {
     alignSelf: "center",
@@ -591,8 +857,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   modalMenu: {
-    backgroundColor: '#ffffff',
-    padding: 20
+    backgroundColor: "#ffffff",
+    padding: 20,
   },
 
   navButtons: {
@@ -616,18 +882,18 @@ const styles = StyleSheet.create({
     width: 280,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "black"
+    borderColor: "black",
   },
   addOutfit: {
     borderWidth: 1,
     marginTop: 0,
-    borderColor: "black"
+    borderColor: "black",
   },
   modalButton: {
     width: 190,
     borderWidth: 1,
     borderColor: "black",
-    alignSelf: "center"
+    alignSelf: "center",
   },
   inputField: {
     paddingTop: 20,
@@ -658,4 +924,3 @@ function compareDateString(date1,date2) {
   return true;
 }
 export default ClosetScreen;
-
