@@ -32,8 +32,12 @@ function ClosetScreen(props) {
   const [showDropDown, setShowDropDown] = React.useState(false);
   
   let tagList = [];
-  for (let i = 0; i < global.allAddedTags.length; i++) {
-    let obj = {label: global.allAddedTags[i], value: global.allAddedTags[i] }
+  let iterlen = 5;
+  if (iterlen > global.tagFrequencyList.length) {
+    iterlen = global.tagFrequencyList.length;
+  }
+  for (let i = 0; i < iterlen; i++) {
+    let obj = {label: global.tagFrequencyList[i].tag, value: global.tagFrequencyList[i].tag }
     tagList.push(obj);
   }
   
