@@ -50,7 +50,7 @@ function InspirationScreen(props) {
     global.inspirationLoaded = true;
   }
   
-  function addPost(id, profilePic, postText, postImg, saves){
+  function addPost(id, profilePic, postText, postImg, saves, tags) {
     let temp = posts;
     let post = {
       id: id,
@@ -59,14 +59,16 @@ function InspirationScreen(props) {
       postTime: new Date().toDateString(),
       post: postText,
       postImg: postImg,
+      tags: tags,
       saves: saves
     }
     temp.push(post);
     let newPosts = numPosts + 1;
     setPosts(temp);
     setNumPosts(newPosts);
-    addNewPost(post.userName, post.saves, post.postTime, post.postImg, post.post, post.postTime, post.userImg);
+    addNewPost(post.userName, post.saves, post.postTime, post.postImg, post.post, post.postTime, post.userImg, post.tags);
   }
+
   function nextOutfit() {
     if (index < iter.length - 1) {
       setIndex(index + 1);
@@ -79,6 +81,7 @@ function InspirationScreen(props) {
       setIndex(index - 1);
     }
   }
+
   let iter = [];
   for (let i = 0; i < global.outfitArray.length; i++) {
     if (global.outfitArray[i] !== undefined) {
@@ -142,7 +145,7 @@ function InspirationScreen(props) {
               onChangeText={PostText => setPostText(PostText)}
             />
             <View style={{flexDirection: "row"}}>
-            <Button style={styles.postButton} onPress={() => {setAddingPostMenu(false); addPost(numPosts + 1, global.pfp64, PostText, c_outfit.image, 0); setPostText("")}}>Post</Button>
+            <Button style={styles.postButton} onPress={() => {setAddingPostMenu(false); addPost(numPosts + 1, global.pfp64, PostText, c_outfit.image, 0,c_outfit.tags); setPostText("")}}>Post</Button>
             <Button style={styles.postButton} onPress={() => {setAddingPostMenu(false); setPostText("")}}>Cancel</Button>
             </View>
             <View style={styles.modalMargin}/>
