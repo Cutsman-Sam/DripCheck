@@ -129,9 +129,10 @@ async function handleLogin() {
     global.outfitArray = new Array();
     global.dayArray = new Array();
     global.followingPosts = new Array();
-    global.followingUsernames = new Array();
+    global.followingUsernames = "";
     global.oCount = 0;
     global.calendarStreak = 0;
+    global.tagFrequencyList = new Array();
     insertNewUser(global.userEmail, global.displayName, 0, 0,"","undefined","");
   } else {
     //get list of following users
