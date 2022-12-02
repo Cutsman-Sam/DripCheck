@@ -103,7 +103,6 @@ function LoginScreen({ navigation }) {
 //<Button onPress={showDialog}>Show Dialog</Button>
 
 async function handleLogin() {
-
   //get all inspiration posts
   global.postArray = new Array();
   let posts = await getAllPosts();
@@ -133,15 +132,27 @@ async function handleLogin() {
     global.oCount = 0;
     global.calendarStreak = 0;
     global.tagFrequencyList = new Array();
-    insertNewUser(global.userEmail, global.displayName, 0, 0,"","undefined","");
+    insertNewUser(
+      global.userEmail,
+      global.displayName,
+      0,
+      0,
+      "",
+      "undefined",
+      ""
+    );
   } else {
     //get list of following users
-    var userNames = JSON.parse(JSON.stringify(previousData)).following.split(',');
-    global.followingUsernames = JSON.parse(JSON.stringify(previousData)).following;
-    for(let i = 0; i < userNames.length; i++) {
+    var userNames = JSON.parse(JSON.stringify(previousData)).following.split(
+      ","
+    );
+    global.followingUsernames = JSON.parse(
+      JSON.stringify(previousData)
+    ).following;
+    for (let i = 0; i < userNames.length; i++) {
       userNames[i].trim();
     }
-    if(userNames.length > 0) {
+    if (userNames.length > 0) {
       global.followingPosts = await getFollowingPosts(userNames);
     }
     console.log("added following users posts to dedicated list.");
@@ -283,7 +294,6 @@ async function handleLogin() {
   global.ready = 1;
   console.log("ready");
   //testDatabaseFunctions();
-  console.log(global.followingPosts);
 }
 const styles = StyleSheet.create({
   container: {

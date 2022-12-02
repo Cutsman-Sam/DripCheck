@@ -5,18 +5,16 @@ import UploadImage from "../utilities/UploadImage";
 
 function ProfileScreen({ navigation }) {
   //const [followers, setFollowers] = React.useState(0);
-  //const [following, setFollowing] = React.useState(0);
+  const [following, setFollowing] = React.useState(0);
   const [reload, setReload] = React.useState(0);
   const [oCount, setOCount] = React.useState(0);
   const [calendarStreak, setCalendarStreak] = React.useState(0);
-  followers = 0;
-  following = 0;
 
-  if(global.followingUsernames != "") {
-    const follower_array = global.followingUsernames.split(',');
-    const withoutDuplicates = [...new Set(follower_array)];
-    following = withoutDuplicates.length - 1;
-  }
+  // if (global.followingUsernames != "") {
+  //   const follower_array = global.followingUsernames.split(",");
+  //   const withoutDuplicates = [...new Set(follower_array)];
+  //   following = withoutDuplicates.length - 1;
+  // }
   if (global.profileLoaded == null) {
     global.profileLoaded = true;
     setStats();
@@ -24,6 +22,13 @@ function ProfileScreen({ navigation }) {
   function setStats() {
     setOCount(global.oCount);
     setCalendarStreak(global.calendarStreak);
+    var f;
+    if (global.followingUsernames != "") {
+      const follower_array = global.followingUsernames.split(",");
+      const withoutDuplicates = [...new Set(follower_array)];
+      f = withoutDuplicates.length;
+    }
+    setFollowing(f);
   }
   return (
     <View style={styles.container}>
@@ -61,7 +66,7 @@ function ProfileScreen({ navigation }) {
         </Text>
       </View>
       <View style={styles.containerRow}>
-      <Text variant="headlineSmall" style={styles.numberLabel}>
+        <Text variant="headlineSmall" style={styles.numberLabel}>
           Streak 🔥
         </Text>
         <Text variant="headlineSmall" style={styles.numberLabel}>
