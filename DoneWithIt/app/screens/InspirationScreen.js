@@ -1,32 +1,11 @@
 import * as React from "react";
 import { StatusBar } from "expo-status-bar"; //status-bar replaced with 'react'
 import { StyleSheet, View, ScrollView, FlatList, Image } from "react-native";
-import {
-  Text,
-  Button,
-  Portal,
-  Modal,
-  TextInput,
-  Switch,
-} from "react-native-paper";
+import { Text, Button, Portal, Modal, TextInput, Switch} from "react-native-paper";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-import {
-  Post,
-  Card,
-  UserImg,
-  UserInfo,
-  UserName,
-  UserInfoText,
-  PostTime,
-  PostText,
-  PostImg,
-  InteractionWrapper,
-  Interaction,
-  InteractionText,
-  ContentFilter,
-} from "../styles/postStyle";
+import { Post, ContentFilter} from "../styles/postStyle";
 
 import UploadPost from "../utilities/UploadPost";
 import { set } from "date-fns";
@@ -109,6 +88,7 @@ function InspirationScreen(props) {
     let temp = posts;
 
     var id;
+    console.log("1");
     for (var i = 0; i < global.postArray.length; i++) {
       if (
         global.postArray[i].postImg === c_post.postImg &&
@@ -315,7 +295,8 @@ function InspirationScreen(props) {
                     global.pfp64,
                     PostText,
                     c_outfit.image,
-                    0
+                    0,
+                    c_outfit.tags
                   );
                   setPostText("");
                 }}
