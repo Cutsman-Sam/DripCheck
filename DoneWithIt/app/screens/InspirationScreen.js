@@ -30,7 +30,8 @@ import {
 
 import UploadPost from "../utilities/UploadPost";
 import { set } from "date-fns";
-import { addNewPost, updatePost } from "../utilities/requestData";
+import { addNewPost, deletePostDB, updatePost } from "../utilities/requestData";
+import { de } from "date-fns/locale";
 
 //UPDATE SAVES
 function InspirationScreen(props) {
@@ -107,8 +108,18 @@ function InspirationScreen(props) {
   }
   function editPost(prevImg, prevPost, profilePic, postText, postImg, saves) {
     let temp = posts;
+
+    var id;
+    for (var i = 0; i < global.postArray.length; i++) {
+      if (
+        global.postArray[i].postImg === c_post.postImg &&
+        global.postArray[i].post === c_post.post
+      ) {
+        id = i;
+      }
+    }
     let post = {
-      id: pidx,
+      id: id,
       userName: global.displayName,
       userImg: profilePic,
       postTime: "edited " + new Date().toDateString(),
@@ -116,13 +127,14 @@ function InspirationScreen(props) {
       postImg: postImg,
       saves: saves,
     };
-    temp.splice(pidx, 1, post);
+    temp.splice(id, 1, post);
     setPosts(temp);
     for (var i = 0; i < global.myPostsArray.length; i++) {
       if (global.myPostsArray[i] === c_post) {
         global.myPostsArray[i] = post;
       }
     }
+    global.postArray[id] = post;
     updatePost(
       prevImg,
       prevPost,
@@ -136,7 +148,33 @@ function InspirationScreen(props) {
       c_outfit.tags
     );
   }
-
+  function deletePost() {
+    // let my = [];
+    // for (var i = 0; i < global.myPostsArray.length; i++) {
+    //   if (global.myPostsArray[i] !== c_post) {
+    //     my.push(global.myPostsArray[i]);
+    //   }
+    // }
+    // global.myPostsArray = my;
+    var id;
+    for (var i = 0; i < global.postArray.length; i++) {
+      if (
+        global.postArray[i].postImg === c_post.postImg &&
+        global.postArray[i].post === c_post.post &&
+        global.postArray[i].userName === global.displayName
+      ) {
+        id = i;
+      }
+    }
+    let temp = posts;
+    temp.splice(id, 1);
+    global.postArray.splice(id, 1);
+    global.myPostsArray.splice(pidx, 1);
+    var newPidx = pidx - 1;
+    setPidx(newPidx);
+    setPosts(temp);
+    deletePostDB(global.displayName, c_post.postImg, c_post.post);
+  }
   function nextOutfit() {
     if (index < iter.length - 1) {
       setIndex(index + 1);
@@ -435,6 +473,17 @@ function InspirationScreen(props) {
                 Cancel
               </Button>
             </View>
+            <Button
+              style={styles.postButton}
+              onPress={() => {
+                setSpecificPostMenu(false);
+                deletePost(c_post.id);
+                setPostText("");
+              }}
+            >
+              {" "}
+              Delete Post
+            </Button>
             <View style={styles.modalMargin} />
           </Modal>
         </Portal>
