@@ -62,6 +62,7 @@ function InspirationScreen(props) {
         post: global.postArray[i].post,
         postImg: global.postArray[i].postImg,
         saves: global.postArray[i].saves,
+        tags: global.postArray[i].tags
       };
       if (post.userName === global.displayName && hasPost == false) {
         setHasPost(true);

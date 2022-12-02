@@ -1,6 +1,6 @@
 import * as React from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { StyleSheet, View, ScrollView, FlatList, Image } from "react-native";
+import { StyleSheet, View, ScrollView, FlatList, Image, Text} from "react-native";
 import {
   Post,
   Card,
@@ -16,11 +16,18 @@ import {
   InteractionText,
   Follow,
 } from "../styles/postStyle";
-import { Button } from "react-native-paper";
+import { Button, Dialog, Paragraph, Portal } from "react-native-paper";
+
 
 const uploadPost = ({ item }) => {
   saveIcon = item.saved ? "heart" : "heart-outline";
   saveIconColor = item.saved ? "#2e64e5" : "#333";
+
+
+  const [visible, setVisible] = React.useState(false);
+
+  const hideDialog = () => setVisible(false);
+
 
   if (item.saves == 1) {
     saveText = "1 Save";
@@ -49,8 +56,21 @@ const uploadPost = ({ item }) => {
           <InteractionText active={item.saved}>{saveText}</InteractionText>
         </Interaction>
         <Interaction>
-          <Ionicons name="pricetags" size={25} />
+          <Ionicons name="pricetags" size={25} onPress={() => {setVisible(true)}}/>
           <InteractionText>Tags</InteractionText>
+          <Portal>
+          <Dialog visible={visible} onDismiss={hideDialog} dismissable={false}>
+          <Dialog.Title textAlign="center" >Tags</Dialog.Title>
+          <Dialog.Content>
+            <Paragraph>
+                {item.tags}
+            </Paragraph>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={hideDialog}>Done</Button>
+          </Dialog.Actions>
+        </Dialog>
+        </Portal>
         </Interaction>
       </InteractionWrapper>
     </Card>
