@@ -406,8 +406,8 @@ export async function addNewOutfit(
     lastWorn: "0000-00-00"
   };
   temp.push(outfit);
+  global.oCount = global.oCount + 1;
   global.outfitArray = temp;
-  global.oCount++;
 
   try {
     //else return outfitID

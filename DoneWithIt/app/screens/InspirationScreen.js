@@ -27,6 +27,8 @@ function InspirationScreen(props) {
   const [addingPostMenu, setAddingPostMenu] = React.useState(false);
   const [editingPostMenu, setEditingPostMenu] = React.useState(false);
   const [specificPostMenu, setSpecificPostMenu] = React.useState(false);
+  const [sortMenu, setSortMenu] = React.useState(false);
+  const [sortingTag, setSortingTag] = React.useState("");
   const [isEnabled, setIsEnabled] = React.useState(false);
   const [PostText, setPostText] = React.useState("");
   const [index, setIndex] = React.useState(0);
@@ -35,31 +37,61 @@ function InspirationScreen(props) {
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   let filter = isEnabled ? "Following" : "Everyone";
 
-  if (global.inspirationLoaded == null) {
-    for (var i = 0; i < global.postArray.length; i++) {
-      if (global.postArray[i] == null) {
+  if (global.inspirationLoaded == null || global.toggle != isEnabled) {
+    var shownPosts;
+    global.toggle = isEnabled;
+    if (isEnabled) {
+      shownPosts = global.followingPosts;
+    } else {
+      shownPosts = global.postArray;
+    }
+    var count = 0;
+    let temp = [];
+    for (var i = 0; i < shownPosts.length; i++) {
+      if (shownPosts[i] == null) {
         continue;
       }
-      let temp = posts;
+      count++;
       let post = {
         id: i + 1,
-        userName: global.postArray[i].userName,
-        userImg: global.postArray[i].profilePic,
-        postTime: global.postArray[i].postTime,
-        post: global.postArray[i].post,
-        postImg: global.postArray[i].postImg,
-        saves: global.postArray[i].saves,
-        tags: global.postArray[i].tags,
+        userName: shownPosts[i].userName,
+        userImg: shownPosts[i].profilePic,
+        postTime: shownPosts[i].postTime,
+        post: shownPosts[i].post,
+        postImg: shownPosts[i].postImg,
+        saves: shownPosts[i].saves,
+        tags: shownPosts[i].tags,
       };
+      temp.push(post);
       if (post.userName === global.displayName && hasPost == false) {
         setHasPost(true);
       }
-      temp.push(post);
-      let newPosts = numPosts + 1;
-      setNumPosts(newPosts);
-      setPosts(temp);
     }
+    setNumPosts(count);
+    setPosts(temp);
     global.inspirationLoaded = true;
+  }
+
+  function showModalSort() {
+    setSortMenu(true);
+  }
+
+  // Removes a tag from an outfit's tag list if it is present.
+  function sortByTag() {
+    let tempArray = [];
+    let addingTag = sortingTag;
+    for (let i = 0; i < posts.length; i++) {
+      if (posts[i].tags.includes(addingTag)) {
+        tempArray.push(posts[i]);
+      }
+    }
+    for (let i = 0; i < posts.length; i++) {
+      if (!tempArray.includes(posts[i])) {
+        tempArray.push(posts[i]);
+      }
+    }
+
+    setPosts(tempArray);
   }
 
   function addPost(id, profilePic, postText, postImg, saves, tags) {
@@ -216,6 +248,15 @@ function InspirationScreen(props) {
   if (c_outfit != null) {
     return (
       <View style={styles.container}>
+        <Button
+              icon="compare-horizontal"
+              mode="contained"
+              style={styles.sortButton}
+              onPress={() => {
+                showModalSort();
+                sortByTag();
+              }}
+            >Sort By...</Button>
         <Post>
           <ContentFilter>
             <Text style={styles.text}>{filter}</Text>
@@ -255,6 +296,47 @@ function InspirationScreen(props) {
             Edit Posts
           </Button>
         </View>
+
+        <Portal>
+          <Modal
+            visible={sortMenu}
+            style={styles.modalMenu}
+            dismissable={false}
+          >
+            <Text variant="headlineSmall" style={styles.outfitText}>
+              Sort Posts
+            </Text>
+            <View style={styles.buttonSpacing}></View>
+            <TextInput
+              label="Tag Name"
+              value={sortingTag}
+              onChangeText={(sortingTag) => setSortingTag(sortingTag)}
+            />
+            <View style={styles.buttonSpacing}></View>
+            <Button
+              icon="check-bold"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                setSortMenu(false); 
+                sortByTag();
+              }}
+            >
+              Sort By Tag
+            </Button>
+            <View style={styles.buttonSpacing}></View>
+            <Button
+              icon="close-thick"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                setSortMenu(false); 
+              }}
+            >
+              Cancel
+            </Button>
+          </Modal>
+        </Portal>
 
         <Portal>
           <Modal
@@ -518,7 +600,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f5fafc",
     alignItems: "center",
-    paddingTop: 50,
+    paddingTop: 0,
   },
   modalMenu: {
     backgroundColor: "#ffffff",
@@ -529,6 +611,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "black",
     alignSelf: "center",
+  },
+  sortButton: {
+    width: 150,
+    borderWidth: 1,
+    borderColor: "black",
+    alignSelf: "center",
+    alignSelf: "flex-end",
+    margin: 10
   },
   buttonRowContainer: {
     alignSelf: "center",
@@ -559,6 +649,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 0,
     borderColor: "black",
+    margin: 10
   },
   scrollView: {
     //backgroundColor: 'orange',

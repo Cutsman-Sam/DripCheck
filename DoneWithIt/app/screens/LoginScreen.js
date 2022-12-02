@@ -104,9 +104,9 @@ function LoginScreen({ navigation }) {
 
 async function handleLogin() {
   //get all inspiration posts
+  global.toggle = false;
   global.postArray = new Array();
   let posts = await getAllPosts();
-
   for (var i in posts) {
     if (posts[i] != null) {
       global.postArray.push(posts[i]);
