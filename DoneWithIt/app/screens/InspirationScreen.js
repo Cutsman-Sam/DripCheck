@@ -1,11 +1,18 @@
 import * as React from "react";
 import { StatusBar } from "expo-status-bar"; //status-bar replaced with 'react'
 import { StyleSheet, View, ScrollView, FlatList, Image } from "react-native";
-import { Text, Button, Portal, Modal, TextInput, Switch} from "react-native-paper";
+import {
+  Text,
+  Button,
+  Portal,
+  Modal,
+  TextInput,
+  Switch,
+} from "react-native-paper";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-import { Post, ContentFilter} from "../styles/postStyle";
+import { Post, ContentFilter } from "../styles/postStyle";
 
 import UploadPost from "../utilities/UploadPost";
 import { set } from "date-fns";
@@ -42,7 +49,7 @@ function InspirationScreen(props) {
         post: global.postArray[i].post,
         postImg: global.postArray[i].postImg,
         saves: global.postArray[i].saves,
-        tags: global.postArray[i].tags
+        tags: global.postArray[i].tags,
       };
       if (post.userName === global.displayName && hasPost == false) {
         setHasPost(true);
@@ -89,7 +96,6 @@ function InspirationScreen(props) {
     let temp = posts;
 
     var id;
-    console.log("1");
     for (var i = 0; i < global.postArray.length; i++) {
       if (
         global.postArray[i].postImg === c_post.postImg &&
@@ -102,10 +108,11 @@ function InspirationScreen(props) {
       id: id,
       userName: global.displayName,
       userImg: profilePic,
-      postTime: "edited " + new Date().toDateString(),
+      postTime: new Date().toDateString(),
       post: postText,
       postImg: postImg,
       saves: saves,
+      tags: global.postArray[id].tags,
     };
     temp.splice(id, 1, post);
     setPosts(temp);
