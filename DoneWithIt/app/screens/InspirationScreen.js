@@ -317,7 +317,8 @@ function InspirationScreen(props) {
                     global.pfp64,
                     PostText,
                     c_outfit.image,
-                    0
+                    0,
+                    c_outfit.tags
                   );
                   setPostText("");
                 }}
