@@ -159,7 +159,8 @@ function InspirationScreen(props) {
     for (var i = 0; i < global.postArray.length; i++) {
       if (
         global.postArray[i].postImg === c_post.postImg &&
-        global.postArray[i].post === c_post.post
+        global.postArray[i].post === c_post.post &&
+        global.postArray[i].userName === global.displayName
       ) {
         id = i;
       }
