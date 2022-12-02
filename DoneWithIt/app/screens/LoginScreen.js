@@ -136,6 +136,7 @@ async function handleLogin() {
 
     //get list of following users
     var userNames = JSON.parse(JSON.stringify(previousData)).following.split(',');
+    global.followingUsernames = userNames;
     for(let i = 0; i < userNames.length; i++) {
       userNames[i].trim();
     }
