@@ -227,11 +227,11 @@ export async function testDatabaseFunctions() {
 
 
     var postID;
-
+    var postImage = "image";
     //Testing Post Functions
     console.log("Testing addNewPost:");
     try {
-        postID = await Database.addNewPost("testUser2",0,"","","my post","2022-11-30");
+        postID = await Database.addNewPost("testUser2",0,"",postImage,"my post","2022-11-30");
 
         if(postID != -1) {
             console.log("\t\t-> succeeded.");
@@ -244,7 +244,7 @@ export async function testDatabaseFunctions() {
 
     console.log("Testing updatePost:");
     try {
-        functionReturn = await Database.updatePost(postID,"testUser2",0,"","","my post","2022-11-30");
+        functionReturn = await Database.updatePost(postImage,"my post","testUser2",0,"","","my post!","2022-11-30","","");
         if(functionReturn == 1) {
             console.log("\t\t-> succeeded.");
         } else {
@@ -285,18 +285,18 @@ export async function testDatabaseFunctions() {
         functionReturn = await Database.getFollowingPosts(followingUsers);
         //console.log(JSON.stringify(functionReturn));
 
-        Database.deletePost(post1);
-        Database.deletePost(post2);
-        Database.deletePost(post3);
+        Database.deletePostDB("","my post", "testUser1");
+        //Database.deletePostDB("","my post", "testUser2");
+        Database.deletePostDB("","my post", "testUser3");
         console.log("\t\t-> succeeded.");
 
     } catch (error) {
         console.error("\tgetFollowingPosts -> failed.\n\t\t" + error);
     }
 
-    console.log("Testing deletePost:");
+    console.log("Testing deletePostDB:");
     try {
-        functionReturn = await Database.deletePost(postID);
+        functionReturn = await Database.deletePostDB("testUser2","","my post");
         if(functionReturn == 1) {
             console.log("\t\t-> succeeded.");
         } else {
