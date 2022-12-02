@@ -9,6 +9,7 @@ import {
   deleteOutfitDB,
 } from "../utilities/requestData";
 import DropDown from "react-native-paper-dropdown";
+import { gl } from "date-fns/locale";
 
 global.currentImage;
 
@@ -46,11 +47,8 @@ function ClosetScreen(props) {
     tagList.push(obj);
   }
 
-  var outfitname = "";
-  if (numOutfits > 0) {
-    outfitname = outfitArray[index].image;
-  }
-  if (global.outfitArray.length != 0 && global.closetLoaded == null) {
+//check to make sure if the global outfitArray updated, then we reload the closet
+  if (global.oCount != 0 && numOutfits < global.oCount) {
     var arr = new Array();
     for (var i = 0; i < global.outfitArray.length; i++) {
       if (global.outfitArray[i] != null) {
@@ -64,14 +62,37 @@ function ClosetScreen(props) {
           lastWorn: global.outfitArray[i].lastWorn,
         };
         arr.push(outfit);
-        setOutfitArray(arr);
-        let newOutfits = numOutfits + arr.length;
-        let newIndex = numOutfits;
-        setNumOutfits(newOutfits);
-        setIndex(0);
+      }
+    }
+    setOutfitArray(arr);
+    setNumOutfits(arr.length);
+    setIndex(0);
+  }
+
+  var outfitname = "";
+  if (numOutfits > 0) {
+    outfitname = outfitArray[index].image;
+  }
+  if ((global.outfitArray.length != 0 && global.closetLoaded == null) ) {
+    var arr = new Array();
+    for (var i = 0; i < global.outfitArray.length; i++) {
+      if (global.outfitArray[i] != null) {
+        let outfit = {
+          id: global.outfitArray[i].id,
+          description: global.outfitArray[i].description,
+          name: global.outfitArray[i].name,
+          date: global.outfitArray[i].date,
+          image: global.outfitArray[i].image,
+          tags: global.outfitArray[i].tags,
+          lastWorn: global.outfitArray[i].lastWorn,
+        };
+        arr.push(outfit);
         //addOldOutfit(global.outfitArray[i].name, global.outfitArray[i].image,global.outfitArray[i].date,global.outfitArray[i].tags);
       }
     }
+    setOutfitArray(arr);
+    setNumOutfits(arr.length);
+    setIndex(0);
   }
   global.closetLoaded = 1;
 
@@ -916,4 +937,5 @@ function compareDateString(date1, date2) {
 
   return true;
 }
+
 export default ClosetScreen;

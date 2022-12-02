@@ -32,25 +32,10 @@ import {updateUser, getCurrentDate, addNewOutfit} from "../utilities/requestData
         return;
       }
     }
-    
-    //outfit JSON object
-    let outfit = {
-      id: "",
-      description: "",
-      name: o_name,
-      date: getCurrentDate(),
-      image: o_image,
-      tags: o_tag,
-      lastWorn: "0000-00-00"
-    };
     //add to global outfit array
-    global.outfitArray.push(outfit);
-  
+    //global.outfitArray.push(outfit);
     //add to DB
-    global.outfitArray[global.outfitArray.length - 1].id = addNewOutfit(global.userEmail, o_name, "", o_image, o_tag);
-  
-    //make sure closet reloads
-    //global.closetLoaded = null;
+    addNewOutfit(global.userEmail, o_name, "", o_image, o_tag);
   }
 
 function updateFollowers(userName){

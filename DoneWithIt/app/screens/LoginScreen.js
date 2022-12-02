@@ -150,12 +150,13 @@ async function handleLogin() {
       JSON.stringify(previousData)
     ).following;
     for (let i = 0; i < userNames.length; i++) {
-      userNames[i].trim();
+      userNames[i] = userNames[i].trim();
     }
+    //console.log(userNames);
+
     if (userNames.length > 0) {
       global.followingPosts = await getFollowingPosts(userNames);
     }
-    console.log("added following users posts to dedicated list.");
     //Utilize previousData to load user's stuff
     global.accountDate = JSON.parse(JSON.stringify(previousData)).dateCreated;
     global.pfp64 = JSON.parse(JSON.stringify(previousData)).profilePic;
@@ -171,25 +172,39 @@ async function handleLogin() {
       global.oCount = res.length;
       let arr = new Array(res.length);
       for (var i = 0; i < res.length; i++) {
-        let created = res[i].dateCreated;
-        let tags = res[i].tags;
-        let imageString = res[i].imageString;
-        let outfitName = res[i].outfitName;
-        let description = res[i].description;
-        let lastWorn = res[i].lastWorn;
-        let id = res[i]._id;
-        let outfit = {
-          id: id,
-          description: description,
-          name: outfitName,
-          date: created,
-          image: imageString,
-          tags: tags,
-          lastWorn: lastWorn,
-        };
-        arr.push(outfit);
+        if(res[i] != null && res[i] != "undefined") {
+          let created = res[i].dateCreated;
+          let tags = res[i].tags;
+          let imageString = res[i].imageString;
+          let outfitName = res[i].outfitName;
+          let description = res[i].description;
+          let lastWorn = res[i].lastWorn;
+          let id = res[i]._id;
+          let outfit = {
+            id: id,
+            description: description,
+            name: outfitName,
+            date: created,
+            image: imageString,
+            tags: tags,
+            lastWorn: lastWorn,
+          };
+          arr.push(outfit);
+        }
       }
       global.outfitArray = arr;
+
+      //prune undefined's
+      for(let i = 0; i < global.outfitArray.length; i++) {
+        try {
+          const temp = global.outfitArray[i].name;
+        } catch (error) {
+          //console.error(error);
+          global.outfitArray.splice(i,1);
+          i--;
+        }
+      }
+
       console.log("Added old outfits");
 
       global.tagFrequencyList = new Array();

@@ -403,9 +403,11 @@ export async function addNewOutfit(
     date: date,
     image: imageString,
     tags: tagString,
+    lastWorn: "0000-00-00"
   };
   temp.push(outfit);
   global.outfitArray = temp;
+  global.oCount++;
 
   try {
     //else return outfitID
@@ -670,18 +672,6 @@ export async function addNewDay(email, outfitID, text, date) {
 
   let response = await fetch(url, options);
   let data = await response.json();
-  /*var temp = global.dayArray
-
-    let day = {
-      id: data.insertedId,
-      outfitId : outfitID,
-      text: text,
-      email: email,
-      date: date
-    };
-    temp.push(day);
-
-    global.dayArray = temp*/
 
   if (data.insertedId == null) {
     return -1;
