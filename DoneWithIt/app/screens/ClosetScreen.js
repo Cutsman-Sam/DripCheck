@@ -70,6 +70,7 @@ function ClosetScreen(props) {
   }
   global.closetLoaded = 1;
   
+  
 
   //---------------
   // Menu Functions

@@ -57,7 +57,7 @@ function BottomTabs() {
         style={{width: 32, height: 32}} />)}}/>
 
       <Tab.Screen name="Closet" component={ClosetScreen} 
-        options={{tabBarIcon: () => (<Image source={require("./app/assets/icon-closet.jpg")} 
+        options={{unmountOnBlur: true, tabBarIcon: () => (<Image source={require("./app/assets/icon-closet.jpg")} 
         style={{width: 32, height: 32}} />)}}/>
         
       <Tab.Screen name="Inspiration" component={InspirationScreen} 
