@@ -27,6 +27,7 @@ function InspirationScreen(props) {
   const [addingPostMenu, setAddingPostMenu] = React.useState(false);
   const [editingPostMenu, setEditingPostMenu] = React.useState(false);
   const [specificPostMenu, setSpecificPostMenu] = React.useState(false);
+  const [sortMenu, setSortMenu] = React.useState(false);
   const [isEnabled, setIsEnabled] = React.useState(false);
   const [PostText, setPostText] = React.useState("");
   const [index, setIndex] = React.useState(0);
@@ -68,6 +69,28 @@ function InspirationScreen(props) {
     setNumPosts(count);
     setPosts(temp);
     global.inspirationLoaded = true;
+  }
+
+  function showModalSort() {
+    setSortMenu(true);
+  }
+
+  // Removes a tag from an outfit's tag list if it is present.
+  function sortByTag() {
+    let tempArray = [];
+    let addingTag = "Comfy";
+    for (let i = 0; i < posts.length; i++) {
+      if (posts[i].tags.includes(addingTag)) {
+        tempArray.push(posts[i]);
+      }
+    }
+    for (let i = 0; i < posts.length; i++) {
+      if (!tempArray.includes(posts[i])) {
+        tempArray.push(posts[i]);
+      }
+    }
+
+    setPosts(tempArray);
   }
 
   function addPost(id, profilePic, postText, postImg, saves, tags) {
@@ -224,6 +247,14 @@ function InspirationScreen(props) {
   if (c_outfit != null) {
     return (
       <View style={styles.container}>
+        <Button
+              icon="compare-horizontal"
+              mode="contained"
+              style={styles.sortButton}
+              onPress={() => {
+                sortByTag();
+              }}
+            >Sort Posts</Button>
         <Post>
           <ContentFilter>
             <Text style={styles.text}>{filter}</Text>
@@ -526,7 +557,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f5fafc",
     alignItems: "center",
-    paddingTop: 50,
+    paddingTop: 0,
   },
   modalMenu: {
     backgroundColor: "#ffffff",
@@ -537,6 +568,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "black",
     alignSelf: "center",
+  },
+  sortButton: {
+    width: 150,
+    borderWidth: 1,
+    borderColor: "black",
+    alignSelf: "center",
+    alignSelf: "flex-end",
+    margin: 10
   },
   buttonRowContainer: {
     alignSelf: "center",
@@ -567,6 +606,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 0,
     borderColor: "black",
+    margin: 10
   },
   scrollView: {
     //backgroundColor: 'orange',
