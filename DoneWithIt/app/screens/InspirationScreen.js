@@ -48,8 +48,8 @@ function InspirationScreen(props) {
       }
       temp.push(post);
       let newPosts = numPosts + 1;
-      setPosts(temp);
       setNumPosts(newPosts);
+      setPosts(temp);
     }
     global.inspirationLoaded = true;
   }
@@ -149,8 +149,7 @@ function InspirationScreen(props) {
     temp.splice(id, 1);
     global.postArray.splice(id, 1);
     global.myPostsArray.splice(pidx, 1);
-    var newPidx = pidx - 1;
-    setPidx(newPidx);
+    setPidx(0);
     setPosts(temp);
     deletePostDB(global.displayName, c_post.postImg, c_post.post);
   }
@@ -166,7 +165,6 @@ function InspirationScreen(props) {
       setIndex(index - 1);
     }
   }
-
   let arr = [];
   for (let i = 0; i < global.myPostsArray.length; i++) {
     if (global.myPostsArray[i] !== undefined) {
@@ -181,6 +179,17 @@ function InspirationScreen(props) {
     }
   }
   let c_post = arr[pidx];
+  if (c_post == undefined) {
+    c_post = {
+      id: "id",
+      userName: global.displayName,
+      userImg: "profilePic",
+      postTime: "edited " + new Date().toDateString(),
+      post: "postText",
+      postImg: "postImg",
+      saves: "saves",
+    };
+  }
   let c_outfit = iter[index];
 
   function nextPost() {
