@@ -97,16 +97,16 @@ function InspirationScreen(props) {
   // Removes a tag from an outfit's tag list if it is present.
   function sortBySaves() {
     let tempArray = [];
-    for (let i = 0; i < outfitArray.length; i++) {
-      if (!tempArray.includes(outfitArray[i])) {
-        tempArray.push(outfitArray[i]);
+    for (let i = 0; i < posts.length; i++) {
+      if (!tempArray.includes(posts[i])) {
+        tempArray.push(posts[i]);
       }
     }
     var tempOutfit;
     //tempArray is initialized
     for (let i = 0; i < tempArray.length - 1; i++) {
       for (let j = 0; j < tempArray.length - i - 1; j++) {
-        if (tempArray[j].saves > tempArray[j + 1].saves) {
+        if (tempArray[j].saves < tempArray[j + 1].saves) {
           //swap them
           tempOutfit = tempArray[j];
           tempArray[j] = tempArray[j + 1];
