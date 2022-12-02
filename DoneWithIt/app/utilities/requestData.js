@@ -887,34 +887,60 @@ export async function updateDay(email, dayID, text, date, outfitID) {
  * @param {*} tags tags associated with outfit/post
  * @returns id value of post that is created, or -1 on fail
  */
-export async function addNewPost(userName, saves, postTime, postImg, post, dateCreated, profilePic, tags) {
-
-    //get current date
-    var date = getCurrentDate();
+export async function addNewPost(
+  userName,
+  saves,
+  postTime,
+  postImg,
+  post,
+  dateCreated,
+  profilePic,
+  tags
+) {
+  //get current date
+  var date = getCurrentDate();
 
   //endpoint url
   const url =
     "https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/insertOne";
 
-    const options = {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json',
-            'api-key': 'nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA',
-        },
-       
-        body: '{"dataSource": "DripCheckApp", "database": "test", "collection": "posts",' + 
-                ' "document": {' + 
-                '"userName" : "' + userName + '",' +
-                '"saves" : "' + saves + '",' +
-                '"postTime" : "' + postTime + '",' +
-                '"postImg" : "' + postImg + '",' +
-                '"post" : "' + post + '",' +
-                '"profilePic" : "' + profilePic + '",' +
-                '"tags" : "' + tags + '",' +
-                '"dateCreated" : "' + dateCreated + '"' +
-            '}}'
-    };
+  const options = {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "api-key":
+        "nsGQLXniFr1RwE6idSX7fNOWIw5dZOWm3xV0TyyGTfbx5FOtQTbcyV8VDKyfYXsA",
+    },
+
+    body:
+      '{"dataSource": "DripCheckApp", "database": "test", "collection": "posts",' +
+      ' "document": {' +
+      '"userName" : "' +
+      userName +
+      '",' +
+      '"saves" : "' +
+      saves +
+      '",' +
+      '"postTime" : "' +
+      postTime +
+      '",' +
+      '"postImg" : "' +
+      postImg +
+      '",' +
+      '"post" : "' +
+      post +
+      '",' +
+      '"profilePic" : "' +
+      profilePic +
+      '",' +
+      '"tags" : "' +
+      tags +
+      '",' +
+      '"dateCreated" : "' +
+      dateCreated +
+      '"' +
+      "}}",
+  };
 
   let response = await fetch(url, options);
   let data = await response.json();
@@ -930,7 +956,7 @@ export async function addNewPost(userName, saves, postTime, postImg, post, dateC
  * @param {*} postID _id of post to delete
  * @returns 1 on success, -1 on failure
  */
-export async function deletePost(postID) {
+export async function deletePostDB(userName, postImg, post) {
   //endpoint url
   const url =
     "https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/deleteOne";
@@ -946,19 +972,22 @@ export async function deletePost(postID) {
       '"dataSource": "DripCheckApp",' +
       '"database": "test",' +
       '"collection": "posts",' +
-      '"filter":  {' +
-      '"_id" : {' +
-      '"$oid": "' +
-      postID +
+      '"filter": {' +
+      '"userName" : "' +
+      userName +
+      '",' +
+      '"postImg"  : "' +
+      postImg +
+      '",' +
+      '"post" : "' +
+      post +
       '"' +
-      "}" +
       "}" +
       "}",
   };
 
   let response = await fetch(url, options);
   let data = await response.json();
-
   //handle return
   if (data.deletedCount == 1) {
     return 1;
@@ -1023,8 +1052,9 @@ export async function updatePost(
   postImg,
   post,
   dateCreated,
-  profilePic
-, tags) {
+  profilePic,
+  tags
+) {
   const url =
     "https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/updateOne";
 
