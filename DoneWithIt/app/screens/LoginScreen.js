@@ -56,6 +56,7 @@ function LoginScreen({ navigation }) {
       fetchData();
     }
   }, [resp]);
+
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={require("../assets/logo.png")} />
@@ -138,10 +139,10 @@ async function handleLogin() {
         res.push(obj[i]);
       }
     }
-    if (res.length != 0)  {
+    if (res.length != 0) {
       global.oCount = res.length;
       let arr = new Array(res.length);
-      for (var i = 0; i < res.length; i++)  {
+      for (var i = 0; i < res.length; i++) {
         let created = res[i].dateCreated;
         let tags = res[i].tags;
         let imageString = res[i].imageString;
@@ -160,45 +161,52 @@ async function handleLogin() {
         };
         arr.push(outfit);
       }
-        global.outfitArray = arr;
-        console.log("Added old outfits");
+      global.outfitArray = arr;
+      console.log("Added old outfits");
 
-        global.tagFrequencyList = new Array();
-        //initialize tagFrequencyList
-        for(let i = 0; i < global.outfitArray.length; i++) {
-          if(global.outfitArray[i] != null && global.outfitArray[i].tags != undefined) {
-            if(global.outfitArray[i].tags != "" && global.outfitArray[i].tags != undefined) {
+      global.tagFrequencyList = new Array();
+      //initialize tagFrequencyList
+      for (let i = 0; i < global.outfitArray.length; i++) {
+        if (
+          global.outfitArray[i] != null &&
+          global.outfitArray[i].tags != undefined
+        ) {
+          if (
+            global.outfitArray[i].tags != "" &&
+            global.outfitArray[i].tags != undefined
+          ) {
+            //console.log(global.outfitArray[i].tags);
+            let tagArr = global.outfitArray[i].tags.split(",");
+            for (let j = 0; j < tagArr.length; j++) {
+              tagArr[j] = tagArr[j].trim();
+              let exists = tagExists(tagArr[j]);
 
-              //console.log(global.outfitArray[i].tags);
-              let tagArr = global.outfitArray[i].tags.split(',');
-              for(let j = 0; j < tagArr.length; j++) {
-                tagArr[j] = tagArr[j].trim();
-                let exists = tagExists(tagArr[j]);
-
-                if(exists != false) {
-                  global.tagFrequencyList[exists - 1].frequency += 1;
-                } else {
-                  console.log("Adding new Tag: " + tagArr[j]);
-                  let tagObject = {
-                    tag: tagArr[j],
-                    frequency: 1
-                  }
-                  global.tagFrequencyList.push(tagObject);    
-                }       
+              if (exists != false) {
+                global.tagFrequencyList[exists - 1].frequency += 1;
+              } else {
+                console.log("Adding new Tag: " + tagArr[j]);
+                let tagObject = {
+                  tag: tagArr[j],
+                  frequency: 1,
+                };
+                global.tagFrequencyList.push(tagObject);
               }
             }
           }
         }
-  
-        //sort by frequency
-        global.tagFrequencyList.sort(function(a, b) {
-          return parseInt(b.frequency) - parseInt(a.frequency);
-        });
-        console.log(global.tagFrequencyList);
-        console.log("Added tags to list and initialized tag frequency. Sorted descending")
-        //console.log(global.tagFrequencyList);
+      }
+
+      //sort by frequency
+      global.tagFrequencyList.sort(function (a, b) {
+        return parseInt(b.frequency) - parseInt(a.frequency);
+      });
+      console.log(global.tagFrequencyList);
+      console.log(
+        "Added tags to list and initialized tag frequency. Sorted descending"
+      );
+      //console.log(global.tagFrequencyList);
     } else {
-        global.tagFrequencyList = new Array();
+      global.tagFrequencyList = new Array();
       global.outfitArray = new Array();
     }
 
@@ -212,7 +220,7 @@ async function handleLogin() {
     }
     if (days.length != 0) {
       let temp = new Array(days.length);
-      for (var i = 0; i < days.length; i++)  {
+      for (var i = 0; i < days.length; i++) {
         let email = global.userEmail;
         let text = days[i].text;
         let date = days[i].date;
@@ -233,8 +241,8 @@ async function handleLogin() {
       let streaking = true;
       while (streaking) {
         let streak = global.calendarStreak;
-        for (var i = 0; i < temp.length; i++)  {
-          if (temp[i] != null)  {
+        for (var i = 0; i < temp.length; i++) {
+          if (temp[i] != null) {
             if (
               curr - new Date(temp[i].date.dateString).getTime() <=
                 1000 * 3600 * 30 &&
@@ -269,11 +277,32 @@ const styles = StyleSheet.create({
   center: {
     flex: 1,
     //justifyContent: 'flex-end',
-    marginTop: 200
-    },
-    image: {
-      marginBottom: 60,
-    }
+    marginTop: 200,
+  },
+  image: {
+    marginBottom: 60,
+  },
 });
+/**
+ * function to find if a tag is already in the global list.
+ * @param {} tag tag to check
+ * @returns index in list if tag is in list, false if not
+ */
+function tagExists(tag) {
+  if (tag == "" || tag == undefined) {
+    return false;
+  }
 
+  for (let i = 0; i < global.tagFrequencyList.length; i++) {
+    if (
+      global.tagFrequencyList[i] != null &&
+      global.tagFrequencyList[i].tag == tag
+    ) {
+      //console.log("Pre-existing tag found");
+      return i + 1;
+    }
+  }
+
+  return false;
+}
 export default LoginScreen;

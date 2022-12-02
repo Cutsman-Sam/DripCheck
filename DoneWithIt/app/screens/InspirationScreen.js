@@ -131,7 +131,8 @@ function InspirationScreen(props) {
       postImg,
       postText,
       post.postTime,
-      profilePic
+      profilePic,
+      c_outfit.tags
     );
   }
 
@@ -408,23 +409,24 @@ function InspirationScreen(props) {
               <Button
                 style={styles.postButton}
                 onPress={() => {
-                  setAddingPostMenu(false);
-                  addPost(
-                    numPosts + 1,
+                  setSpecificPostMenu(false);
+                  editPost(
+                    c_post.postImg,
+                    c_post.post,
                     global.pfp64,
                     PostText,
                     c_outfit.image,
-                    0
+                    c_post.saves
                   );
                   setPostText("");
                 }}
               >
-                Post
+                Save
               </Button>
               <Button
                 style={styles.postButton}
                 onPress={() => {
-                  setAddingPostMenu(false);
+                  setSpecificPostMenu(false);
                   setPostText("");
                 }}
               >
