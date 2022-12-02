@@ -129,11 +129,11 @@ async function handleLogin() {
     global.outfitArray = new Array();
     global.dayArray = new Array();
     global.followingPosts = new Array();
+    global.followingUsernames = new Array();
     global.oCount = 0;
     global.calendarStreak = 0;
     insertNewUser(global.userEmail, global.displayName, 0, 0);
   } else {
-
     //get list of following users
     var userNames = JSON.parse(JSON.stringify(previousData)).following.split(',');
     global.followingUsernames = userNames;
