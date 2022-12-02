@@ -1,6 +1,7 @@
 import * as React from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { StyleSheet, View, ScrollView, FlatList, Image } from "react-native";
+import { updatePost } from "../utilities/requestData";
 import {
   Post,
   Card,
@@ -39,7 +40,7 @@ function saveOutfitToCloset(o_name, o_image, o_tag) {
       return;
     }
   }
-    
+
   addNewOutfit(global.userEmail, o_name, "", o_image, o_tag);
 }
 
@@ -66,6 +67,7 @@ function updateFollowers(userName) {
 
 const uploadPost = ({ item }) => {
   const [isSaved, setIsSaved] = React.useState(false);
+  const [saveText, setSaveText] = React.useState("");
   const [followText, setFollowText] = React.useState("Follow");
   saveIcon = isSaved ? "heart" : "heart-outline";
   saveIconColor = isSaved ? "#2e64e5" : "#333";
@@ -78,14 +80,16 @@ const uploadPost = ({ item }) => {
   //     //global.postArray[id].saves = global.postArray[id].saves + 1;
   //     saveOutfitToCloset(item.userName + "'s Post", item.postImg, item.tags);
   //   }
-
-  if (item.saves == 1) {
-    saveText = "1 Save";
-  } else if (item.saves > 1) {
-    saveText = item.saves + " Saves";
-  } else {
-    saveText = "Save";
+  if (saveText === "") {
+    if (item.saves == 1) {
+      setSaveText("1 Save");
+    } else if (item.saves > 1) {
+      setSaveText("" + item.saves + " Saves");
+    } else {
+      setSaveText("Save");
+    }
   }
+
   let userNames = global.followingUsernames.split(",");
   for (let i = 0; i < userNames.length; i++) {
     userNames[i] = userNames[i].trim();
@@ -125,7 +129,36 @@ const uploadPost = ({ item }) => {
                 item.postImg,
                 item.tags
               );
-              setIsSaved(true);
+              if (isSaved == false) {
+                setIsSaved(true);
+                for (var i = 0; i < global.postArray.length; i++) {
+                  if (
+                    global.postArray[i].postImg === item.postImg &&
+                    global.postArray[i].post === item.post
+                  ) {
+                    global.postArray[i].saves++;
+                    break;
+                  }
+                }
+                item.saves++;
+                updatePost(
+                  item.postImg,
+                  item.post,
+                  item.userName,
+                  parseInt(item.saves),
+                  item.postTime,
+                  item.postImg,
+                  item.post,
+                  item.postTime,
+                  item.userImg,
+                  item.tags
+                );
+                if (item.saves == 1) {
+                  setSaveText("" + item.saves + " Save");
+                } else {
+                  setSaveText("" + item.saves + " Saves");
+                }
+              }
             }}
             name={saveIcon}
             size={25}

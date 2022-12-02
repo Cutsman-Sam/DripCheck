@@ -403,7 +403,7 @@ export async function addNewOutfit(
     date: date,
     image: imageString,
     tags: tagString,
-    lastWorn: "0000-00-00"
+    lastWorn: "0000-00-00",
   };
   temp.push(outfit);
   global.oCount = global.oCount + 1;
@@ -1120,6 +1120,7 @@ export async function updatePost(
   let response = await fetch(url, options);
   let data = await response.json();
   //return 1 on success, -1 on failure
+  console.log(data.matchedCount);
   if (data.matchedCount == 1 && data.modifiedCount == 1) {
     return 1;
   } else {

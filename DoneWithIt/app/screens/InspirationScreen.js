@@ -158,7 +158,7 @@ function InspirationScreen(props) {
       prevImg,
       prevPost,
       post.userName,
-      saves,
+      parseInt(saves),
       post.postTime,
       postImg,
       postText,
@@ -227,7 +227,7 @@ function InspirationScreen(props) {
       postTime: "edited " + new Date().toDateString(),
       post: "postText",
       postImg: "postImg",
-      saves: "saves",
+      saves: 0,
     };
   }
   let c_outfit = iter[index];
@@ -249,14 +249,16 @@ function InspirationScreen(props) {
     return (
       <View style={styles.container}>
         <Button
-              icon="compare-horizontal"
-              mode="contained"
-              style={styles.sortButton}
-              onPress={() => {
-                showModalSort();
-                sortByTag();
-              }}
-            >Sort By...</Button>
+          icon="compare-horizontal"
+          mode="contained"
+          style={styles.sortButton}
+          onPress={() => {
+            showModalSort();
+            sortByTag();
+          }}
+        >
+          Sort By...
+        </Button>
         <Post>
           <ContentFilter>
             <Text style={styles.text}>{filter}</Text>
@@ -318,7 +320,7 @@ function InspirationScreen(props) {
               mode="contained"
               style={styles.modalButton}
               onPress={() => {
-                setSortMenu(false); 
+                setSortMenu(false);
                 sortByTag();
               }}
             >
@@ -330,7 +332,7 @@ function InspirationScreen(props) {
               mode="contained"
               style={styles.modalButton}
               onPress={() => {
-                setSortMenu(false); 
+                setSortMenu(false);
               }}
             >
               Cancel
@@ -618,7 +620,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     alignSelf: "center",
     alignSelf: "flex-end",
-    margin: 10
+    margin: 10,
   },
   buttonRowContainer: {
     alignSelf: "center",
@@ -649,7 +651,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 0,
     borderColor: "black",
-    margin: 10
+    margin: 10,
   },
   scrollView: {
     //backgroundColor: 'orange',
