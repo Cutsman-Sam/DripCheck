@@ -13,6 +13,7 @@ global.oCount;
 global.calendarStreak;
 global.pfp64;
 global.postArray;
+global.saves;
 global.inspirationLoaded;
 global.myPostsArray;
 global.followingPosts;

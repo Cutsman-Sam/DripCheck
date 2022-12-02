@@ -32,10 +32,12 @@ import {updateUser, getCurrentDate, addNewOutfit} from "../utilities/requestData
         return;
       }
     }
+    
     //add to global outfit array
     //global.outfitArray.push(outfit);
     //add to DB
     addNewOutfit(global.userEmail, o_name, "", o_image, o_tag);
+
   }
 
 function updateFollowers(userName){
