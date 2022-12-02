@@ -204,7 +204,6 @@ function CalendarScreen(navigation) {
       }*/
     }
 
-
   }
   
   
@@ -299,7 +298,7 @@ function CalendarScreen(navigation) {
           <View style={styles.buttonSpacing}></View>
           <TextInput label="Notes" value={addNotes} onChangeText={addNotes => setAddNotes(addNotes)}/>
           <View style={styles.buttonSpacing}></View>
-          <Button icon="pencil" mode="contained" style={styles.modalButton} onPress={() => {setNotesMenu(false); setAssigningMenu(true)}}>
+          <Button icon="trash-can" mode="contained" style={styles.modalButton} onPress={() => {setNotesMenu(false); setAssigningMenu(true)}}>
             Edit
           </Button>
           <View style={styles.buttonSpacing}></View>

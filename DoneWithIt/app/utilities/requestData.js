@@ -52,6 +52,9 @@ export async function userExists(email) {
  * @param {*} displayName displayName of user
  * @param {*} streak streak data for user in format
  * @param {*} outfitCount displayName of user
+ * @param {*} profilePic profilePic of user
+ * @param {*} settingsString settings string containing user's saved settings
+ * @param {*} following list of userNames of people this user is following
  * @returns _id of user in database
  */
 export async function insertNewUser(
@@ -60,7 +63,8 @@ export async function insertNewUser(
   streak,
   outfitCount,
   profilePic,
-  settingsString
+  settingsString,
+  following
 ) {
   //get current date
   var date = getCurrentDate();
@@ -98,6 +102,9 @@ export async function insertNewUser(
       '",' +
       '"profilePic" : "' +
       profilePic +
+      '",' +
+      '"following" : "' +
+      following +
       '",' +
       '"settingsString" : "' +
       settingsString +
@@ -161,6 +168,7 @@ export async function deleteUser(email) {
  * @param {*} outfitCount total number of outfits the user has.
  * @param {*} profilePic profile picture of this user
  * @param {*} settingsString settings string containing settings details for user.
+ * @param {*} following list of userNames of people this user is following
  * @returns 1 if user updated correctly, -1 on fail
  */
 export async function updateUser(
@@ -171,7 +179,8 @@ export async function updateUser(
   lastStreakDay,
   outfitCount,
   profilePic,
-  settingsString
+  settingsString,
+  following
 ) {
   const url =
     "https://data.mongodb-api.com/app/data-ndazo/endpoint/data/v1/action/updateOne";
@@ -214,6 +223,9 @@ export async function updateUser(
       '",' +
       '"profilePic" : "' +
       profilePic +
+      '",' +
+      '"following" : "' +
+      following +
       '",' +
       '"settingsString" : "' +
       settingsString +
