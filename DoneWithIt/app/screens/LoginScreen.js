@@ -282,7 +282,7 @@ async function handleLogin() {
   global.ready = 1;
   console.log("ready");
   //testDatabaseFunctions();
-  //console.log(global.followingPosts);
+  console.log(global.followingPosts);
 }
 const styles = StyleSheet.create({
   container: {
