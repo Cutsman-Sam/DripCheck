@@ -32,7 +32,7 @@ export default function UploadImage() {
       setImage(_image.uri);
       global.currentImage = _image.uri;
       global.pfp64 = _image.base64;
-      updateUser(global.userEmail, global.displayName, global.accountDate, global.calendarStreak, "00-00-0000", global.oCount, global.pfp64, "undefined");
+      updateUser(global.userEmail, global.displayName, global.accountDate, global.calendarStreak, "00-00-0000", global.oCount, global.pfp64, "undefined",global.followingUsernames);
     }
   };
   if(String(image).indexOf(global.pfp64) == -1 && global.pfp64 != "undefined"){

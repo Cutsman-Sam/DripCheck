@@ -956,9 +956,11 @@ export async function addNewPost(
 
   let response = await fetch(url, options);
   let data = await response.json();
+  console.log("Outfit added");
   try {
     return data.insertedId;
   } catch (error) {
+    console.log("Error adding outfit");
     return -1;
   }
 }
@@ -1004,6 +1006,7 @@ export async function deletePostDB(userName, postImg, post) {
   let data = await response.json();
   //handle return
   if (data.deletedCount == 1) {
+    console.log("Deleted a post");
     return 1;
   }
   return -1;
