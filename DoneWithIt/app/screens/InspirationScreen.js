@@ -28,6 +28,7 @@ function InspirationScreen(props) {
   const [editingPostMenu, setEditingPostMenu] = React.useState(false);
   const [specificPostMenu, setSpecificPostMenu] = React.useState(false);
   const [sortMenu, setSortMenu] = React.useState(false);
+  const [sortingTag, setSortingTag] = React.useState("");
   const [isEnabled, setIsEnabled] = React.useState(false);
   const [PostText, setPostText] = React.useState("");
   const [index, setIndex] = React.useState(0);
@@ -78,7 +79,7 @@ function InspirationScreen(props) {
   // Removes a tag from an outfit's tag list if it is present.
   function sortByTag() {
     let tempArray = [];
-    let addingTag = "Comfy";
+    let addingTag = sortingTag;
     for (let i = 0; i < posts.length; i++) {
       if (posts[i].tags.includes(addingTag)) {
         tempArray.push(posts[i]);
@@ -252,9 +253,10 @@ function InspirationScreen(props) {
               mode="contained"
               style={styles.sortButton}
               onPress={() => {
+                showModalSort();
                 sortByTag();
               }}
-            >Sort Posts</Button>
+            >Sort By...</Button>
         <Post>
           <ContentFilter>
             <Text style={styles.text}>{filter}</Text>
@@ -294,6 +296,47 @@ function InspirationScreen(props) {
             Edit Posts
           </Button>
         </View>
+
+        <Portal>
+          <Modal
+            visible={sortMenu}
+            style={styles.modalMenu}
+            dismissable={false}
+          >
+            <Text variant="headlineSmall" style={styles.outfitText}>
+              Sort Posts
+            </Text>
+            <View style={styles.buttonSpacing}></View>
+            <TextInput
+              label="Tag Name"
+              value={sortingTag}
+              onChangeText={(sortingTag) => setSortingTag(sortingTag)}
+            />
+            <View style={styles.buttonSpacing}></View>
+            <Button
+              icon="check-bold"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                setSortMenu(false); 
+                sortByTag();
+              }}
+            >
+              Sort By Tag
+            </Button>
+            <View style={styles.buttonSpacing}></View>
+            <Button
+              icon="close-thick"
+              mode="contained"
+              style={styles.modalButton}
+              onPress={() => {
+                setSortMenu(false); 
+              }}
+            >
+              Cancel
+            </Button>
+          </Modal>
+        </Portal>
 
         <Portal>
           <Modal
