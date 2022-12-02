@@ -192,7 +192,6 @@ async function handleLogin() {
             global.outfitArray[i].tags != "" &&
             global.outfitArray[i].tags != undefined
           ) {
-            //console.log(global.outfitArray[i].tags);
             let tagArr = global.outfitArray[i].tags.split(",");
             for (let j = 0; j < tagArr.length; j++) {
               tagArr[j] = tagArr[j].trim();
@@ -201,7 +200,6 @@ async function handleLogin() {
               if (exists != false) {
                 global.tagFrequencyList[exists - 1].frequency += 1;
               } else {
-                //console.log("Adding new Tag: " + tagArr[j]);
                 let tagObject = {
                   tag: tagArr[j],
                   frequency: 1,
@@ -217,11 +215,9 @@ async function handleLogin() {
       global.tagFrequencyList.sort(function (a, b) {
         return parseInt(b.frequency) - parseInt(a.frequency);
       });
-      //console.log(global.tagFrequencyList);
       console.log(
         "Added tags to list and initialized tag frequency. Sorted descending"
       );
-      //console.log(global.tagFrequencyList);
     } else {
       global.tagFrequencyList = new Array();
       global.outfitArray = new Array();
@@ -283,7 +279,6 @@ async function handleLogin() {
   global.ready = 1;
   console.log("ready");
   //testDatabaseFunctions();
-  console.log(global.followingPosts);
 }
 const styles = StyleSheet.create({
   container: {

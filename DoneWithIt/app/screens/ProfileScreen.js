@@ -4,19 +4,14 @@ import { Text, Button, Paragraph, IconButton } from "react-native-paper";
 import UploadImage from "../utilities/UploadImage";
 
 function ProfileScreen({ navigation }) {
-  //const [followers, setFollowers] = React.useState(0);
-  //const [following, setFollowing] = React.useState(0);
   const [reload, setReload] = React.useState(0);
   const [oCount, setOCount] = React.useState(0);
   const [calendarStreak, setCalendarStreak] = React.useState(0);
-  followers = 0;
   following = 0;
 
   if(global.followingUsernames != "") {
     const follower_array = global.followingUsernames.split(',');
-    const withoutDuplicates = [...new Set(follower_array)];
-    console.log("set: " + withoutDuplicates);
-    following = withoutDuplicates.length;
+    following = follower_array.length;
   }
   if (global.profileLoaded == null) {
     global.profileLoaded = true;
