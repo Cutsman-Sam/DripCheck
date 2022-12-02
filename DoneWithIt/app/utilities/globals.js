@@ -14,4 +14,6 @@ global.calendarStreak;
 global.pfp64;
 global.postArray;
 global.inspirationLoaded;
+global.myPostsArray;
+
 global.tagFrequencyList;
