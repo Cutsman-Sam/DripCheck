@@ -1,11 +1,22 @@
 import * as React from "react";
 import { StyleSheet, View } from "react-native";
-import { Text, Button, Paragraph } from "react-native-paper";
+import { Text, Button, Paragraph, IconButton } from "react-native-paper";
 import UploadImage from "../utilities/UploadImage";
 
 function ProfileScreen({ navigation }) {
   const [followers, setFollowers] = React.useState(0);
   const [following, setFollowing] = React.useState(0);
+  const [reload, setReload] = React.useState(0);
+  const [oCount, setOCount] = React.useState(0);
+  const [calendarStreak, setCalendarStreak] = React.useState(0);
+  if (global.profileLoaded == null) {
+    global.profileLoaded = true;
+    setStats();
+  }
+  function setStats() {
+    setOCount(global.oCount);
+    setCalendarStreak(global.calendarStreak);
+  }
   return (
     <View style={styles.container}>
       <View style={styles.containerSettings}>
@@ -47,8 +58,15 @@ function ProfileScreen({ navigation }) {
         </Text>
       </View>
       <Text>Account Created: {global.accountDate}</Text>
-      <Text>Outfits Created: {global.oCount}</Text>
-      <Text>Calendar Streak: {global.calendarStreak} 🔥</Text>
+      <Text>Outfits Created: {oCount}</Text>
+      <Text>Calendar Streak: {calendarStreak} 🔥</Text>
+      <IconButton
+        icon="refresh"
+        size={50}
+        onPress={() => {
+          setStats();
+        }}
+      ></IconButton>
     </View>
   );
 }
