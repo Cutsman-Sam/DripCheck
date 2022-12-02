@@ -22,7 +22,11 @@ import {updateUser} from "../utilities/requestData";
 
 
 function updateFollowers(userName){
+    if(global.followingUsernames == "") {
+        global.followingUsernames = userName;
+    } else {
     global.followingUsernames = global.followingUsernames + ", " + userName;
+    }
     updateUser(global.userEmail, global.displayName, global.accountDate, global.calendarStreak, 
         "00-00-0000", global.oCount, global.pfp64, "undefined",global.followingUsernames);
         console.log(global.followingUsernames);

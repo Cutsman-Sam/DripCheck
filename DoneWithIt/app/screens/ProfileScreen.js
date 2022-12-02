@@ -5,15 +5,18 @@ import UploadImage from "../utilities/UploadImage";
 
 function ProfileScreen({ navigation }) {
   //const [followers, setFollowers] = React.useState(0);
-  const [following, setFollowing] = React.useState(0);
+  //const [following, setFollowing] = React.useState(0);
   const [reload, setReload] = React.useState(0);
   const [oCount, setOCount] = React.useState(0);
   const [calendarStreak, setCalendarStreak] = React.useState(0);
   followers = 0;
+  following = 0;
 
-  const follower_array = global.followingUsernames.split(',');
-  const withoutDuplicates = [...new Set(follower_array)];
-  followers = withoutDuplicates.length - 1;
+  if(global.followingUsernames != "") {
+    const follower_array = global.followingUsernames.split(',');
+    const withoutDuplicates = [...new Set(follower_array)];
+    following = withoutDuplicates.length - 1;
+  }
   if (global.profileLoaded == null) {
     global.profileLoaded = true;
     setStats();
@@ -47,17 +50,17 @@ function ProfileScreen({ navigation }) {
       </Paragraph>
 
       <View style={styles.containerRow}>
-        <Text variant="headlineLarge" style={styles.numberField}>
+        {/* <Text variant="headlineLarge" style={styles.numberField}>
           {followers}
-        </Text>
+        </Text> */}
         <Text variant="headlineLarge" style={styles.numberField}>
           {following}
         </Text>
       </View>
       <View style={styles.containerRow}>
-        <Text variant="headlineSmall" style={styles.numberLabel}>
+        {/* <Text variant="headlineSmall" style={styles.numberLabel}>
           Followers
-        </Text>
+        </Text> */}
         <Text variant="headlineSmall" style={styles.numberLabel}>
           Following
         </Text>
