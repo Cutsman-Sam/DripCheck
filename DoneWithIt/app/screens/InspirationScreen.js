@@ -35,30 +35,38 @@ function InspirationScreen(props) {
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   let filter = isEnabled ? "Following" : "Everyone";
 
-  if (global.inspirationLoaded == null) {
-    for (var i = 0; i < global.postArray.length; i++) {
-      if (global.postArray[i] == null) {
+  if (global.inspirationLoaded == null || global.toggle != isEnabled) {
+    var shownPosts;
+    global.toggle = isEnabled;
+    if (isEnabled) {
+      shownPosts = global.followingPosts;
+    } else {
+      shownPosts = global.postArray;
+    }
+    var count = 0;
+    let temp = [];
+    for (var i = 0; i < shownPosts.length; i++) {
+      if (shownPosts[i] == null) {
         continue;
       }
-      let temp = posts;
+      count++;
       let post = {
         id: i + 1,
-        userName: global.postArray[i].userName,
-        userImg: global.postArray[i].profilePic,
-        postTime: global.postArray[i].postTime,
-        post: global.postArray[i].post,
-        postImg: global.postArray[i].postImg,
-        saves: global.postArray[i].saves,
-        tags: global.postArray[i].tags,
+        userName: shownPosts[i].userName,
+        userImg: shownPosts[i].profilePic,
+        postTime: shownPosts[i].postTime,
+        post: shownPosts[i].post,
+        postImg: shownPosts[i].postImg,
+        saves: shownPosts[i].saves,
+        tags: shownPosts[i].tags,
       };
+      temp.push(post);
       if (post.userName === global.displayName && hasPost == false) {
         setHasPost(true);
       }
-      temp.push(post);
-      let newPosts = numPosts + 1;
-      setNumPosts(newPosts);
-      setPosts(temp);
     }
+    setNumPosts(count);
+    setPosts(temp);
     global.inspirationLoaded = true;
   }
 

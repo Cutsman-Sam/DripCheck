@@ -19,3 +19,4 @@ global.followingPosts;
 global.tagFrequencyList;
 global.followingUsernames;
 global.profileLoaded;
+global.toggle;

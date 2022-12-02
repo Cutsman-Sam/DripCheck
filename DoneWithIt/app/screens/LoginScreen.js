@@ -104,9 +104,9 @@ function LoginScreen({ navigation }) {
 
 async function handleLogin() {
   //get all inspiration posts
+  global.toggle = false;
   global.postArray = new Array();
   let posts = await getAllPosts();
-
   for (var i in posts) {
     if (posts[i] != null) {
       global.postArray.push(posts[i]);
@@ -150,7 +150,7 @@ async function handleLogin() {
       JSON.stringify(previousData)
     ).following;
     for (let i = 0; i < userNames.length; i++) {
-      userNames[i].trim();
+      userNames[i] = userNames[i].trim();
     }
     if (userNames.length > 0) {
       global.followingPosts = await getFollowingPosts(userNames);
