@@ -289,6 +289,32 @@ function ClosetScreen(props) {
         tempArray.push(outfitArray[i]);
       }
     }
+
+    setIndex(0);
+    setOutfitArray(tempArray);
+  }
+
+  function sortByDate() {
+    //console.log("Sorting by date");
+    let tempArray = [];
+    for (let i = 0; i < outfitArray.length; i++) {
+      if (!tempArray.includes(outfitArray[i])) {
+        tempArray.push(outfitArray[i]);
+      }
+    }
+    var tempOutfit;
+    //tempArray is initialized
+    for(let i = 0; i < tempArray.length - 1; i++) {
+      for(let j = 0; j < tempArray.length - i - 1; j++ ) {
+        if(compareDateString(tempArray[j].lastWorn, tempArray[j + 1].lastWorn)) {
+          //swap them
+          tempOutfit = tempArray[j];
+          tempArray[j] = tempArray[j+1];
+          tempArray[j+1] = tempOutfit;
+        }
+      }
+    }
+
     setIndex(0);
     setOutfitArray(tempArray);
   }
@@ -504,7 +530,7 @@ function ClosetScreen(props) {
               Sort By Tag
             </Button>
             <View style={styles.buttonSpacing}></View>
-            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll()}}>
+            <Button icon="check-bold" mode="contained" style={styles.modalButton} onPress={() => {hideModalAll(), sortByDate()}}>
               Sort By Date
             </Button>
             <View style={styles.buttonSpacing}></View>
@@ -635,6 +661,29 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
 });
+/**
+ * 
+ * @param {*} date1 
+ * @param {*} date2 
+ * @returns false on date1 is earlier, true on date2 is earlier
+ */
+function compareDateString(date1,date2) {
+  let year1 = parseInt(date1.substring(0,4));
+  let year2 = parseInt(date2.substring(0,4));
+  let month1 = parseInt(date1.substring(5,7));
+  let month2 = parseInt(date2.substring(5,7));
+  let day1 = parseInt(date1.substring(9));
+  let day2 = parseInt(date2.substring(9));
 
+  if(year1 > year2) {
+    return false;
+  } else if(year1 == year2 && month1 > month2) {
+    return false;
+  } else if(year1 == year2 && month1 == month2 && day1 > day2) {
+    return false;
+  }
+
+  return true;
+}
 export default ClosetScreen;
 
