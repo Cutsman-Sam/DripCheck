@@ -965,7 +965,9 @@ export async function addNewPost(
 
 /**
  * deletes a post given the postID
- * @param {*} postID _id of post to delete
+ * @param {*} userName _id of post to delete
+ * @param {*} postImg image of post to delete
+ * @param {*} post text of post to delete
  * @returns 1 on success, -1 on failure
  */
 export async function deletePostDB(userName, postImg, post) {
@@ -1045,7 +1047,8 @@ export async function deleteAllPosts(userName) {
 
 /**
  * function to update a new post into the database
- * @param {*} postID id of post to be updated
+ * @param {*} prevImg image of post to update
+ * @param {*} prevPost text of post to update
  * @param {*} userName userName of post creator, current user
  * @param {*} saves number of initial saves a post has
  * @param {*} postTime time post was created, stored as string
@@ -1111,6 +1114,9 @@ export async function updatePost(
       '",' +
       '"profilePic" : "' +
       profilePic +
+      '",' +
+      '"tags" : "' +
+      tags +
       '",' +
       '"dateCreated" : "' +
       dateCreated +

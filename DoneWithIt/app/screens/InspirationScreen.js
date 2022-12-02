@@ -1,32 +1,11 @@
 import * as React from "react";
 import { StatusBar } from "expo-status-bar"; //status-bar replaced with 'react'
 import { StyleSheet, View, ScrollView, FlatList, Image } from "react-native";
-import {
-  Text,
-  Button,
-  Portal,
-  Modal,
-  TextInput,
-  Switch,
-} from "react-native-paper";
+import { Text, Button, Portal, Modal, TextInput, Switch} from "react-native-paper";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-import {
-  Post,
-  Card,
-  UserImg,
-  UserInfo,
-  UserName,
-  UserInfoText,
-  PostTime,
-  PostText,
-  PostImg,
-  InteractionWrapper,
-  Interaction,
-  InteractionText,
-  ContentFilter,
-} from "../styles/postStyle";
+import { Post, ContentFilter} from "../styles/postStyle";
 
 import UploadPost from "../utilities/UploadPost";
 import { set } from "date-fns";
@@ -70,8 +49,8 @@ function InspirationScreen(props) {
       }
       temp.push(post);
       let newPosts = numPosts + 1;
-      setPosts(temp);
       setNumPosts(newPosts);
+      setPosts(temp);
     }
     global.inspirationLoaded = true;
   }
@@ -110,6 +89,7 @@ function InspirationScreen(props) {
     let temp = posts;
 
     var id;
+    console.log("1");
     for (var i = 0; i < global.postArray.length; i++) {
       if (
         global.postArray[i].postImg === c_post.postImg &&
@@ -170,8 +150,7 @@ function InspirationScreen(props) {
     temp.splice(id, 1);
     global.postArray.splice(id, 1);
     global.myPostsArray.splice(pidx, 1);
-    var newPidx = pidx - 1;
-    setPidx(newPidx);
+    setPidx(0);
     setPosts(temp);
     deletePostDB(global.displayName, c_post.postImg, c_post.post);
   }
@@ -203,6 +182,17 @@ function InspirationScreen(props) {
     }
   }
   let c_post = arr[pidx];
+  if (c_post == undefined) {
+    c_post = {
+      id: "id",
+      userName: global.displayName,
+      userImg: "profilePic",
+      postTime: "edited " + new Date().toDateString(),
+      post: "postText",
+      postImg: "postImg",
+      saves: "saves",
+    };
+  }
   let c_outfit = iter[index];
 
   function nextPost() {
@@ -318,6 +308,7 @@ function InspirationScreen(props) {
                     PostText,
                     c_outfit.image,
                     0,
+                    c_outfit.tags,
                     c_outfit.tags
                   );
                   setPostText("");
