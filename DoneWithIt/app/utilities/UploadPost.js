@@ -23,7 +23,9 @@ import {updateUser} from "../utilities/requestData";
 
 function updateFollowers(userName){
     if(global.followingUsernames == "") {
-        global.followingUsernames = userName;
+        global.followingUsernames = " " + userName;
+    } else if (global.followingUsernames.includes(userName)) {
+        return;
     } else {
     global.followingUsernames = global.followingUsernames + ", " + userName;
     }

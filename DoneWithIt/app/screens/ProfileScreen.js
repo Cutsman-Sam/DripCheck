@@ -15,7 +15,8 @@ function ProfileScreen({ navigation }) {
   if(global.followingUsernames != "") {
     const follower_array = global.followingUsernames.split(',');
     const withoutDuplicates = [...new Set(follower_array)];
-    following = withoutDuplicates.length - 1;
+    console.log("set: " + withoutDuplicates);
+    following = withoutDuplicates.length;
   }
   if (global.profileLoaded == null) {
     global.profileLoaded = true;
