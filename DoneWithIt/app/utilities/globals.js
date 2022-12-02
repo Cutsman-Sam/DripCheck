@@ -17,3 +17,4 @@ global.inspirationLoaded;
 global.myPostsArray;
 global.followingPosts;
 global.tagFrequencyList;
+global.followingUsernames;

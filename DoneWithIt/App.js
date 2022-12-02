@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, LogBox } from 'react-native';
 
 import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
 
@@ -14,6 +14,9 @@ import CalendarScreen from './app/screens/CalendarScreen';
 import ClosetScreen from './app/screens/ClosetScreen';
 import InspirationScreen from './app/screens/InspirationScreen';
 import LoadingScreen from './app/screens/LoadingScreen';
+
+
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -70,7 +73,8 @@ function BottomTabs() {
 
 //View -> UIView
 export default function App({navigation}) {
-  
+  console.disableYellowBox = true;
+  LogBox.ignoreAllLogs(); // Ignore log notification by message
   return (
     <PaperProvider theme={theme}>
     <NavigationContainer>
