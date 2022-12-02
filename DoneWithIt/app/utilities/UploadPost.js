@@ -14,7 +14,9 @@ import {
   InteractionWrapper,
   Interaction,
   InteractionText,
+  Follow,
 } from "../styles/postStyle";
+import { Button } from "react-native-paper";
 
 const uploadPost = ({ item }) => {
   saveIcon = item.saved ? "heart" : "heart-outline";
@@ -36,6 +38,7 @@ const uploadPost = ({ item }) => {
           <UserName> {item.userName} </UserName>
           <PostTime> {item.postTime} </PostTime>
         </UserInfoText>
+        <Button onPress={() => {console.log("Following")}} >Follow</Button>
       </UserInfo>
       <PostText> {item.post} </PostText>
       <PostImg source={{ uri: "data:image/png;base64," + item.postImg }} />

@@ -149,6 +149,7 @@ function InspirationScreen(props) {
     }
   }
 
+  //add if to check whether we need to display following or everyone's post
   let arr = [];
   for (let i = 0; i < global.myPostsArray.length; i++) {
     if (global.myPostsArray[i] !== undefined) {
