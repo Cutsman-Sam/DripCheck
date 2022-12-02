@@ -74,7 +74,7 @@ function InspirationScreen(props) {
     global.inspirationLoaded = true;
   }
 
-  function addPost(id, profilePic, postText, postImg, saves) {
+  function addPost(id, profilePic, postText, postImg, saves, tags) {
     let temp = posts;
     let post = {
       id: id,
@@ -83,6 +83,7 @@ function InspirationScreen(props) {
       postTime: new Date().toDateString(),
       post: postText,
       postImg: postImg,
+      tags: tags,
       saves: saves,
     };
     global.postArray.push(post);
@@ -99,7 +100,8 @@ function InspirationScreen(props) {
       post.postImg,
       post.post,
       post.postTime,
-      post.userImg
+      post.userImg,
+      post.tags
     );
   }
   function editPost(prevImg, prevPost, profilePic, postText, postImg, saves) {
@@ -132,6 +134,7 @@ function InspirationScreen(props) {
       profilePic
     );
   }
+
   function nextOutfit() {
     if (index < iter.length - 1) {
       setIndex(index + 1);
@@ -151,6 +154,7 @@ function InspirationScreen(props) {
       arr.push(global.myPostsArray[i]);
     }
   }
+
   let iter = [];
   for (let i = 0; i < global.outfitArray.length; i++) {
     if (global.outfitArray[i] !== undefined) {
@@ -404,24 +408,23 @@ function InspirationScreen(props) {
               <Button
                 style={styles.postButton}
                 onPress={() => {
-                  setSpecificPostMenu(false);
-                  editPost(
-                    c_post.postImg,
-                    c_post.post,
+                  setAddingPostMenu(false);
+                  addPost(
+                    numPosts + 1,
                     global.pfp64,
                     PostText,
                     c_outfit.image,
-                    c_post.saves
+                    0
                   );
                   setPostText("");
                 }}
               >
-                Save
+                Post
               </Button>
               <Button
                 style={styles.postButton}
                 onPress={() => {
-                  setSpecificPostMenu(false);
+                  setAddingPostMenu(false);
                   setPostText("");
                 }}
               >

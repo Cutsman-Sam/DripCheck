@@ -7,7 +7,6 @@ global.outfitBase64;
 global.closetLoaded;
 global.calendarLoaded;
 global.outfitArray;
-global.allAddedTags;
 global.ready;
 global.dayArray;
 global.oCount;
@@ -16,3 +15,5 @@ global.pfp64;
 global.postArray;
 global.inspirationLoaded;
 global.myPostsArray;
+
+global.tagFrequencyList;
