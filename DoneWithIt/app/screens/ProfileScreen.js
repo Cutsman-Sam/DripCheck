@@ -50,24 +50,28 @@ function ProfileScreen({ navigation }) {
       </Paragraph>
 
       <View style={styles.containerRow}>
-        {/* <Text variant="headlineLarge" style={styles.numberField}>
-          {followers}
-        </Text> */}
+        <Text variant="headlineLarge" style={styles.numberField}>
+          {calendarStreak}
+        </Text>
+        <Text variant="headlineLarge" style={styles.numberField}>
+          {oCount}
+        </Text>
         <Text variant="headlineLarge" style={styles.numberField}>
           {following}
         </Text>
       </View>
       <View style={styles.containerRow}>
-        {/* <Text variant="headlineSmall" style={styles.numberLabel}>
-          Followers
-        </Text> */}
+      <Text variant="headlineSmall" style={styles.numberLabel}>
+          Streak 🔥
+        </Text>
+        <Text variant="headlineSmall" style={styles.numberLabel}>
+          # of Outfits
+        </Text>
         <Text variant="headlineSmall" style={styles.numberLabel}>
           Following
         </Text>
       </View>
       <Text>Account Created: {global.accountDate}</Text>
-      <Text>Outfits Created: {oCount}</Text>
-      <Text>Calendar Streak: {calendarStreak} 🔥</Text>
       <IconButton
         icon="refresh"
         size={50}
