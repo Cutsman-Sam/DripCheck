@@ -139,9 +139,9 @@ async function handleLogin(){
                 let exists = tagExists(tagArr[j]);
 
                 if(exists != false) {
-                  global.tagFrequencyList[exists].frequency += 1;
+                  global.tagFrequencyList[exists - 1].frequency += 1;
                 } else {
-                  //console.log("Adding new Tag: " + tagArr[j]);
+                  console.log("Adding new Tag: " + tagArr[j]);
                   let tagObject = {
                     tag: tagArr[j],
                     frequency: 1
@@ -157,7 +157,7 @@ async function handleLogin(){
         global.tagFrequencyList.sort(function(a, b) {
           return parseInt(b.frequency) - parseInt(a.frequency);
         });
-        //console.log(global.tagFrequencyList);
+        console.log(global.tagFrequencyList);
         console.log("Added tags to list and initialized tag frequency. Sorted descending")
         //console.log(global.tagFrequencyList);
       } else {
@@ -247,8 +247,8 @@ function tagExists(tag) {
 
   for(let i = 0; i < global.tagFrequencyList.length; i++) {
     if(global.tagFrequencyList[i] != null && global.tagFrequencyList[i].tag == tag) {
-      //console.log(global.tagFrequencyList[i].tag + " " + tag)
-      return i;
+      //console.log("Pre-existing tag found");
+      return i + 1;
     }
   }
 
